@@ -12,6 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workshop", "Workshop", "{DFA8554A-7EAB-43CF-9E3F-F339D982BD9F}"
+	ProjectSection(SolutionItems) = preProject
+		Workshop\Workshop_PTBR.md = Workshop\Workshop_PTBR.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +36,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DFA8554A-7EAB-43CF-9E3F-F339D982BD9F} = {51E441E7-5D9D-4F1B-A9F6-48DE2EBFAFF8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0FE0FE18-EB21-45BF-AD85-92BEC1EA061D}
