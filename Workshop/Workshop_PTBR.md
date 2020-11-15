@@ -2,7 +2,7 @@
 
 Escrito por Damned Angel, 2020
 
-## Abrviações usadas nesse documento
+## Abreviações usadas nesse documento
 
 VS: Visual Studio 2019
 
@@ -25,7 +25,7 @@ VS: Visual Studio 2019
 
 
 ### 1.2. Criando o projeto
-###### *Github's Ticket/Branch: 2/TKT0002.*
+###### *Github Ticket/Branch: 2/TKT0002.*
 ##### Objetivo: Dominar a criação de projetos MSX a partir dos templates (previsão: 10 minutos).
 
 1. Clique no botão **Create a New Project** na janela de abertura do VS. Alternativamente, selecione **File|New|Project**.
@@ -44,7 +44,7 @@ VS: Visual Studio 2019
 
 
 ### 1.4. Configurando o projeto e explorando o template
-###### *Github's Ticket/Branch: 3/TKT0003.*
+###### *Github Ticket/Branch: 3/TKT0003.*
 ##### Objetivo: Compreender a estrutura do projeto MSX (previsão: 25 minutos).
 
 1. Ajustando parâmetros em ApplicationSettings.txt.
@@ -72,7 +72,7 @@ VS: Visual Studio 2019
 
 
 ### 1.6. Consertando a inicialização de variáveis globais do C
-###### *Github's Ticket/Branch: 4/TKT0004.*
+###### *Github Ticket/Branch: 4/TKT0004.*
 ##### Objetivo: Resolver um Bug do template ROM que afetará as demais sessões do Workshop (previsão: 5 minutos).
 
 *Nota: Reabrir o projeto ROM antes de iniciar esse item.*
