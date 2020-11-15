@@ -47,6 +47,12 @@ STR_COMPARE = 0
 ;----------------------------------------------------------
 ;	crt0
 init::
+;----------------------------------------------------------
+;	Step 1: Initialize globals
+	call    gsinit
+
+;----------------------------------------------------------
+;	Step 2: Position stack at the top of memory.
 .ifne RETURN_TO_BASIC
 .if STACK_HIMEM
 	di
@@ -55,6 +61,8 @@ init::
 .endif
 .endif
 
+;----------------------------------------------------------
+;	Step 3: Set page 2 on ROM
 .if SET_PAGE_2
 	di
 	call	#BIOS_RSLREG
@@ -81,6 +89,8 @@ init::
 	ei
 .endif
 
+;----------------------------------------------------------
+;	Step 3: Call the "main" function
 .if RETURN_TO_BASIC
 	jp		_main
 .else
