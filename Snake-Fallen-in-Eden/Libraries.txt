@@ -8,7 +8,7 @@
 
 ;----------------------------------------------------------
 ;	Include here your project's LIB files
-;[MSX_LIB_PATH]\fusion-c\lib\fusion.lib
+[MSX_LIB_PATH]\fusion-c\lib\fusion.lib
 
 ;----------------------------------------------------------
 ;	Include here your project's REL files

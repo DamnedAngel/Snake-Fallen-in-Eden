@@ -92,4 +92,37 @@ Nota: Isso é um bug no template. Será consertado em versões futuras.
 
 ## Sessão 2: Iniciando o programa
 
+### 2.1. Integrando a bibliotec Fusion-C
+###### *Github Ticket/Branch: 7/TKT0007.*
 
+##### Objetivo: Entender a inclusão de bibliotecas externas ao projeto (previsão: 10 minutos).
+
+1. Substitua o conteúdo da função main() por
+```c
+void main(void) {
+	Screen(1);
+}
+```
+Tente compilar e você receberá um erro, já que a função *Screen* é implementada pela Fusion-C, e não está disponível nativamente. Vamos então integrar a biblioteca ao projeto seguindo os passos abaixo.
+
+2. Descomente a linha abaixo no arquivo IncludeDirectories.txt:
+```
+[MSX_LIB_PATH]\fusion-c\header
+```
+Isso fará os arquivos .h nesse diretório acessíveis por cláusulas *include*. Você poderá ter que adaptar o caminho caso tenha usado um diretório diferente na instalação da Fusion-C.
+
+3. Adicione a linha abaixo no início do seu fonte *msxromapp.c*:
+```c
+#include "msx_fusion.h"
+```
+Isso importará todas as declarações de funções da Fusion-C. Se você não entende direito como arquivos header (*.h) funcionam em C, talvez este seja um bom momento de dar uma pesquisada rápida.
+
+Note que o arquivo a msx_fusion.h contém a declaração da função, mas não a implementação (abra o arquivo e veja por você mesmo!). No próximo passo incluremos a implementação da função ao projeto.
+
+4. Descomente a linha abaixo no arquivo Libraries.txt:
+```
+[MSX_LIB_PATH]\fusion-c\lib\fusion.lib
+```
+Com isso terminamos a inclusão da biblioteca no processo de compilação do projeto.
+
+5. Compile o programa para se certificar que ele está funcional. Se quiser, teste-o no OpenMSX.

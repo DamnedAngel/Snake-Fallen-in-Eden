@@ -7,6 +7,7 @@
 
 #include "targetconfig.h"
 #include "MSX\BIOS\msxbios.h"
+#include "msx_fusion.h"
 
 #define Peek( address )			( *( (volatile unsigned char*)(address) ) )
 #define Peekw( address )		( *( (volatile unsigned int*)(address) ) )
@@ -61,11 +62,7 @@ void print(char* msg) {
 //	Your fun starts here!!!
 //	Replace the code below with your art.
 void main(void) {
-	print("Hello MSX from C!\r\n"
-		"If you don't want your\r\n"
-		"ROM program to return to\r\n"
-		"BASIC/MSX-DOS, just avoid\r\n"
-		"main's return instruction.\r\n\0");
+	Screen(1);
 }
 
 // ----------------------------------------------------------

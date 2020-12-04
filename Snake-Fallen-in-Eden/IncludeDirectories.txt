@@ -8,5 +8,5 @@
 ;[MSX_LIB_PATH]\msx
 ;[MSX_LIB_PATH]\msxdos
 ;[MSX_LIB_PATH]\util
-;[MSX_LIB_PATH]\fusion-c\header
+[MSX_LIB_PATH]\fusion-c\header
 
