@@ -6,6 +6,7 @@ Escrito por Damned Angel, 2020
 
 VS: Visual Studio 2019
 
+---
 
 ## Sessão 1: Criando e configurando o projeto
 
@@ -86,4 +87,9 @@ Nota: Isso é um bug no template. Será consertado em versões futuras.
 
 1. Tópicos apresentados.
 2. Dinâmica geral do workshop: feedbacks e ideias.
+
+---
+
+## Sessão 2: Iniciando o programa
+
 
