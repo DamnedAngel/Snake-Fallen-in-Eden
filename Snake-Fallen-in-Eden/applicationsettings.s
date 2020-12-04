@@ -1,14 +1,14 @@
 ;-------------------------------------------------		
 ; applicationsettings.s created automatically			
 ; by makefile											
-; on 22:02:53.32 , 03-Dec-20 				
+; on 23:14:35.99 , 03-Dec-20 				
 ;														
 ; DO NOT BOTHER EDITING THIS.							
 ; ALL CHANGES WILL BE LOST.							
 ;-------------------------------------------------		
 														
 GLOBALS_INITIALIZER = 1								
-RETURN_TO_BASIC = 1								
+RETURN_TO_BASIC = 0								
 STACK_HIMEM = 0								
 SET_PAGE_2 = 0								
 fileStart .equ 0x8000							
