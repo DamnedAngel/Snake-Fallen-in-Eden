@@ -2,9 +2,22 @@
 
 Escrito por Damned Angel, 2020
 
+---
+
 ## Abreviações usadas nesse documento
 
 VS: Visual Studio 2019
+
+---
+
+## Padronizações usadas nesse documento
+
+Esse documento é dividido em sessões de workshop, e as sessões são divididas em tópicos de estudo.
+
+Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3 formatos:
+* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma explosição do palestrante.
+* Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
+* Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
 ---
 
@@ -14,15 +27,15 @@ VS: Visual Studio 2019
 
 ##### Objetivo: REVISAR pré-requisitos para o workshop (previsão: 10 minutos).
 
-1. VS Instalado.
-2. Templates MSX (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instruções em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
-3. SDCC, Hex2Bin e Python instalados e configurados no PATH.
-4. Fusion-C baixada e descompactada.
-5. OpenMSX instalado e rodando. Seguir roteiro do Lavadeira em:
+* VS Instalado.
+* Templates MSX (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instruções em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
+* SDCC, Hex2Bin e Python instalados e configurados no PATH.
+* Fusion-C baixada e descompactada.
+* OpenMSX instalado e rodando. Seguir roteiro do Lavadeira em:
 * Parte 1: https://medium.com/relearning-msx/relearning-msx-5-setting-up-the-msx-c-environment-part-1-797d14e03a1d
 * Parte 2: https://medium.com/relearning-msx/relearning-msx-6-7a5d8e3ef6a3
 * Demais partes são interessantes, mas opcionais. O que precisamos é de um OpenMSX rodando MSXDOS para o caso de desenvolvimento para esse ambiente.
-6. OpenMSX Debugger instalado e rodando.
+* OpenMSX Debugger instalado e rodando.
 
 
 ### 1.2. Criando o projeto
@@ -66,7 +79,7 @@ VS: Visual Studio 2019
 ### 1.5. Criando projetos MSX-DOS e BIN
 ##### Objetivo: Compreender a estrutura do projeto MSX (previsão: 20 minutos).
 
-*Nota: Salvar e fechar projeto ROM antes de iniciar esse item.*
+*Nota: Salve e feche o projeto ROM antes de iniciar esse item.*
 
 1. Criando um projeto MSXDOS + compilação e execução + configurações. 
 2. Criando um projeto BIN + compilação e execução + configurações. 
@@ -76,9 +89,16 @@ VS: Visual Studio 2019
 ###### *Github Ticket/Branch: 4/TKT0004.*
 ##### Objetivo: Resolver um Bug do template ROM que afetará as demais sessões do Workshop (previsão: 5 minutos).
 
-*Nota: Reabrir o projeto ROM antes de iniciar esse item.*
+*Nota: Reabra o projeto ROM antes de iniciar esse item.*
 
-1. Inserir linha **call gsinit** depois da linha **init::**.
+1. Insira a linha 
+```asm
+call gsinit
+```
+depois da linha:
+```asm
+init::
+```
 
 Nota: Isso é um bug no template. Será consertado em versões futuras.
 
@@ -92,7 +112,7 @@ Nota: Isso é um bug no template. Será consertado em versões futuras.
 
 ## Sessão 2: Iniciando o programa
 
-### 2.1. Integrando a bibliotec Fusion-C
+### 2.1. Integrando a biblioteca Fusion-C
 ###### *Github Ticket/Branch: 7/TKT0007.*
 
 ##### Objetivo: Entender a inclusão de bibliotecas externas ao projeto (previsão: 10 minutos).
@@ -101,9 +121,10 @@ Nota: Isso é um bug no template. Será consertado em versões futuras.
 ```c
 void main(void) {
 	Screen(1);
+	Width(32);
 }
 ```
-Tente compilar e você receberá um erro, já que a função *Screen* é implementada pela Fusion-C, e não está disponível nativamente. Vamos então integrar a biblioteca ao projeto seguindo os passos abaixo.
+Tente compilar e você receberá um erro, já que as funções *Screen()* e *Width()* são implementadas pela Fusion-C, e não estão disponíveis nativamente. Vamos então integrar a biblioteca ao projeto seguindo os passos abaixo.
 
 2. Descomente a linha abaixo no arquivo IncludeDirectories.txt:
 ```
@@ -126,3 +147,43 @@ Note que o arquivo a msx_fusion.h contém a declaração da função, mas não a imple
 Com isso terminamos a inclusão da biblioteca no processo de compilação do projeto.
 
 5. Compile o programa para se certificar que ele está funcional. Se quiser, teste-o no OpenMSX.
+
+### 2.2. Criando o loop principal do programa
+###### *Github Ticket/Branch: 6/TKT0006.*
+
+##### Objetivo: Ter a inicialização e a lógica geral do fluxo da aplicação implementadas (previsão:15 minutos).
+
+1. No arquivo *msxromapp.c*, Remova todas as funções de exemplo de suporte a chamadas CALL do BASIC e a dispositivos depois do main():
+* onCall*
+* onDevice*
+
+2. No mesmo arquivo, crie stubs para as funções de exibição de título do jogo, da lógica de jogo e da exibição da tela de fim de jogo:
+```c
+void title() {
+	Cls();
+	print ("My Snake Game");
+	InputChar();
+}
+
+void game() {
+	Cls();
+	print ("Game");
+	InputChar();
+}
+
+void gameOver() {
+	Cls();
+	print ("Game Over");
+	InputChar();
+}
+```
+
+3. Implemente um loop infinito na função *main()* do programa, chamando sequencialmente as funções criadas no passo anterior.
+
+4. Compile e execute o programa.
+
+5. Discussão de resultados e percepções sobre:
+* o programa;
+* o ambiente de desenvolvimento;
+* a biblioteca Fusion-C;
+* diferenças para BASIC, Pascal ou outras linguagens.
