@@ -48,6 +48,9 @@
     <ClInclude Include="MSX\BIOS\msxbios.h">
       <Filter>Header Files\MSX\BIOS</Filter>
     </ClInclude>
+    <ClInclude Include="screens.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MSX\BIOS\msxbios.s">
