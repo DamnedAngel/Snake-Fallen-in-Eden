@@ -217,7 +217,7 @@ static const char gameScreen[] = \
 #include "screens.h"
 ```
 
-4. Por fim, vamos substituir o stub de tela de jogo pelo novo background, simples mas funcional. Na função Substitua a impressão da string *"Game"* pela impressão de nossa nova constante *gameScreen*:
+4. Por fim, precisamos substituir o stub de tela de jogo pelo novo background, simples mas funcional. Na função *game()*, substitua a impressão da string *"Game"* pela impressão de nossa nova constante *gameScreen*:
 ```c
 	//print("Game");
 	print(gameScreen);
@@ -233,3 +233,22 @@ static const char gameScreen[] = \
 
 7. Ajuste, se necessário, a impressão do último caracter da tela para evitar o scroll.
 * Esse ajuste é preliminar, até construirmos nossa própria rotina de impressão em Assembly, que vai permitir desenhar o gramado, dar mais velocidade para a criação da tela e evitar o scroll quando usamos a última posição da tela.
+
+### 2.4. Criando uma tela de abertura funcional
+###### *Github Ticket/Branch: 9/TKT0009*
+
+##### Objetivo: Estabelecer uma tela de abertura informativa para o jogo (previsão:10 minutos).
+
+A criação da tela de abertura é similar à criação da tela de background do jogo. Assim os passos são similares:
+
+1. No arquivo *screens.h*, crie a constante *titleScreen[]* com o mapa da tela de abertura, de forma similar à *gameScreen*, também com 32x24 posições.
+
+2. Na função *title()*, substitua a impressão da string *"My Snake Game"* pela impressão da constante *titleScreen*.
+```c
+	//print("My Snake Game");
+	print(titleScreen);
+```
+
+3. Compile e execute o programa.
+
+

@@ -59,13 +59,12 @@ void print(char* msg) {
 
 void title() {
 	Cls();
-	print("My Snake Game");
+	print(titleScreen);
 	InputChar();
 }
 
 void game() {
 	Cls();
-	//print("Game");
 	print(gameScreen);
 	InputChar();
 }
