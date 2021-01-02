@@ -131,7 +131,7 @@ Com isso terminamos a inclusão da biblioteca no processo de compilação do projet
 
 5. Compile o programa para se certificar que ele está funcional. Se quiser, teste-o no OpenMSX.
 
-### 2.2. Criando o loop principal do programa
+### 2.2. Criando o loop externo do programa
 ###### *Github Ticket/Branch: 6/TKT0006.*
 
 ##### Objetivo: Ter a inicialização e a lógica geral do fluxo da aplicação implementadas (previsão:15 minutos).
@@ -160,6 +160,8 @@ void gameOver() {
 	InputChar();
 }
 ```
+
+**Note que as funções Cls(), print e InputChar são implementadas pela bibliteca **Fusion-C**.*
 
 3. Implemente um loop infinito na função *main()* do programa, chamando sequencialmente as funções criadas no passo anterior.
 ```c
@@ -235,7 +237,7 @@ static const char gameScreen[] = \
 * Esse ajuste é preliminar, até construirmos nossa própria rotina de impressão em Assembly, que vai permitir desenhar o gramado, dar mais velocidade para a criação da tela e evitar o scroll quando usamos a última posição da tela.
 
 ### 2.4. Criando uma tela de abertura funcional
-###### *Github Ticket/Branch: 9/TKT0009*
+###### *Github Ticket/Branch: 10/TKT0010*
 
 ##### Objetivo: Estabelecer uma tela de abertura informativa para o jogo (previsão:10 minutos).
 
@@ -252,3 +254,37 @@ A criação da tela de abertura é similar à criação da tela de background do jogo.
 3. Compile e execute o programa.
 
 
+### 2.5. Criando uma tela de fim de jogo funcional
+###### *Github Ticket/Branch: 11/TKT0011*
+
+##### Objetivo: Estabelecer uma tela de fim de jogo adequada para o jogo (previsão:10 minutos).
+
+A criação da tela de fim de jogo é um pouco diferente, pois queremos permitir que o jogador avalie a situação geral do jogo e revise o placar.
+
+1. No arquivo *screens.h*, crie a constante *gameOverMsg[]* com uma mensagem de 3 linhas (32 x 3 posições) de "Game Over" o mapa da tela de abertura:
+
+2. Remova o *Cls()* da função *gameOver()* e substitua a impressão da string *"My Snake Game"* pela constante *gameOverMsg*, a partir da linha 9:
+
+```c
+void gameOver() {
+	//Cls();
+	//print("Game Over");
+	Locate(0, 9);
+	print(gameOverMsg);
+	InputChar();
+}
+```
+**Note que a função Locate() é implementada pela biblioteca **Fusion-C**.*
+
+3. Compile e execute o programa.
+
+### 2.6. Finalização da Sessão 2
+##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 15 minutos).
+
+1. Discussão geral da apresentação:
+* Uso de bibliotecas em C.
+* Fusion-C para desenvolvedores MSX-BASIC.
+* Arquivos .c e arquivos .h.
+* Constantes.
+* O loop externo do programa.
+* Dinâmica geral do workshop: feedbacks e ideias.

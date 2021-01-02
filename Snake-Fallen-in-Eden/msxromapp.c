@@ -70,8 +70,8 @@ void game() {
 }
 
 void gameOver() {
-	Cls();
-	print("Game Over");
+	Locate(0, 9);
+	print(gameOverMsg);
 	InputChar();
 }
 
