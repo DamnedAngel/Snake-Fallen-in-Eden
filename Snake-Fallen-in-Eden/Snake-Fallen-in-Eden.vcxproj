@@ -95,6 +95,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="MSX\BIOS\msxbios.h" />
+    <ClInclude Include="screens.h" />
     <ClInclude Include="targetconfig.h" />
   </ItemGroup>
   <ItemGroup>
