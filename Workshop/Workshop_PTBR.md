@@ -288,3 +288,8 @@ void gameOver() {
 * Constantes.
 * O loop externo do programa.
 * Dinâmica geral do workshop: feedbacks e ideias.
+ 
+---
+
+## Sessão 3: Implementando a cobra
+
