@@ -84,25 +84,7 @@ Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3
 1. Criando um projeto MSXDOS + compilação e execução + configurações. 
 2. Criando um projeto BIN + compilação e execução + configurações. 
 
-
-### 1.6. Consertando a inicialização de variáveis globais do C
-###### *Github Ticket/Branch: 4/TKT0004.*
-##### Objetivo: Resolver um Bug do template ROM que afetará as demais sessões do Workshop (previsão: 5 minutos).
-
-*Nota: Reabra o projeto ROM antes de iniciar esse item.*
-
-1. Insira a linha 
-```asm
-call gsinit
-```
-depois da linha:
-```asm
-init::
-```
-
-Nota: Isso é um bug no template. Será consertado em versões futuras.
-
-### 1.7. Finalização da Sessão 1
+### 1.6. Finalização da Sessão 1
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
@@ -216,6 +198,8 @@ Nota: Se você não está usando o VS, faça processo similar na sua IDE, ou simples
 * Use "-" para bordas horizontais, "|" pa verticais e "+" para as intersecções.
 
 ```c
+#pragma once
+
 static const char gameScreen[] = \
 "+------------------------------+"\
 "|                              |"\
