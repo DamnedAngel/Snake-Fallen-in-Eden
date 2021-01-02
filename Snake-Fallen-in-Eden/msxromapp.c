@@ -8,6 +8,7 @@
 #include "targetconfig.h"
 #include "MSX\BIOS\msxbios.h"
 #include "msx_fusion.h"
+#include "screens.h"
 
 #define Peek( address )			( *( (volatile unsigned char*)(address) ) )
 #define Peekw( address )		( *( (volatile unsigned int*)(address) ) )
@@ -64,7 +65,8 @@ void title() {
 
 void game() {
 	Cls();
-	print("Game");
+	//print("Game");
+	print(gameScreen);
 	InputChar();
 }
 

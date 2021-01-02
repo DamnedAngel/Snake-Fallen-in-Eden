@@ -1,6 +1,6 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
 
-Escrito por Damned Angel, 2020
+Escrito por Damned Angel, 2020-2021
 
 ---
 
@@ -63,7 +63,7 @@ Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3
 
 1. Ajustando parâmetros em ApplicationSettings.txt.
 2. Configurando nome da aplicação em TargetConfig_Debug.txt e TargetConfig_Release.txt.
-3. Arquivos de configuração do projeto.
+3. Explorando os arquivos de configuração do projeto.
 4. Explorando a estrutura do projeto:
 * msxromapp.c
 * msxromapp.s
@@ -105,8 +105,9 @@ Nota: Isso é um bug no template. Será consertado em versões futuras.
 ### 1.7. Finalização da Sessão 1
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
-1. Tópicos apresentados.
-2. Dinâmica geral do workshop: feedbacks e ideias.
+1. Discussão geral da apresentação:
+* Tópicos apresentados.
+* Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
 
@@ -153,7 +154,7 @@ Com isso terminamos a inclusão da biblioteca no processo de compilação do projet
 
 ##### Objetivo: Ter a inicialização e a lógica geral do fluxo da aplicação implementadas (previsão:15 minutos).
 
-1. No arquivo *msxromapp.c*, Remova todas as funções de exemplo de suporte a chamadas CALL do BASIC e a dispositivos depois do main():
+1. No arquivo *msxromapp.c*, remova todas as funções de exemplo de suporte a chamadas CALL do BASIC e a dispositivos depois do main():
 * onCall*
 * onDevice*
 
@@ -179,11 +180,72 @@ void gameOver() {
 ```
 
 3. Implemente um loop infinito na função *main()* do programa, chamando sequencialmente as funções criadas no passo anterior.
+```c
+	// program's infinite loop
+	while (1) {
+		title();
+		game();
+		gameOver();
+	}
+```
 
 4. Compile e execute o programa.
 
-5. Discussão de resultados e percepções sobre:
+5. Discussão de resultados e primeiras percepções sobre:
 * o programa;
 * o ambiente de desenvolvimento;
 * a biblioteca Fusion-C;
 * diferenças para BASIC, Pascal ou outras linguagens.
+
+### 2.3. Criando uma tela funcional para o jogo
+###### *Github Ticket/Branch: 8/TKT0008.*
+
+##### Objetivo: Estabelecer uma tela de fundo funcional para o desenvolvimento do jogo (previsão:20 minutos).
+
+1. Vamos primeiramente criar um arquivo header (*screens.h*) no qual declararemos nossas telas. Siga os passos:
+* No VS, garanta que o Solution Explorer está visível, selecionando **View|Solution Explorer**.
+* No Solution Explorer, expanda a pasta (filtro, na verdade) **[Solution]|[Projeto]|Header Files**.
+* Clique o botão direito no filtro **Header Files** e selecione a opção **Add|New Item**.
+* Na tela que apareceu, selecione o tipo **Header File (.h)**, dê o nome *screens.h* para o arquivo, certifique-se que o campo **Location** tem o diretório do seu projeto (deve ser por default) e clique em **Add**.
+* Note que o arquivo foi criado e a referência a ele apareceu no Solution Explorer, sob o filtro **Header Files**.
+
+Nota: Se você não está usando o VS, faça processo similar na sua IDE, ou simplesmente crie o arquivo *screens.h* no diretório do seu projeto.
+
+2. No arquivo *screens.h*, crie uma constante (*static const char gameScreen[]*, terminada em nulo) com o mapa da tela do jogo, de 32x24 posições, com uma borda nas 23 linhas superiores e informações de status (score, hiscore e level) na última linha.
+
+* Use "-" para bordas horizontais, "|" pa verticais e "+" para as intersecções.
+
+```c
+static const char gameScreen[] = \
+"+------------------------------+"\
+"|                              |"\
+
+(... repete 19 linhas ...)
+
+"|                              |"\
+"+------------------------------+"\
+" Score 0     High 0    Level 1  \0";
+```
+
+3. Agora, para utilizar o que definimos no aquivo *screens.h*, em nossa rotina de exibição de tela no arquivo *msxromapp.c*, esse último precisa "conhecer" o primeiro. Precisamos, assim, referenciar o arquivo header no *msxromapp.c*. Para isso, inclua a seguinte linha no topo do arquivo .c, após outras cláusulas "include":
+
+```c
+#include "screens.h"
+```
+
+4. Por fim, vamos substituir o stub de tela de jogo pelo novo background, simples mas funcional. Na função Substitua a impressão da string *"Game"* pela impressão de nossa nova constante *gameScreen*:
+```c
+	//print("Game");
+	print(gameScreen);
+```
+
+5. Compile e execute o programa.
+
+6. Discussão de resultados e percepções sobre:
+* constantes;
+* arquivos header;
+* a impressão na última posição da tela (canto inferior direito, ou coordenadas (31,23)); print versus vpoke;
+* diferenças para BASIC, Pascal ou outras linguagens.
+
+7. Ajuste, se necessário, a impressão do último caracter da tela para evitar o scroll.
+* Esse ajuste é preliminar, até construirmos nossa própria rotina de impressão em Assembly, que vai permitir desenhar o gramado, dar mais velocidade para a criação da tela e evitar o scroll quando usamos a última posição da tela.
