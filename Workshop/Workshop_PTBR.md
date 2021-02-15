@@ -283,7 +283,9 @@ void gameOver() {
 ### 2.6. Finalização da Sessão 2
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 15 minutos).
 
-1. Discussão geral da apresentação:
+1. Lição de casa: ler o manual do TMS9118 (http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf), seções 7.1, 7.1.1 (7.1.2 não precisa), 8.1 inteira (8.1.1, 8.1.2 e 8.1.3).
+
+2. Discussão geral da apresentação:
 * Uso de bibliotecas em C.
 * Fusion-C para desenvolvedores MSX-BASIC.
 * Arquivos .c e arquivos .h.
@@ -291,8 +293,6 @@ void gameOver() {
 * O loop externo do programa.
 * Dinâmica geral do workshop: feedbacks e ideias.
 
-2. Lição de casa: ler o manual do TMS9118 (http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf), seções 7.1, 7.1.1 (7.1.2 não precisa), 8.1 inteira (8.1.1, 8.1.2 e 8.1.3).
- 
 ---
 
 ## Sessão 3: Implementando a cobra
@@ -508,7 +508,7 @@ Ou, pensando em C:
 ### 3.4. Controlando a cadência do jogo.
 ###### *Github Ticket/Branch: 16/TKT0016.*
 
-##### Objetivo: Controlar o jogo através do sistema de interrupções do MSX (previsão: 20 minutos).
+##### Objetivo: Controlar a velocidade o jogo através do sistema de interrupções do MSX (previsão: 20 minutos).
 
 1. Entendendo o básico de interrupções do VDP.
 * Rotina de tratamento de interrupção;
@@ -546,7 +546,7 @@ unsigned int lastJiffy;
 ```
 4. Compile e rode o programa.
 
-5. Agora, para movimentar a cabeça da cobra, vamos colocar uma velocidade inicial de 4 posições por segundo. Assim, vamos aguardar o Jiffy chegar a 15 (supondo 60 NTSC e PAL-M com 60 frames por segundo) para executar a movimentação e, em seguida, zeramos essa variável para outro ciclo. Lembre-se que o bloco de efeitos sonoros deve ser executado a cada frame.
+5. Agora, para movimentar a cabeça da cobra, vamos colocar uma velocidade inicial de 4 posições por segundo. Assim, supondo NTSC e PAL-M com 60 frames por segundo, vamos aguardar o Jiffy chegar a 15 para executar a movimentação e, em seguida, zeramos essa variável para outro ciclo. Lembre-se que o bloco de efeitos sonoros deve ser executado a cada frame.
 ```c
 	// Initialize game variables
 	x = 10;
@@ -572,3 +572,14 @@ unsigned int lastJiffy;
 		{
 		}
 ```
+### 3.5. Finalização da Sessão 3
+##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
+
+1. Discussão geral da apresentação:
+* Switch/Case;
+* VDP, tabelas, VPEEK, VPOKE.
+* Interrupções, temporização, Jiffy.
+* Os vários loops internos do programa para controle de temporização.
+* Dinâmica geral do workshop: feedbacks e ideias.
+
+---
