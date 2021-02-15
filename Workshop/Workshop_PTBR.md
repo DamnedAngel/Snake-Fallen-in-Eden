@@ -341,7 +341,7 @@ void game() {
 ### 3.2. Movimentando a cabeça.
 ###### *Github Ticket/Branch: 14/TKT0014.*
 
-##### Objetivo: Fazer a cabeça da cobra passear pelo jardim (previsão: 15 minutos).
+##### Objetivo: Fazer a cabeça da cobra passear pelo jardim, comandada pelas setas do teclado (previsão: 30 minutos).
 
 1. Para que possamos começar a dinâmica do jogo, necessitamos criar um loop que mantenha a mecânica em execução até que o jogo acabe. Vamos, assim, criar a variável booleana *EoG* para controle desse loop (End of Game) no arquivo *msxromapp.c*, logo após as diretivas *#include*:
 ```c
@@ -376,4 +376,78 @@ bool EoG;
 ```
 
 7. Compile e rode o programa.
+
+8. Desafio: Sem olhar as respostas abaixo, pesquise como fazer uma leitura de Joystick na Fusion-C e implemente a leitura na variável joy.
+```c
+unsigned char x, y;
+bool EoG;
+unsigned char joy;
+```
+```c
+	while (!EoG) {
+		joy = JoystickRead(0);
+
+		Locate(x, y);
+		print("*");
+	}
+```
+
+9. Conhecendo a estrutura ***switch/case*** em C:
+```c
+SINTAXE:
+
+switch (expressão)
+{
+    case <constante_1>:
+      // bloco de comandos
+
+      break;
+
+    case <constante_2>:
+      // bloco de comandos
+
+      break;
+    .
+    .
+    .
+    case <constante_n>:
+      // bloco de comandos
+
+      break;
+
+    default:
+      // bloco de comandos
+}
+```
+* A *expressão* é avaliada uma vez e comparada com as *constantes* de cada bloco ***case***, na ordem estipulada.
+* Se/quando houver uma correspondência, o *bloco de comandos* correspondente é executados.
+* Ao encontrar a cláusula ***break***, a estrutura ***switch*** é finalizada.
+* Se um block ***case*** não for finalizado com ***break***,  os *blocos de comandos* subsequentes são executados também (até que um ***break*** seja encontrado).
+* Se/quando a expressão não corresponder a nenhuma das *constantes*, o *bloco de comandos* após a cláusula ***default*** é executado.
+
+8. Desafio: Sem olhar o resultado abaixo, monte uma estrutura ***switch/case*** para alterar os valores das variáveis *x* e *y* em função dos valores de *joy*.
+```c
+		joy = JoystickRead(0);
+		
+		// move snake
+		switch (joy) {
+		case 1:
+			y--;
+			break;
+		case 3:
+			x++;
+			break;
+		case 5:
+			y++;
+			break;
+		case 7:
+			x--;
+			break;
+		}
+```
+
+9. Compile e rode o programa.
+
+10. Discussão:
+* O que houve? Por quê?
 
