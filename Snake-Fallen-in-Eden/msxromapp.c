@@ -10,6 +10,8 @@
 #include "msx_fusion.h"
 #include "screens.h"
 
+unsigned char x, y;
+
 #define Peek( address )			( *( (volatile unsigned char*)(address) ) )
 #define Peekw( address )		( *( (volatile unsigned int*)(address) ) )
 
@@ -66,6 +68,14 @@ void title() {
 void game() {
 	Cls();
 	print(gameScreen);
+
+	// Initialize game variables
+	x = 10;
+	y = 10;
+
+	Locate(x, y);
+	print("*");
+
 	InputChar();
 }
 

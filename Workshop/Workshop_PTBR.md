@@ -100,14 +100,14 @@ Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3
 
 ##### Objetivo: Entender a inclusão de bibliotecas externas ao projeto (previsão: 10 minutos).
 
-1. Substitua o conteúdo da função main() por
+1. Vamos primeiramente configurar o VDP para o modo que usaremos no jogo. Substitua o conteúdo da função main() por
 ```c
 void main(void) {
 	Screen(1);
 	Width(32);
 }
 ```
-Tente compilar e você receberá um erro, já que as funções *Screen()* e *Width()* são implementadas pela Fusion-C, e não estão disponíveis nativamente. Vamos então integrar a biblioteca ao projeto seguindo os passos abaixo.
+Tente compilar e você receberá um erro, já que as funções *Screen()* e *Width()* não estão disponíveis nativamente na linguagem C. A biblioteca Fusion-C as implementa, mas ainda não a integramos no projeto. Vamos então fazer isso, seguindo os passos abaixo.
 
 2. Descomente a linha abaixo no arquivo IncludeDirectories.txt:
 ```
@@ -161,7 +161,7 @@ void gameOver() {
 }
 ```
 
-**Note que as funções Cls(), print e InputChar são implementadas pela bibliteca **Fusion-C**.*
+**Note que as funções Cls() e InputChar são implementadas pela bibliteca **Fusion-C**, que também tem uma função Print(), mas estamos aqui usando o print() que é disponibilizado pelo template, por ser mais simples.*
 
 3. Implemente um loop infinito na função *main()* do programa, chamando sequencialmente as funções criadas no passo anterior.
 ```c
@@ -292,4 +292,49 @@ void gameOver() {
 ---
 
 ## Sessão 3: Implementando a cobra
+
+### 3.1. Uma cabeça no jardim
+###### *Github Ticket/Branch: 13/TKT0013.*
+
+##### Objetivo: Fazer a cabeça da cobra aparecer no jardim, com posição controlada por variáveis (previsão: 15 minutos).
+
+1. Vamos iniciar fazendo uma solução básica para o problema, adotando um estilo de programação próximo ao MSX-BASIC. A intenção é darmos um passo por vez para quem vem da linguagem clássica, e irmos pegando momento progressivamente.
+
+A movimentação é bidimensional (cima-baixo, esquerda-direita), então vamos implementar o controle da cabeça com duas variáveis X e Y para essas dimensões.
+
+Ao contrário do MSX-BASIC, todas as variáveis em C precisam ser declaradas antes do primeiro uso. Declare as duas variáveis no arquivo *msxromapp.c*, logo após as diretivas *#include*:
+```c
+unsigned char x, y;
+```
+
+2. Adicione, na função *game()*, a inicialização das variáveis, para que a cobra sempre inicialize o jogo dessa posição default:
+```c
+void game() {
+	Cls();
+	print(gameScreen);
+
+	// Initialize game variables
+	x = 10;
+	y = 10;
+
+	InputChar();
+}
+```
+
+3. Adicione, após a inicialização da variáveis, mas antes do *InputChar()*, comandos para impressão da cabeça:
+```c
+void game() {
+	Locate(x, y);
+	print("*");
+}
+```
+
+4. Compile e execute.
+
+5. Tente alterar os valores de X e Y, compile e execute.
+
+6. Discussão:
+* O que houve? Por quê?
+
+7. Restaure os valores de X=10 e Y=10.
 
