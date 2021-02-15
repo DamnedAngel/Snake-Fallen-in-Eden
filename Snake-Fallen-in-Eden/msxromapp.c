@@ -5,12 +5,15 @@
 //		C version
 // ----------------------------------------------------------
 
+#include <stdbool.h>
 #include "targetconfig.h"
 #include "MSX\BIOS\msxbios.h"
 #include "msx_fusion.h"
 #include "screens.h"
 
 unsigned char x, y;
+bool EoG;
+unsigned char joy;
 
 #define Peek( address )			( *( (volatile unsigned char*)(address) ) )
 #define Peekw( address )		( *( (volatile unsigned int*)(address) ) )
@@ -72,9 +75,31 @@ void game() {
 	// Initialize game variables
 	x = 10;
 	y = 10;
+	EoG = false;
 
-	Locate(x, y);
-	print("*");
+	// Game's main loop
+	while (!EoG) {
+		joy = JoystickRead(0);
+		
+		// move snake
+		switch (joy) {
+		case 1:
+			y--;
+			break;
+		case 3:
+			x++;
+			break;
+		case 5:
+			y++;
+			break;
+		case 7:
+			x--;
+			break;
+		}
+
+		Locate(x, y);
+		print("*");
+	}
 
 	InputChar();
 }
