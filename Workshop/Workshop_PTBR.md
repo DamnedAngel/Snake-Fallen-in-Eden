@@ -288,6 +288,8 @@ void gameOver() {
 * Constantes.
 * O loop externo do programa.
 * Dinâmica geral do workshop: feedbacks e ideias.
+
+2. Lição de casa: ler o manual do TMS9118 (http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf), seções 7.1, 7.1.1 (7.1.2 não precisa), 8.1 inteira (8.1.1, 8.1.2 e 8.1.3).
  
 ---
 
@@ -377,7 +379,7 @@ bool EoG;
 
 7. Compile e rode o programa.
 
-8. Desafio: Sem olhar as respostas abaixo, pesquise como fazer uma leitura de Joystick na Fusion-C e implemente a leitura na variável joy.
+8. **DESAFIO**: Sem olhar as respostas abaixo, pesquise como fazer uma leitura de Joystick na Fusion-C e implemente a leitura na variável joy.
 ```c
 unsigned char x, y;
 bool EoG;
@@ -425,7 +427,7 @@ switch (expressão)
 * Se um block ***case*** não for finalizado com ***break***,  os *blocos de comandos* subsequentes são executados também (até que um ***break*** seja encontrado).
 * Se/quando a expressão não corresponder a nenhuma das *constantes*, o *bloco de comandos* após a cláusula ***default*** é executado.
 
-8. Desafio: Sem olhar o resultado abaixo, monte uma estrutura ***switch/case*** para alterar os valores das variáveis *x* e *y* em função dos valores de *joy*.
+8. **DESAFIO**: Sem olhar o resultado abaixo, monte uma estrutura ***switch/case*** para alterar os valores das variáveis *x* e *y* em função dos valores de *joy*.
 ```c
 		joy = JoystickRead(0);
 		
@@ -446,8 +448,58 @@ switch (expressão)
 		}
 ```
 
-9. Compile e rode o programa.
+9. Compile e rode o programa (dica: teste com toques BEM rápidos na teclas de setas).
 
 10. Discussão:
 * O que houve? Por quê?
+
+### 3.3. Detectando colisão.
+###### *Github Ticket/Branch: 15/TKT0015.*
+
+##### Objetivo: Detectar colisão da cobra com as paredes e consigo mesma e finalizar o jogo (previsão: 20 minutos).
+
+1. Entendendo um pouquinho mais sobre a VRAM.
+* Tabelas padrões, nomes e cores da screen 1.
+* Lembrando da função BASE() do MSX-BASIC (https://www.msx.org/wiki/BASE()).
+* Lembrando da função VPEEK() do MSX-BASIC (https://www.msx.org/wiki/VPEEK).
+
+2. Crie a constante NAMETABLE no arquivo *msxromapp.c*, entre as cláusulas *#include* e as declarações de variáveis:
+```c
+#define NAMETABLE			0x1800
+```
+
+3. Discussão:
+* Como converter os valores das variáveis *x* e *y* nos endereços de VRAM correspondentes?
+
+4. **DESAFIO**: Sem olhar as respostas abaixo, recupere o conteúdo do jardim (tela) na posição para onde a cabeça da cobra está indo e armezene na variável *content*.
+```c
+bool EoG;
+unsigned char x, y;
+unsigned char joy;
+unsigned char content;
+```
+```c
+		// move snake
+		switch (joy) {
+			...
+		}
+
+		content = Vpeek(NAMETABLE + y * 32 + x);
+```
+
+5. **DESAFIO**: Sem olhar as respostas abaixo, ajuste a variável EoG se o valor da variável content for diferente de 32 (ASCII do espaço).
+```c
+		content = Vpeek(NAMETABLE + y * 32 + x);
+		if ((joy > 0) && (content != 32)) {
+			EoG = true;
+		}
+
+```
+Ou, pensando em C:
+```c
+		content = Vpeek(NAMETABLE + y * 32 + x);
+		EoG = ((joy > 0) && (content != ' '));
+```
+
+6. Compile e rode o programa.
 
