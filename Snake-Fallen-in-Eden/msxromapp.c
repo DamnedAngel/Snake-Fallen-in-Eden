@@ -11,12 +11,15 @@
 #include "msx_fusion.h"
 #include "screens.h"
 
-unsigned char x, y;
-bool EoG;
-unsigned char joy;
+#define NAMETABLE					0x1800
 
-#define Peek( address )			( *( (volatile unsigned char*)(address) ) )
-#define Peekw( address )		( *( (volatile unsigned int*)(address) ) )
+bool EoG;
+unsigned char x, y;
+unsigned char joy;
+unsigned char content;
+
+#define Peek( address )				( *( (volatile unsigned char*)(address) ) )
+#define Peekw( address )			( *( (volatile unsigned int*)(address) ) )
 
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
@@ -96,6 +99,9 @@ void game() {
 			x--;
 			break;
 		}
+
+		content = Vpeek(NAMETABLE + y * 32 + x);
+		EoG = ((joy > 0) && (content != ' '));
 
 		Locate(x, y);
 		print("*");
