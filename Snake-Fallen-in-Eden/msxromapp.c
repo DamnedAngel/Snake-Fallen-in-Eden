@@ -5,13 +5,22 @@
 //		C version
 // ----------------------------------------------------------
 
+#include <stdbool.h>
 #include "targetconfig.h"
 #include "MSX\BIOS\msxbios.h"
 #include "msx_fusion.h"
 #include "screens.h"
 
-#define Peek( address )			( *( (volatile unsigned char*)(address) ) )
-#define Peekw( address )		( *( (volatile unsigned int*)(address) ) )
+#define NAMETABLE					0x1800
+
+bool EoG;
+unsigned char x, y;
+unsigned char joy;
+unsigned char content;
+unsigned int lastJiffy;
+
+#define Peek( address )				( *( (volatile unsigned char*)(address) ) )
+#define Peekw( address )			( *( (volatile unsigned int*)(address) ) )
 
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
@@ -66,6 +75,53 @@ void title() {
 void game() {
 	Cls();
 	print(gameScreen);
+
+	// Initialize game variables
+	x = 10;
+	y = 10;
+	EoG = false;
+	Pokew(BIOS_JIFFY, 0);
+
+	// Game's main loop
+	while (!EoG) {
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {}
+		// from this point on, 1 pass per frame
+
+		if (Peekw(BIOS_JIFFY) == 15) {
+			joy = JoystickRead(0);
+
+			// move snake
+			switch (joy) {
+			case 1:
+				y--;
+				break;
+			case 3:
+				x++;
+				break;
+			case 5:
+				y++;
+				break;
+			case 7:
+				x--;
+				break;
+			}
+
+			content = Vpeek(NAMETABLE + y * 32 + x);
+			EoG = ((joy > 0) && (content != ' '));
+
+			Locate(x, y);
+			print("*");
+
+			Pokew(BIOS_JIFFY, 0);
+		}
+
+		// here we will add the sound effects routine
+		{
+		}
+
+		lastJiffy = Peekw(BIOS_JIFFY);
+	}
+
 	InputChar();
 }
 

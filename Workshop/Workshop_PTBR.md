@@ -19,6 +19,8 @@ Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
+Adicionalmente, note que os trechos de código fornecidos como exemplo muitas vezes contém um trecho já existente do programa, para referência de localização.
+
 ---
 
 ## Sessão 1: Criando e configurando o projeto
@@ -100,14 +102,14 @@ Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3
 
 ##### Objetivo: Entender a inclusão de bibliotecas externas ao projeto (previsão: 10 minutos).
 
-1. Substitua o conteúdo da função main() por
+1. Vamos primeiramente configurar o VDP para o modo que usaremos no jogo. Substitua o conteúdo da função main() por
 ```c
 void main(void) {
 	Screen(1);
 	Width(32);
 }
 ```
-Tente compilar e você receberá um erro, já que as funções *Screen()* e *Width()* são implementadas pela Fusion-C, e não estão disponíveis nativamente. Vamos então integrar a biblioteca ao projeto seguindo os passos abaixo.
+Tente compilar e você receberá um erro, já que as funções *Screen()* e *Width()* não estão disponíveis nativamente na linguagem C. A biblioteca Fusion-C as implementa, mas ainda não a integramos no projeto. Vamos então fazer isso, seguindo os passos abaixo.
 
 2. Descomente a linha abaixo no arquivo IncludeDirectories.txt:
 ```
@@ -161,7 +163,7 @@ void gameOver() {
 }
 ```
 
-**Note que as funções Cls(), print e InputChar são implementadas pela bibliteca **Fusion-C**.*
+**Note que as funções Cls() e InputChar são implementadas pela bibliteca **Fusion-C**, que também tem uma função Print(), mas estamos aqui usando o print() que é disponibilizado pelo template, por ser mais simples.*
 
 3. Implemente um loop infinito na função *main()* do programa, chamando sequencialmente as funções criadas no passo anterior.
 ```c
@@ -281,10 +283,303 @@ void gameOver() {
 ### 2.6. Finalização da Sessão 2
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 15 minutos).
 
-1. Discussão geral da apresentação:
+1. Lição de casa: ler o manual do TMS9118 (http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf), seções 7.1, 7.1.1 (7.1.2 não precisa), 8.1 inteira (8.1.1, 8.1.2 e 8.1.3).
+
+2. Discussão geral da apresentação:
 * Uso de bibliotecas em C.
 * Fusion-C para desenvolvedores MSX-BASIC.
 * Arquivos .c e arquivos .h.
 * Constantes.
 * O loop externo do programa.
 * Dinâmica geral do workshop: feedbacks e ideias.
+
+---
+
+## Sessão 3: Implementando a cobra
+
+### 3.1. Uma cabeça no jardim
+###### *Github Ticket/Branch: 13/TKT0013.*
+
+##### Objetivo: Fazer a cabeça da cobra aparecer no jardim, com posição controlada por variáveis (previsão: 15 minutos).
+
+1. Vamos iniciar fazendo uma solução básica para o problema, adotando um estilo de programação próximo ao MSX-BASIC. A intenção é darmos um passo por vez para quem vem da linguagem clássica, e irmos pegando momento progressivamente.
+
+A movimentação é bidimensional (cima-baixo, esquerda-direita), então vamos implementar o controle da cabeça com duas variáveis *x* e *y* para essas dimensões.
+
+Ao contrário do MSX-BASIC, todas as variáveis em C precisam ser declaradas antes do primeiro uso. Declare as duas variáveis no arquivo *msxromapp.c*, logo após as diretivas *#include*:
+```c
+unsigned char x, y;
+```
+
+2. Adicione, na função *game()*, a inicialização das variáveis, para que a cobra sempre inicialize o jogo dessa posição default:
+```c
+void game() {
+	Cls();
+	print(gameScreen);
+
+	// Initialize game variables
+	x = 10;
+	y = 10;
+
+	InputChar();
+}
+```
+
+3. Adicione, após a inicialização da variáveis, mas antes do *InputChar()*, comandos para impressão da cabeça:
+```c
+void game() {
+	Locate(x, y);
+	print("*");
+}
+```
+
+4. Compile e execute.
+
+5. Tente alterar os valores de *x* e *y*, compile e execute.
+
+6. Discussão:
+* Por que escolhemos declarar as variáveis *x* e *y* como globais e não dentro da função *game()*?
+
+7. Restaure os valores de *x=10* e *y=10*.
+
+### 3.2. Movimentando a cabeça.
+###### *Github Ticket/Branch: 14/TKT0014.*
+
+##### Objetivo: Fazer a cabeça da cobra passear pelo jardim, comandada pelas setas do teclado (previsão: 30 minutos).
+
+1. Para que possamos começar a dinâmica do jogo, necessitamos criar um loop que mantenha a mecânica em execução até que o jogo acabe. Vamos, assim, criar a variável booleana *EoG* para controle desse loop (End of Game) no arquivo *msxromapp.c*, logo após as diretivas *#include*:
+```c
+bool EoG;
+```
+
+2. Em seguida, inicialize a variável com o valor *false*, no bloco de inicialização de variáveis da função *game()*:
+```c
+	// Initialize game variables
+	x = 10;
+	y = 10;
+	EoG = true;
+```
+
+3. Por fim, criemos a estrutura do loop ao redor dos comandos para impressão da cabeça da cobra. Com isso, o jogo ficará agora em um loop eterno, mas mais tarde artibuiremos *true* à EoG quando a cobra colidir com as paredes ou com ela mesma, o que permitirá ao jogo sair do loop:
+```c
+	// Game's main loop
+	while (! EoG) {
+		Locate(x, y);
+		print("*");
+	}
+```
+
+4. Compile o programa.
+
+5. Discussão:
+* O que houve? Por quê?
+
+6. Adicione suporte à variáveis booleanas ao seu programa, adicionando o seguinte include no início do arquivo *msxromapp.c*:
+```c
+#include <stdbool.h>
+```
+
+7. Compile e rode o programa.
+
+8. **DESAFIO**: Sem olhar as respostas abaixo, pesquise como fazer uma leitura de Joystick na Fusion-C e implemente a leitura na variável joy.
+```c
+unsigned char x, y;
+bool EoG;
+unsigned char joy;
+```
+```c
+	while (!EoG) {
+		joy = JoystickRead(0);
+
+		Locate(x, y);
+		print("*");
+	}
+```
+
+9. Conhecendo a estrutura ***switch/case*** em C:
+```c
+SINTAXE:
+
+switch (expressão)
+{
+    case <constante_1>:
+      // bloco de comandos
+
+      break;
+
+    case <constante_2>:
+      // bloco de comandos
+
+      break;
+    .
+    .
+    .
+    case <constante_n>:
+      // bloco de comandos
+
+      break;
+
+    default:
+      // bloco de comandos
+}
+```
+* A *expressão* é avaliada uma vez e comparada com as *constantes* de cada bloco ***case***, na ordem estipulada.
+* Se/quando houver uma correspondência, o *bloco de comandos* correspondente é executados.
+* Ao encontrar a cláusula ***break***, a estrutura ***switch*** é finalizada.
+* Se um block ***case*** não for finalizado com ***break***,  os *blocos de comandos* subsequentes são executados também (até que um ***break*** seja encontrado).
+* Se/quando a expressão não corresponder a nenhuma das *constantes*, o *bloco de comandos* após a cláusula ***default*** é executado.
+
+8. **DESAFIO**: Sem olhar o resultado abaixo, monte uma estrutura ***switch/case*** para alterar os valores das variáveis *x* e *y* em função dos valores de *joy*.
+```c
+		joy = JoystickRead(0);
+		
+		// move snake
+		switch (joy) {
+		case 1:
+			y--;
+			break;
+		case 3:
+			x++;
+			break;
+		case 5:
+			y++;
+			break;
+		case 7:
+			x--;
+			break;
+		}
+```
+
+9. Compile e rode o programa (dica: teste com toques BEM rápidos na teclas de setas).
+
+10. Discussão:
+* O que houve? Por quê?
+
+### 3.3. Detectando colisão.
+###### *Github Ticket/Branch: 15/TKT0015.*
+
+##### Objetivo: Detectar colisão da cobra com as paredes e consigo mesma e finalizar o jogo (previsão: 20 minutos).
+
+1. Entendendo um pouquinho mais sobre a VRAM.
+* Tabelas padrões, nomes e cores da screen 1.
+* Lembrando da função BASE() do MSX-BASIC (https://www.msx.org/wiki/BASE()).
+* Lembrando da função VPEEK() do MSX-BASIC (https://www.msx.org/wiki/VPEEK).
+
+2. Crie a constante NAMETABLE no arquivo *msxromapp.c*, entre as cláusulas *#include* e as declarações de variáveis:
+```c
+#define NAMETABLE			0x1800
+```
+
+3. Discussão:
+* Como converter os valores das variáveis *x* e *y* nos endereços de VRAM correspondentes?
+
+4. **DESAFIO**: Sem olhar as respostas abaixo, recupere o conteúdo do jardim (tela) na posição para onde a cabeça da cobra está indo e armezene na variável *content*.
+```c
+bool EoG;
+unsigned char x, y;
+unsigned char joy;
+unsigned char content;
+```
+```c
+		// move snake
+		switch (joy) {
+			...
+		}
+
+		content = Vpeek(NAMETABLE + y * 32 + x);
+```
+
+5. **DESAFIO**: Sem olhar as respostas abaixo, ajuste a variável EoG se o valor da variável content for diferente de 32 (ASCII do espaço).
+```c
+		content = Vpeek(NAMETABLE + y * 32 + x);
+		if ((joy > 0) && (content != 32)) {
+			EoG = true;
+		}
+
+```
+Ou, pensando em C:
+```c
+		content = Vpeek(NAMETABLE + y * 32 + x);
+		EoG = ((joy > 0) && (content != ' '));
+```
+
+6. Compile e rode o programa.
+
+### 3.4. Controlando a cadência do jogo.
+###### *Github Ticket/Branch: 16/TKT0016.*
+
+##### Objetivo: Controlar a velocidade o jogo através do sistema de interrupções do MSX (previsão: 20 minutos).
+
+1. Entendendo o básico de interrupções do VDP.
+* Rotina de tratamento de interrupção;
+* Halt do Z80;
+* Apoio da BIOS. Jiffy.
+
+2. Crie uma variável inteira, sem sinal e de 16 bits para controlar o progresso do *Jiffy* chamada *lastJiffy*. No final de loop, grave o último *Jiffy* detectado na variável e no início do loop do jogo aguarde até a BIOS mudar o valor do *Jiffy*.
+```c
+unsigned char content;
+unsigned int lastJiffy;
+```
+```c
+	// Game's main loop
+	while (!EoG) {
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {}
+		// from this point on, 1 pass per frame
+
+		...
+
+		lastJiffy = Peekw(BIOS_JIFFY);
+	}
+```
+
+3. Apenas para manter nossa lembrança, vamos colocar um comentário no final do loop de jogo, agora sincronizado a 1 execução por frame, que ali futuramente colocaremos nossa rotina simples de geração dos sons:
+
+```c
+		Locate(x, y);
+		print("*");
+
+		// here we will add the sound effects routine
+		{
+		}
+
+		lastJiffy = Peekw(BIOS_JIFFY);
+```
+4. Compile e rode o programa.
+
+5. Agora, para movimentar a cabeça da cobra, vamos colocar uma velocidade inicial de 4 posições por segundo. Assim, supondo NTSC e PAL-M com 60 frames por segundo, vamos aguardar o Jiffy chegar a 15 para executar a movimentação e, em seguida, zeramos essa variável para outro ciclo. Lembre-se que o bloco de efeitos sonoros deve ser executado a cada frame.
+```c
+	// Initialize game variables
+	x = 10;
+	y = 10;
+	EoG = false;
+	Pokew(BIOS_JIFFY, 0);
+```
+```c
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {}
+		// from this point on, 1 pass per frame
+
+		if (Peekw(BIOS_JIFFY) == 15) {
+			joy = JoystickRead(0);
+
+			...
+
+			print("*");
+
+			Pokew(BIOS_JIFFY, 0);
+		}
+
+		// here we will add the sound effects routine
+		{
+		}
+```
+### 3.5. Finalização da Sessão 3
+##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
+
+1. Discussão geral da apresentação:
+* Switch/Case;
+* VDP, tabelas, VPEEK, VPOKE.
+* Interrupções, temporização, Jiffy.
+* Os vários loops internos do programa para controle de temporização.
+* Dinâmica geral do workshop: feedbacks e ideias.
+
+---
