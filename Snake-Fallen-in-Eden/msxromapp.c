@@ -17,6 +17,7 @@ bool EoG;
 unsigned char x, y;
 unsigned char joy;
 unsigned char content;
+unsigned int lastJiffy;
 
 #define Peek( address )				( *( (volatile unsigned char*)(address) ) )
 #define Peekw( address )			( *( (volatile unsigned int*)(address) ) )
@@ -79,32 +80,46 @@ void game() {
 	x = 10;
 	y = 10;
 	EoG = false;
+	Pokew(BIOS_JIFFY, 0);
 
 	// Game's main loop
 	while (!EoG) {
-		joy = JoystickRead(0);
-		
-		// move snake
-		switch (joy) {
-		case 1:
-			y--;
-			break;
-		case 3:
-			x++;
-			break;
-		case 5:
-			y++;
-			break;
-		case 7:
-			x--;
-			break;
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {}
+		// from this point on, 1 pass per frame
+
+		if (Peekw(BIOS_JIFFY) == 15) {
+			joy = JoystickRead(0);
+
+			// move snake
+			switch (joy) {
+			case 1:
+				y--;
+				break;
+			case 3:
+				x++;
+				break;
+			case 5:
+				y++;
+				break;
+			case 7:
+				x--;
+				break;
+			}
+
+			content = Vpeek(NAMETABLE + y * 32 + x);
+			EoG = ((joy > 0) && (content != ' '));
+
+			Locate(x, y);
+			print("*");
+
+			Pokew(BIOS_JIFFY, 0);
 		}
 
-		content = Vpeek(NAMETABLE + y * 32 + x);
-		EoG = ((joy > 0) && (content != ' '));
+		// here we will add the sound effects routine
+		{
+		}
 
-		Locate(x, y);
-		print("*");
+		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
 	InputChar();

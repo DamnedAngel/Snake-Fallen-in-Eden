@@ -19,6 +19,8 @@ Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
+Adicionalmente, note que os trechos de código fornecidos como exemplo muitas vezes contém um trecho já existente do programa, para referência de localização.
+
 ---
 
 ## Sessão 1: Criando e configurando o projeto
@@ -503,3 +505,70 @@ Ou, pensando em C:
 
 6. Compile e rode o programa.
 
+### 3.4. Controlando a cadência do jogo.
+###### *Github Ticket/Branch: 16/TKT0016.*
+
+##### Objetivo: Controlar o jogo através do sistema de interrupções do MSX (previsão: 20 minutos).
+
+1. Entendendo o básico de interrupções do VDP.
+* Rotina de tratamento de interrupção;
+* Halt do Z80;
+* Apoio da BIOS. Jiffy.
+
+2. Crie uma variável inteira, sem sinal e de 16 bits para controlar o progresso do *Jiffy* chamada *lastJiffy*. No final de loop, grave o último *Jiffy* detectado na variável e no início do loop do jogo aguarde até a BIOS mudar o valor do *Jiffy*.
+```c
+unsigned char content;
+unsigned int lastJiffy;
+```
+```c
+	// Game's main loop
+	while (!EoG) {
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {}
+		// from this point on, 1 pass per frame
+
+		...
+
+		lastJiffy = Peekw(BIOS_JIFFY);
+	}
+```
+
+3. Apenas para manter nossa lembrança, vamos colocar um comentário no final do loop de jogo, agora sincronizado a 1 execução por frame, que ali futuramente colocaremos nossa rotina simples de geração dos sons:
+
+```c
+		Locate(x, y);
+		print("*");
+
+		// here we will add the sound effects routine
+		{
+		}
+
+		lastJiffy = Peekw(BIOS_JIFFY);
+```
+4. Compile e rode o programa.
+
+5. Agora, para movimentar a cabeça da cobra, vamos colocar uma velocidade inicial de 4 posições por segundo. Assim, vamos aguardar o Jiffy chegar a 15 (supondo 60 NTSC e PAL-M com 60 frames por segundo) para executar a movimentação e, em seguida, zeramos essa variável para outro ciclo. Lembre-se que o bloco de efeitos sonoros deve ser executado a cada frame.
+```c
+	// Initialize game variables
+	x = 10;
+	y = 10;
+	EoG = false;
+	Pokew(BIOS_JIFFY, 0);
+```
+```c
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {}
+		// from this point on, 1 pass per frame
+
+		if (Peekw(BIOS_JIFFY) == 15) {
+			joy = JoystickRead(0);
+
+			...
+
+			print("*");
+
+			Pokew(BIOS_JIFFY, 0);
+		}
+
+		// here we will add the sound effects routine
+		{
+		}
+```
