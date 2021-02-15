@@ -300,7 +300,7 @@ void gameOver() {
 
 1. Vamos iniciar fazendo uma solução básica para o problema, adotando um estilo de programação próximo ao MSX-BASIC. A intenção é darmos um passo por vez para quem vem da linguagem clássica, e irmos pegando momento progressivamente.
 
-A movimentação é bidimensional (cima-baixo, esquerda-direita), então vamos implementar o controle da cabeça com duas variáveis X e Y para essas dimensões.
+A movimentação é bidimensional (cima-baixo, esquerda-direita), então vamos implementar o controle da cabeça com duas variáveis *x* e *y* para essas dimensões.
 
 Ao contrário do MSX-BASIC, todas as variáveis em C precisam ser declaradas antes do primeiro uso. Declare as duas variáveis no arquivo *msxromapp.c*, logo após as diretivas *#include*:
 ```c
@@ -331,10 +331,49 @@ void game() {
 
 4. Compile e execute.
 
-5. Tente alterar os valores de X e Y, compile e execute.
+5. Tente alterar os valores de *x* e *y*, compile e execute.
 
 6. Discussão:
+* Por que escolhemos declarar as variáveis *x* e *y* como globais e não dentro da função *game()*?
+
+7. Restaure os valores de *x=10* e *y=10*.
+
+### 3.2. Movimentando a cabeça.
+###### *Github Ticket/Branch: 14/TKT0014.*
+
+##### Objetivo: Fazer a cabeça da cobra passear pelo jardim (previsão: 15 minutos).
+
+1. Para que possamos começar a dinâmica do jogo, necessitamos criar um loop que mantenha a mecânica em execução até que o jogo acabe. Vamos, assim, criar a variável booleana *EoG* para controle desse loop (End of Game) no arquivo *msxromapp.c*, logo após as diretivas *#include*:
+```c
+bool EoG;
+```
+
+2. Em seguida, inicialize a variável com o valor *false*, no bloco de inicialização de variáveis da função *game()*:
+```c
+	// Initialize game variables
+	x = 10;
+	y = 10;
+	EoG = true;
+```
+
+3. Por fim, criemos a estrutura do loop ao redor dos comandos para impressão da cabeça da cobra. Com isso, o jogo ficará agora em um loop eterno, mas mais tarde artibuiremos *true* à EoG quando a cobra colidir com as paredes ou com ela mesma, o que permitirá ao jogo sair do loop:
+```c
+	// Game's main loop
+	while (! EoG) {
+		Locate(x, y);
+		print("*");
+	}
+```
+
+4. Compile o programa.
+
+5. Discussão:
 * O que houve? Por quê?
 
-7. Restaure os valores de X=10 e Y=10.
+6. Adicione suporte à variáveis booleanas ao seu programa, adicionando o seguinte include no início do arquivo *msxromapp.c*:
+```c
+#include <stdbool.h>
+```
+
+7. Compile e rode o programa.
 
