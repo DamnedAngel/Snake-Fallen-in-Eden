@@ -7,7 +7,7 @@
 
 #include <stdbool.h>
 #include "targetconfig.h"
-#include "MSX\BIOS\msxbios.h"
+#include "MSX/BIOS/msxbios.h"
 #include "msx_fusion.h"
 #include "screens.h"
 
