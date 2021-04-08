@@ -4,53 +4,130 @@ Escrito por Damned Angel, 2020-2021
 
 ---
 
-## AbreviaÁıes usadas nesse documento
+## Abrevia√ß√µes usadas nesse documento
 
 VS: Visual Studio 2019
 
 ---
 
-## PadronizaÁıes usadas nesse documento
+## Padroniza√ß√µes usadas nesse documento
 
-Esse documento È dividido em sessıes de workshop, e as sessıes s„o divididas em tÛpicos de estudo.
+Esse documento √© dividido em sess√µes de workshop, e as sess√µes s√£o divididas em t√≥picos de estudo.
 
-Os tÛpicos de estudo s„o dividos em passos. Esses passos ter„o sempre 1 dentre 3 formatos:
-* Um passo com o verbo no ger˙ndio (ex: *Compilando o projeto.*) significa uma explosiÁ„o do palestrante.
-* Um passo com o verbo no imperativo (ex: *Configure a aplicaÁ„o*) denota um passo para ser executado pelo participante.
-* Um passo com a descriÁ„o de uma atividade (ex: *Discuss„o em grupo.*) descreve a proposta de uma din‚mica.
+Os t√≥picos de estudo s√£o dividos em passos. Esses passos ter√£o sempre 1 dentre 3 formatos:
+* Um passo com o verbo no ger√∫ndio (ex: *Compilando o projeto.*) significa uma explosi√ß√£o do palestrante.
+* Um passo com o verbo no imperativo (ex: *Configure a aplica√ß√£o*) denota um passo para ser executado pelo participante.
+* Um passo com a descri√ß√£o de uma atividade (ex: *Discuss√£o em grupo.*) descreve a proposta de uma din√¢mica.
 
-Adicionalmente, note que os trechos de cÛdigo fornecidos como exemplo muitas vezes contÈm um trecho j· existente do programa, para referÍncia de localizaÁ„o.
+Adicionalmente, note que os trechos de c√≥digo fornecidos como exemplo muitas vezes cont√©m um trecho j√° existente do programa, para refer√™ncia de localiza√ß√£o.
 
 ---
 
-## Sess„o 1: Criando e configurando o projeto
+## Sess√£o 0: Configurando o ambiente
 
-### 1.1. PrÈ-requisitos
+##### Objetivo: Ter o ambiente para desenvolvimento para MSX configurado e funcionando.
 
-##### Objetivo: REVISAR prÈ-requisitos para o workshop (previs„o: 10 minutos).
+Os templates para desenvolvimento para MSX foram originalmente concebidos para serem utilizados no MS Visual Studio, sob Windows. Com o tempo, eles evolu√≠ram para serem utilizados com outros editores, IDEs e at√© sistemas operacionais. O uso com o Viual Studio automatiza a gera√ß√£o de novos projetos e o processo de compila√ß√£o, mas tudo isso pode ser feito manualmente em outros ambientes.
+
+Caso voc√™ pretenda utilizar o MS Visual Studio, comece o processo de instala√ß√£o e configura√ß√£o do seu ambiente pela se√ß√£o 0.1 abaixo. Caso prefira utilizar outro editor/IDE, fa√ßa a instala√ß√£o dessas ferramentas e salte para a se√ß√£o 0.2.
+
+### 0.1. Instalando o Visual Studio Community 2019
+
+**Nota: APENAS PARA AQUELES QUE DESEJAM UTILIZAR O VISUAL STUDIO COMO AMBIENTE DE DESENVOLVIMENTO!**
+
+1. Acesse https://visualstudio.microsoft.com/downloads/, fa√ßa o download do MS Visual Studio e inicie o processo de instala√ß√£o.
+1.1. A vers√£o Community √© gratuita e suficiente.
+1.2. **Durante o processo de instala√ß√£o, instale um ou mais wordloads (suporte √† linguagens e plataformas). Essas extens√µes n√£o s√£o necess√°rias para compilar seus projetos MSX, mas o Visual Studio, aparentemente, tem dificuldades de encontrar os templates se wordloads n√£o s√£o instalados. Como sugest√£o, instale os ambientes de C++ e Jogos C++.**
+
+### 0.2. Instalando o SDCC
+
+1. Acesse http://sdcc.sourceforge.net/, fa√ßa o download do SDCC (Small Device C Compiler) e inicie o processo de instala√ß√£o.
+1.1. Voc√™ pode precisar recompilar o SDCC a partir dos fontes se o bin√°rio para seu sistema operacional n√£o estiver dispon√≠vel. O processo n√£o √© complicado, entretanto.
+1.2 A compila√ß√£o do SDCC depende do pacote "Build Essentials" no linux. O OSX j√° possui todas as depend√™ncias.
+1.3. Para garantir um processo de compila√ß√£o mais r√°pido, configure a compila√ß√£o com **make config** e remova os m√≥dulos que n√£o lhe interessarem. Para o uso na compila√ß√£o de MSX, apenas os m√≥dulos relacionados com o Z80 s√£o necess√°rios.
+2. Ap√≥s a instala√ß√£o, garanta que voc√™ tem os execut√°veis sdcc.exe e sdasz80.exe no PATH do seu sistema operacional. Para testar isso, abra uma janela do terminal/shell/prompt de comando e digite **sdcc <enter>** e **sdasz80 <enter>**. Ao emitir esses comandos, mensagens desses programas devem aparecer na tela.
+
+### 0.3. Instalando o HEX2BIN
+
+1. Acesse http://hex2bin.sourceforge.net/, e fa√ßa o download do HEX2BIN.
+2. O hex2bin n√£o vem com pacote de instala√ß√£o.
+2.1. No Windows, a forma mais f√°cil de "instalar" √© extrair o execut√°vel hex2bin.exe do pacote de distribui√ß√£o e mov√™-lo para a pasta onde seu sdcc.exe est√° localizado.
+2.2. No Linux e no OSX voc√™ provavelmente precisar√° compilar essas ferramentas (embora algumas pessoas reportaram para mim terem encontrados bin√°rios dispon√≠veis para download). Nesse caso, fa√ßa download do codigo-fonte e o compile. √â r√°pido e f√°cil.
+3. Ap√≥s a instala√ß√£o, garanta que voc√™ tem o execut√°vel hex2bin.exe no PATH do seu sistema operacional. Para testar isso, abra uma janela do terminal/shell/prompt de comando e digite **hex2bin <enter>**. Ao emitir esse comando, uma mensagem do programa ser√° exibida.
+
+### 0.4. Instalando o PYTHON
+
+1. Acesse https://www.python.org/, fa√ßa o download do pacote de instala√ß√£o do PYTHON e inicie o processo de instala√ß√£o.
+2. Ap√≥s a instala√ß√£o, garanta que voc√™ tem o execut√°vel python.exe no PATH do seu sistema operacional. Para testar isso, abra uma janela do terminal/shell/prompt de comando e digite **python <enter>**. Ao emitir esse comando, uma mensagem do programa ser√° exibida.
+
+### 0.5. Preparando a estrutura de diret√≥rios para seus projetos
+
+1. Fa√ßa download do arquivo MSX.zip localizado em uma pinned message do canal templates-e-ide do Discord Server MSX Revamp.
+1.1. Esse arquivo cont√©m, al√©m da √°rvore de diret√≥rios RECOMENDADA para o desenvolvimento de aplica√ß√µes MSX, a biblioteca fusion-c e um projeto MSX de exemplo, 100% funcional.
+2. Decompacte o arquivo no local apropriado no seu computador. Explore a estrutura.
+
+### 0.6.a. Fazendo download dos templates de projetos MSX (VISUAL STUDIO)
+
+1. Acesse https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio/releases/tag/v00.05.00, des√ßa at√© a se√ß√£o **Assets** e fa√ßa download dos arquivos *.Template.zip .
+2. Abra o Windows Explorer e navegue para a pasta **C:\Users\[User Name]\Documents\Visual Studio [Version]\Templates\ProjectTemplates\**. Caso seja necess√°rio, crie os diret√≥rios.
+3. Copie os templates baixados para essa pasta.
+4. Abra o Visual Studio, selecione a op√ß√£o de criar um novo projeto e verifique se as op√ß√µes de criar projetos MSX est√£o presentes.
+4.1. Em algumas instala√ß√µes, por algum motivo o Visual Studio n√£o consegue encontrar os templates. √â um bug do Visual Studio. Se for esse seu caso, seguem algumas coisas que voc√™ pode tentar:
+4.1.1. Descompacte os templates cada um para um diret√≥rio espec√≠fico. Em princ√≠pio, o Visual Studio consegue identificar templates compactados ou armazenados em diret√≥rios. Em alguns casos o VS consegue encontrar apenas os templates em diret√≥rios.
+4.1.2. Instale workloads diferentes no VS. Exsitem casos de ambientes nos quais o VS passou a enxergar os templates ap√≥s instala√ß√£o dos workloads de C++ e Jogos C++.
+4.1.3. Re-instale o Visual Studio. Sim, it sucks.
+5. Para usar os templates, selecione o template desejado na tela de cria√ß√£o do projeto e siga as instru√ß√µes.
+
+### 0.6.b. Fazendo download dos templates de projetos MSX (OUTROS AMBIENTES QUE N√ÉO O VISUAL STUDIO)
+
+1. Acesse https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio/releases/tag/v00.05.00, des√ßa at√© a se√ß√£o **Assets** e fa√ßa download dos arquivos *.Application.zip.
+2. Para us√°-los, descompacte o template desejado nao diret√≥rio **projecs** da estrutura de desenvolvimento citada na se√ß√£o 0.5 acima. Renomeie o diret√≥rio da solu√ß√£o para o que lhe interessar e pronto, seu projeto est√° pronto para ser evolu√≠do.
+
+### 0.7. instalando o emulador openMSX
+
+1. Acesse https://openmsx.org/, fa√ßa download do instalador para o seu sistema operacional e inicie o processo de instala√ß√£o.
+2. Fa√ßa o download das ROMS MSX em http://www.msxarchive.nl/pub/msx/emulator/openMSX/systemroms.zip e o descompacte nas pastas abaixo:
+2.1. Linux e OSX: ~/.openMSX/share/systemroms
+2.2. Windows: C:\Users\your_user_name\My Documents\openMSX\share\systemroms
+3. Fa√ßa o download da imagem de Hard Disk do Ricardo Pinheiro em https://we.tl/t-pHJk47w7Yj e a descompacte em algum lugar apropriado no seu HD.
+4. Dispare o execut√°vel Catapult. Ele iniciar√° uma busca pelas ROMs dispon√≠veis. Se ele n√£o iniciar, force o processo na op√ß√£o de menu File|Test MSX Hardware.
+5. No interface principal do Catapult, selecione:
+5.1. Em MSX Type, o modelo Panasonic FS-A1GT.
+5.2. em Extensions, o m√≥dulo ide
+6. Na caixa de texto Hard-Disk, selecione a imagem de HD baixada no item 3 acima.
+6. Aperte o bot√£o Start para inciar a emula√ß√£o
+
+
+---
+
+## Sess√£o 1: Criando e configurando o projeto
+
+### 1.1. Pr√©-requisitos
+
+##### Objetivo: REVISAR pr√©-requisitos para o workshop (previs√£o: 10 minutos).
 
 * VS Instalado.
-* Templates MSX (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instruÁıes em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
+* Templates MSX (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instru√ß√µes em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
 * SDCC, Hex2Bin e Python instalados e configurados no PATH.
 * Fusion-C baixada e descompactada.
 * OpenMSX instalado e rodando. Seguir roteiro do Lavadeira em:
 * Parte 1: https://medium.com/relearning-msx/relearning-msx-5-setting-up-the-msx-c-environment-part-1-797d14e03a1d
 * Parte 2: https://medium.com/relearning-msx/relearning-msx-6-7a5d8e3ef6a3
-* Demais partes s„o interessantes, mas opcionais. O que precisamos È de um OpenMSX rodando MSXDOS para o caso de desenvolvimento para esse ambiente.
+* Demais partes s√£o interessantes, mas opcionais. O que precisamos √© de um OpenMSX rodando MSXDOS para o caso de desenvolvimento para esse ambiente.
 * OpenMSX Debugger instalado e rodando.
 
 
 ### 1.2. Criando o projeto
 ###### *Github Ticket/Branch: 2/TKT0002.*
-##### Objetivo: Dominar a criaÁ„o de projetos MSX a partir dos templates (previs„o: 10 minutos).
+##### Objetivo: Dominar a cria√ß√£o de projetos MSX a partir dos templates (previs√£o: 10 minutos).
 
-1. Clique no bot„o **Create a New Project** na janela de abertura do VS. Alternativamente, selecione **File|New|Project**.
-2. Na lista de templates mostrada, selecione **MSX ROM Application** (caso queira fazer o projeto no formato MSX-DOS, escolha o template **MSX-DOS Application**. Provavelmente esse item estar· no final da lista, ent„o faÁa o scroll down.
-3. Configure o nome da aplicaÁ„o, a localizaÁ„o do projeto no seu disco e o nome da soluÁ„o (a soluÁ„o È um agregador de projetos).
-4. Clique o bot„o **Create** e o VS criar· seu projeto. Para ter certeza que o projeto foi criado corretamente, compile-o com **Build|Build Solution**. A tela de output dever·, ao final da compilaÁ„o, mostrar a mensagem **"Rebuild All: 1 succeeded, 0 failed, 0 skipped"**.
+1. Clique no bot√£o **Create a New Project** na janela de abertura do VS. Alternativamente, selecione **File|New|Project**.
+2. Na lista de templates mostrada, selecione **MSX ROM Application** (caso queira fazer o projeto no formato MSX-DOS, escolha o template **MSX-DOS Application**. Provavelmente esse item estar√° no final da lista, ent√£o fa√ßa o scroll down.
+3. Configure o nome da aplica√ß√£o, a localiza√ß√£o do projeto no seu disco e o nome da solu√ß√£o (a solu√ß√£o √© um agregador de projetos).
+4. Clique o bot√£o **Create** e o VS criar√° seu projeto. Para ter certeza que o projeto foi criado corretamente, compile-o com **Build|Build Solution**. A tela de output dever√°, ao final da compila√ß√£o, mostrar a mensagem **"Rebuild All: 1 succeeded, 0 failed, 0 skipped"**.
 
 ### 1.3. Compilando e rodando no OpenMSX
-##### Objetivo: Executar programas MSX em desenvolvimento (previs„o: 10 minutos).
+##### Objetivo: Executar programas MSX em desenvolvimento (previs√£o: 10 minutos).
 
 1. Compilando o projeto ROM e rodando no OpenMSX.
 2. Usando modo Release/Debug.
@@ -61,11 +138,11 @@ Adicionalmente, note que os trechos de cÛdigo fornecidos como exemplo muitas vez
 
 ### 1.4. Configurando o projeto e explorando o template
 ###### *Github Ticket/Branch: 3/TKT0003.*
-##### Objetivo: Compreender a estrutura do projeto MSX (previs„o: 25 minutos).
+##### Objetivo: Compreender a estrutura do projeto MSX (previs√£o: 25 minutos).
 
-1. Ajustando par‚metros em ApplicationSettings.txt.
-2. Configurando nome da aplicaÁ„o em TargetConfig_Debug.txt e TargetConfig_Release.txt.
-3. Explorando os arquivos de configuraÁ„o do projeto.
+1. Ajustando par√¢metros em ApplicationSettings.txt.
+2. Configurando nome da aplica√ß√£o em TargetConfig_Debug.txt e TargetConfig_Release.txt.
+3. Explorando os arquivos de configura√ß√£o do projeto.
 4. Explorando a estrutura do projeto:
 * msxromapp.c
 * msxromapp.s
@@ -79,70 +156,70 @@ Adicionalmente, note que os trechos de cÛdigo fornecidos como exemplo muitas vez
 * symbol.p
 
 ### 1.5. Criando projetos MSX-DOS e BIN
-##### Objetivo: Compreender a estrutura do projeto MSX (previs„o: 20 minutos).
+##### Objetivo: Compreender a estrutura do projeto MSX (previs√£o: 20 minutos).
 
 *Nota: Salve e feche o projeto ROM antes de iniciar esse item.*
 
-1. Criando um projeto MSXDOS + compilaÁ„o e execuÁ„o + configuraÁıes. 
-2. Criando um projeto BIN + compilaÁ„o e execuÁ„o + configuraÁıes. 
+1. Criando um projeto MSXDOS + compila√ß√£o e execu√ß√£o + configura√ß√µes. 
+2. Criando um projeto BIN + compila√ß√£o e execu√ß√£o + configura√ß√µes. 
 
-### 1.6. FinalizaÁ„o da Sess„o 1
-##### Objetivo: Discutir os tÛpicos tratados e o modelo/din‚mica do workshop (previs„o: 10 minutos).
+### 1.6. Finaliza√ß√£o da Sess√£o 1
+##### Objetivo: Discutir os t√≥picos tratados e o modelo/din√¢mica do workshop (previs√£o: 10 minutos).
 
-1. Discuss„o geral da apresentaÁ„o:
-* TÛpicos apresentados.
-* Din‚mica geral do workshop: feedbacks e ideias.
+1. Discuss√£o geral da apresenta√ß√£o:
+* T√≥picos apresentados.
+* Din√¢mica geral do workshop: feedbacks e ideias.
 
 ---
 
-## Sess„o 2: Iniciando o programa
+## Sess√£o 2: Iniciando o programa
 
 ### 2.1. Integrando a biblioteca Fusion-C
 ###### *Github Ticket/Branch: 7/TKT0007.*
 
-##### Objetivo: Entender a inclus„o de bibliotecas externas ao projeto (previs„o: 10 minutos).
+##### Objetivo: Entender a inclus√£o de bibliotecas externas ao projeto (previs√£o: 10 minutos).
 
-1. Vamos primeiramente configurar o VDP para o modo que usaremos no jogo. Substitua o conte˙do da funÁ„o main() por
+1. Vamos primeiramente configurar o VDP para o modo que usaremos no jogo. Substitua o conte√∫do da fun√ß√£o main() por
 ```c
 void main(void) {
 	Screen(1);
 	Width(32);
 }
 ```
-Tente compilar e vocÍ receber· um erro, j· que as funÁıes *Screen()* e *Width()* n„o est„o disponÌveis nativamente na linguagem C. A biblioteca Fusion-C as implementa, mas ainda n„o a integramos no projeto. Vamos ent„o fazer isso, seguindo os passos abaixo.
+Tente compilar e voc√™ receber√° um erro, j√° que as fun√ß√µes *Screen()* e *Width()* n√£o est√£o dispon√≠veis nativamente na linguagem C. A biblioteca Fusion-C as implementa, mas ainda n√£o a integramos no projeto. Vamos ent√£o fazer isso, seguindo os passos abaixo.
 
 2. Descomente a linha abaixo no arquivo IncludeDirectories.txt:
 ```
 [MSX_LIB_PATH]\fusion-c\header
 ```
-Isso far· os arquivos .h nesse diretÛrio acessÌveis por cl·usulas *include*. VocÍ poder· ter que adaptar o caminho caso tenha usado um diretÛrio diferente na instalaÁ„o da Fusion-C.
+Isso far√° os arquivos .h nesse diret√≥rio acess√≠veis por cl√°usulas *include*. Voc√™ poder√° ter que adaptar o caminho caso tenha usado um diret√≥rio diferente na instala√ß√£o da Fusion-C.
 
-3. Adicione a linha abaixo no inÌcio do seu fonte *msxromapp.c*:
+3. Adicione a linha abaixo no in√≠cio do seu fonte *msxromapp.c*:
 ```c
 #include "msx_fusion.h"
 ```
-Isso importar· todas as declaraÁıes de funÁıes da Fusion-C. Se vocÍ n„o entende direito como arquivos header (*.h) funcionam em C, talvez este seja um bom momento de dar uma pesquisada r·pida.
+Isso importar√° todas as declara√ß√µes de fun√ß√µes da Fusion-C. Se voc√™ n√£o entende direito como arquivos header (*.h) funcionam em C, talvez este seja um bom momento de dar uma pesquisada r√°pida.
 
-Note que o arquivo a msx_fusion.h contÈm a declaraÁ„o da funÁ„o, mas n„o a implementaÁ„o (abra o arquivo e veja por vocÍ mesmo!). No prÛximo passo incluremos a implementaÁ„o da funÁ„o ao projeto.
+Note que o arquivo a msx_fusion.h cont√©m a declara√ß√£o da fun√ß√£o, mas n√£o a implementa√ß√£o (abra o arquivo e veja por voc√™ mesmo!). No pr√≥ximo passo incluremos a implementa√ß√£o da fun√ß√£o ao projeto.
 
 4. Descomente a linha abaixo no arquivo Libraries.txt:
 ```
 [MSX_LIB_PATH]\fusion-c\lib\fusion.lib
 ```
-Com isso terminamos a inclus„o da biblioteca no processo de compilaÁ„o do projeto.
+Com isso terminamos a inclus√£o da biblioteca no processo de compila√ß√£o do projeto.
 
-5. Compile o programa para se certificar que ele est· funcional. Se quiser, teste-o no OpenMSX.
+5. Compile o programa para se certificar que ele est√° funcional. Se quiser, teste-o no OpenMSX.
 
 ### 2.2. Criando o loop externo do programa
 ###### *Github Ticket/Branch: 6/TKT0006.*
 
-##### Objetivo: Ter a inicializaÁ„o e a lÛgica geral do fluxo da aplicaÁ„o implementadas (previs„o:15 minutos).
+##### Objetivo: Ter a inicializa√ß√£o e a l√≥gica geral do fluxo da aplica√ß√£o implementadas (previs√£o:15 minutos).
 
-1. No arquivo *msxromapp.c*, remova todas as funÁıes de exemplo de suporte a chamadas CALL do BASIC e a dispositivos depois do main():
+1. No arquivo *msxromapp.c*, remova todas as fun√ß√µes de exemplo de suporte a chamadas CALL do BASIC e a dispositivos depois do main():
 * onCall*
 * onDevice*
 
-2. No mesmo arquivo, crie stubs para as funÁıes de exibiÁ„o de tÌtulo do jogo, da lÛgica de jogo e da exibiÁ„o da tela de fim de jogo:
+2. No mesmo arquivo, crie stubs para as fun√ß√µes de exibi√ß√£o de t√≠tulo do jogo, da l√≥gica de jogo e da exibi√ß√£o da tela de fim de jogo:
 ```c
 void title() {
 	Cls();
@@ -163,9 +240,9 @@ void gameOver() {
 }
 ```
 
-**Note que as funÁıes Cls() e InputChar s„o implementadas pela bibliteca **Fusion-C**, que tambÈm tem uma funÁ„o Print(), mas estamos aqui usando o print() que È disponibilizado pelo template, por ser mais simples.*
+**Note que as fun√ß√µes Cls() e InputChar s√£o implementadas pela bibliteca **Fusion-C**, que tamb√©m tem uma fun√ß√£o Print(), mas estamos aqui usando o print() que √© disponibilizado pelo template, por ser mais simples.*
 
-3. Implemente um loop infinito na funÁ„o *main()* do programa, chamando sequencialmente as funÁıes criadas no passo anterior.
+3. Implemente um loop infinito na fun√ß√£o *main()* do programa, chamando sequencialmente as fun√ß√µes criadas no passo anterior.
 ```c
 	// program's infinite loop
 	while (1) {
@@ -177,29 +254,29 @@ void gameOver() {
 
 4. Compile e execute o programa.
 
-5. Discuss„o de resultados e primeiras percepÁıes sobre:
+5. Discuss√£o de resultados e primeiras percep√ß√µes sobre:
 * o programa;
 * o ambiente de desenvolvimento;
 * a biblioteca Fusion-C;
-* diferenÁas para BASIC, Pascal ou outras linguagens.
+* diferen√ßas para BASIC, Pascal ou outras linguagens.
 
 ### 2.3. Criando uma tela funcional para o jogo
 ###### *Github Ticket/Branch: 8/TKT0008.*
 
-##### Objetivo: Estabelecer uma tela de fundo funcional para o desenvolvimento do jogo (previs„o:20 minutos).
+##### Objetivo: Estabelecer uma tela de fundo funcional para o desenvolvimento do jogo (previs√£o:20 minutos).
 
 1. Vamos primeiramente criar um arquivo header (*screens.h*) no qual declararemos nossas telas. Siga os passos:
-* No VS, garanta que o Solution Explorer est· visÌvel, selecionando **View|Solution Explorer**.
+* No VS, garanta que o Solution Explorer est√° vis√≠vel, selecionando **View|Solution Explorer**.
 * No Solution Explorer, expanda a pasta (filtro, na verdade) **[Solution]|[Projeto]|Header Files**.
-* Clique o bot„o direito no filtro **Header Files** e selecione a opÁ„o **Add|New Item**.
-* Na tela que apareceu, selecione o tipo **Header File (.h)**, dÍ o nome *screens.h* para o arquivo, certifique-se que o campo **Location** tem o diretÛrio do seu projeto (deve ser por default) e clique em **Add**.
-* Note que o arquivo foi criado e a referÍncia a ele apareceu no Solution Explorer, sob o filtro **Header Files**.
+* Clique o bot√£o direito no filtro **Header Files** e selecione a op√ß√£o **Add|New Item**.
+* Na tela que apareceu, selecione o tipo **Header File (.h)**, d√™ o nome *screens.h* para o arquivo, certifique-se que o campo **Location** tem o diret√≥rio do seu projeto (deve ser por default) e clique em **Add**.
+* Note que o arquivo foi criado e a refer√™ncia a ele apareceu no Solution Explorer, sob o filtro **Header Files**.
 
-Nota: Se vocÍ n„o est· usando o VS, faÁa processo similar na sua IDE, ou simplesmente crie o arquivo *screens.h* no diretÛrio do seu projeto.
+Nota: Se voc√™ n√£o est√° usando o VS, fa√ßa processo similar na sua IDE, ou simplesmente crie o arquivo *screens.h* no diret√≥rio do seu projeto.
 
-2. No arquivo *screens.h*, crie uma constante (*static const char gameScreen[]*, terminada em nulo) com o mapa da tela do jogo, de 32x24 posiÁıes, com uma borda nas 23 linhas superiores e informaÁıes de status (score, hiscore e level) na ˙ltima linha.
+2. No arquivo *screens.h*, crie uma constante (*static const char gameScreen[]*, terminada em nulo) com o mapa da tela do jogo, de 32x24 posi√ß√µes, com uma borda nas 23 linhas superiores e informa√ß√µes de status (score, hiscore e level) na √∫ltima linha.
 
-* Use "-" para bordas horizontais, "|" pa verticais e "+" para as intersecÁıes.
+* Use "-" para bordas horizontais, "|" pa verticais e "+" para as intersec√ß√µes.
 
 ```c
 #pragma once
@@ -215,13 +292,13 @@ static const char gameScreen[] = \
 " Score 0     High 0    Level 1  \0";
 ```
 
-3. Agora, para utilizar o que definimos no aquivo *screens.h*, em nossa rotina de exibiÁ„o de tela no arquivo *msxromapp.c*, esse ˙ltimo precisa "conhecer" o primeiro. Precisamos, assim, referenciar o arquivo header no *msxromapp.c*. Para isso, inclua a seguinte linha no topo do arquivo .c, apÛs outras cl·usulas "include":
+3. Agora, para utilizar o que definimos no aquivo *screens.h*, em nossa rotina de exibi√ß√£o de tela no arquivo *msxromapp.c*, esse √∫ltimo precisa "conhecer" o primeiro. Precisamos, assim, referenciar o arquivo header no *msxromapp.c*. Para isso, inclua a seguinte linha no topo do arquivo .c, ap√≥s outras cl√°usulas "include":
 
 ```c
 #include "screens.h"
 ```
 
-4. Por fim, precisamos substituir o stub de tela de jogo pelo novo background, simples mas funcional. Na funÁ„o *game()*, substitua a impress„o da string *"Game"* pela impress„o de nossa nova constante *gameScreen*:
+4. Por fim, precisamos substituir o stub de tela de jogo pelo novo background, simples mas funcional. Na fun√ß√£o *game()*, substitua a impress√£o da string *"Game"* pela impress√£o de nossa nova constante *gameScreen*:
 ```c
 	//print("Game");
 	print(gameScreen);
@@ -229,25 +306,25 @@ static const char gameScreen[] = \
 
 5. Compile e execute o programa.
 
-6. Discuss„o de resultados e percepÁıes sobre:
+6. Discuss√£o de resultados e percep√ß√µes sobre:
 * constantes;
 * arquivos header;
-* a impress„o na ˙ltima posiÁ„o da tela (canto inferior direito, ou coordenadas (31,23)); print versus vpoke;
-* diferenÁas para BASIC, Pascal ou outras linguagens.
+* a impress√£o na √∫ltima posi√ß√£o da tela (canto inferior direito, ou coordenadas (31,23)); print versus vpoke;
+* diferen√ßas para BASIC, Pascal ou outras linguagens.
 
-7. Ajuste, se necess·rio, a impress„o do ˙ltimo caracter da tela para evitar o scroll.
-* Esse ajuste È preliminar, atÈ construirmos nossa prÛpria rotina de impress„o em Assembly, que vai permitir desenhar o gramado, dar mais velocidade para a criaÁ„o da tela e evitar o scroll quando usamos a ˙ltima posiÁ„o da tela.
+7. Ajuste, se necess√°rio, a impress√£o do √∫ltimo caracter da tela para evitar o scroll.
+* Esse ajuste √© preliminar, at√© construirmos nossa pr√≥pria rotina de impress√£o em Assembly, que vai permitir desenhar o gramado, dar mais velocidade para a cria√ß√£o da tela e evitar o scroll quando usamos a √∫ltima posi√ß√£o da tela.
 
 ### 2.4. Criando uma tela de abertura funcional
 ###### *Github Ticket/Branch: 10/TKT0010*
 
-##### Objetivo: Estabelecer uma tela de abertura informativa para o jogo (previs„o:10 minutos).
+##### Objetivo: Estabelecer uma tela de abertura informativa para o jogo (previs√£o:10 minutos).
 
-A criaÁ„o da tela de abertura È similar ‡ criaÁ„o da tela de background do jogo. Assim os passos s„o similares:
+A cria√ß√£o da tela de abertura √© similar √† cria√ß√£o da tela de background do jogo. Assim os passos s√£o similares:
 
-1. No arquivo *screens.h*, crie a constante *titleScreen[]* com o mapa da tela de abertura, de forma similar ‡ *gameScreen*, tambÈm com 32x24 posiÁıes.
+1. No arquivo *screens.h*, crie a constante *titleScreen[]* com o mapa da tela de abertura, de forma similar √† *gameScreen*, tamb√©m com 32x24 posi√ß√µes.
 
-2. Na funÁ„o *title()*, substitua a impress„o da string *"My Snake Game"* pela impress„o da constante *titleScreen*.
+2. Na fun√ß√£o *title()*, substitua a impress√£o da string *"My Snake Game"* pela impress√£o da constante *titleScreen*.
 ```c
 	//print("My Snake Game");
 	print(titleScreen);
@@ -259,13 +336,13 @@ A criaÁ„o da tela de abertura È similar ‡ criaÁ„o da tela de background do jogo.
 ### 2.5. Criando uma tela de fim de jogo funcional
 ###### *Github Ticket/Branch: 11/TKT0011*
 
-##### Objetivo: Estabelecer uma tela de fim de jogo adequada para o jogo (previs„o:10 minutos).
+##### Objetivo: Estabelecer uma tela de fim de jogo adequada para o jogo (previs√£o:10 minutos).
 
-A criaÁ„o da tela de fim de jogo È um pouco diferente, pois queremos permitir que o jogador avalie a situaÁ„o geral do jogo e revise o placar.
+A cria√ß√£o da tela de fim de jogo √© um pouco diferente, pois queremos permitir que o jogador avalie a situa√ß√£o geral do jogo e revise o placar.
 
-1. No arquivo *screens.h*, crie a constante *gameOverMsg[]* com uma mensagem de 3 linhas (32 x 3 posiÁıes) de "Game Over" o mapa da tela de abertura:
+1. No arquivo *screens.h*, crie a constante *gameOverMsg[]* com uma mensagem de 3 linhas (32 x 3 posi√ß√µes) de "Game Over" o mapa da tela de abertura:
 
-2. Remova o *Cls()* da funÁ„o *gameOver()* e substitua a impress„o da string *"My Snake Game"* pela constante *gameOverMsg*, a partir da linha 9:
+2. Remova o *Cls()* da fun√ß√£o *gameOver()* e substitua a impress√£o da string *"My Snake Game"* pela constante *gameOverMsg*, a partir da linha 9:
 
 ```c
 void gameOver() {
@@ -276,42 +353,42 @@ void gameOver() {
 	InputChar();
 }
 ```
-**Note que a funÁ„o Locate() È implementada pela biblioteca **Fusion-C**.*
+**Note que a fun√ß√£o Locate() √© implementada pela biblioteca **Fusion-C**.*
 
 3. Compile e execute o programa.
 
-### 2.6. FinalizaÁ„o da Sess„o 2
-##### Objetivo: Discutir os tÛpicos tratados e o modelo/din‚mica do workshop (previs„o: 15 minutos).
+### 2.6. Finaliza√ß√£o da Sess√£o 2
+##### Objetivo: Discutir os t√≥picos tratados e o modelo/din√¢mica do workshop (previs√£o: 15 minutos).
 
-1. LiÁ„o de casa: ler o manual do TMS9118 (http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf), seÁıes 7.1, 7.1.1 (7.1.2 n„o precisa), 8.1 inteira (8.1.1, 8.1.2 e 8.1.3).
+1. Li√ß√£o de casa: ler o manual do TMS9118 (http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf), se√ß√µes 7.1, 7.1.1 (7.1.2 n√£o precisa), 8.1 inteira (8.1.1, 8.1.2 e 8.1.3).
 
-2. Discuss„o geral da apresentaÁ„o:
+2. Discuss√£o geral da apresenta√ß√£o:
 * Uso de bibliotecas em C.
 * Fusion-C para desenvolvedores MSX-BASIC.
 * Arquivos .c e arquivos .h.
 * Constantes.
 * O loop externo do programa.
-* Din‚mica geral do workshop: feedbacks e ideias.
+* Din√¢mica geral do workshop: feedbacks e ideias.
 
 ---
 
-## Sess„o 3: Implementando a cobra
+## Sess√£o 3: Implementando a cobra
 
-### 3.1. Uma cabeÁa no jardim
+### 3.1. Uma cabe√ßa no jardim
 ###### *Github Ticket/Branch: 13/TKT0013.*
 
-##### Objetivo: Fazer a cabeÁa da cobra aparecer no jardim, com posiÁ„o controlada por vari·veis (previs„o: 15 minutos).
+##### Objetivo: Fazer a cabe√ßa da cobra aparecer no jardim, com posi√ß√£o controlada por vari√°veis (previs√£o: 15 minutos).
 
-1. Vamos iniciar fazendo uma soluÁ„o b·sica para o problema, adotando um estilo de programaÁ„o prÛximo ao MSX-BASIC. A intenÁ„o È darmos um passo por vez para quem vem da linguagem cl·ssica, e irmos pegando momento progressivamente.
+1. Vamos iniciar fazendo uma solu√ß√£o b√°sica para o problema, adotando um estilo de programa√ß√£o pr√≥ximo ao MSX-BASIC. A inten√ß√£o √© darmos um passo por vez para quem vem da linguagem cl√°ssica, e irmos pegando momento progressivamente.
 
-A movimentaÁ„o È bidimensional (cima-baixo, esquerda-direita), ent„o vamos implementar o controle da cabeÁa com duas vari·veis *x* e *y* para essas dimensıes.
+A movimenta√ß√£o √© bidimensional (cima-baixo, esquerda-direita), ent√£o vamos implementar o controle da cabe√ßa com duas vari√°veis *x* e *y* para essas dimens√µes.
 
-Ao contr·rio do MSX-BASIC, todas as vari·veis em C precisam ser declaradas antes do primeiro uso. Declare as duas vari·veis no arquivo *msxromapp.c*, logo apÛs as diretivas *#include*:
+Ao contr√°rio do MSX-BASIC, todas as vari√°veis em C precisam ser declaradas antes do primeiro uso. Declare as duas vari√°veis no arquivo *msxromapp.c*, logo ap√≥s as diretivas *#include*:
 ```c
 unsigned char x, y;
 ```
 
-2. Adicione, na funÁ„o *game()*, a inicializaÁ„o das vari·veis, para que a cobra sempre inicialize o jogo dessa posiÁ„o default:
+2. Adicione, na fun√ß√£o *game()*, a inicializa√ß√£o das vari√°veis, para que a cobra sempre inicialize o jogo dessa posi√ß√£o default:
 ```c
 void game() {
 	Cls();
@@ -325,7 +402,7 @@ void game() {
 }
 ```
 
-3. Adicione, apÛs a inicializaÁ„o da vari·veis, mas antes do *InputChar()*, comandos para impress„o da cabeÁa:
+3. Adicione, ap√≥s a inicializa√ß√£o da vari√°veis, mas antes do *InputChar()*, comandos para impress√£o da cabe√ßa:
 ```c
 void game() {
 	Locate(x, y);
@@ -337,22 +414,22 @@ void game() {
 
 5. Tente alterar os valores de *x* e *y*, compile e execute.
 
-6. Discuss„o:
-* Por que escolhemos declarar as vari·veis *x* e *y* como globais e n„o dentro da funÁ„o *game()*?
+6. Discuss√£o:
+* Por que escolhemos declarar as vari√°veis *x* e *y* como globais e n√£o dentro da fun√ß√£o *game()*?
 
 7. Restaure os valores de *x=10* e *y=10*.
 
-### 3.2. Movimentando a cabeÁa.
+### 3.2. Movimentando a cabe√ßa.
 ###### *Github Ticket/Branch: 14/TKT0014.*
 
-##### Objetivo: Fazer a cabeÁa da cobra passear pelo jardim, comandada pelas setas do teclado (previs„o: 30 minutos).
+##### Objetivo: Fazer a cabe√ßa da cobra passear pelo jardim, comandada pelas setas do teclado (previs√£o: 30 minutos).
 
-1. Para que possamos comeÁar a din‚mica do jogo, necessitamos criar um loop que mantenha a mec‚nica em execuÁ„o atÈ que o jogo acabe. Vamos, assim, criar a vari·vel booleana *EoG* para controle desse loop (End of Game) no arquivo *msxromapp.c*, logo apÛs as diretivas *#include*:
+1. Para que possamos come√ßar a din√¢mica do jogo, necessitamos criar um loop que mantenha a mec√¢nica em execu√ß√£o at√© que o jogo acabe. Vamos, assim, criar a vari√°vel booleana *EoG* para controle desse loop (End of Game) no arquivo *msxromapp.c*, logo ap√≥s as diretivas *#include*:
 ```c
 bool EoG;
 ```
 
-2. Em seguida, inicialize a vari·vel com o valor *false*, no bloco de inicializaÁ„o de vari·veis da funÁ„o *game()*:
+2. Em seguida, inicialize a vari√°vel com o valor *false*, no bloco de inicializa√ß√£o de vari√°veis da fun√ß√£o *game()*:
 ```c
 	// Initialize game variables
 	x = 10;
@@ -360,7 +437,7 @@ bool EoG;
 	EoG = true;
 ```
 
-3. Por fim, criemos a estrutura do loop ao redor dos comandos para impress„o da cabeÁa da cobra. Com isso, o jogo ficar· agora em um loop eterno, mas mais tarde artibuiremos *true* ‡ EoG quando a cobra colidir com as paredes ou com ela mesma, o que permitir· ao jogo sair do loop:
+3. Por fim, criemos a estrutura do loop ao redor dos comandos para impress√£o da cabe√ßa da cobra. Com isso, o jogo ficar√° agora em um loop eterno, mas mais tarde artibuiremos *true* √† EoG quando a cobra colidir com as paredes ou com ela mesma, o que permitir√° ao jogo sair do loop:
 ```c
 	// Game's main loop
 	while (! EoG) {
@@ -371,17 +448,17 @@ bool EoG;
 
 4. Compile o programa.
 
-5. Discuss„o:
-* O que houve? Por quÍ?
+5. Discuss√£o:
+* O que houve? Por qu√™?
 
-6. Adicione suporte ‡ vari·veis booleanas ao seu programa, adicionando o seguinte include no inÌcio do arquivo *msxromapp.c*:
+6. Adicione suporte √† vari√°veis booleanas ao seu programa, adicionando o seguinte include no in√≠cio do arquivo *msxromapp.c*:
 ```c
 #include <stdbool.h>
 ```
 
 7. Compile e rode o programa.
 
-8. **DESAFIO**: Sem olhar as respostas abaixo, pesquise como fazer uma leitura de Joystick na Fusion-C e implemente a leitura na vari·vel joy.
+8. **DESAFIO**: Sem olhar as respostas abaixo, pesquise como fazer uma leitura de Joystick na Fusion-C e implemente a leitura na vari√°vel joy.
 ```c
 unsigned char x, y;
 bool EoG;
@@ -400,7 +477,7 @@ unsigned char joy;
 ```c
 SINTAXE:
 
-switch (express„o)
+switch (express√£o)
 {
     case <constante_1>:
       // bloco de comandos
@@ -423,13 +500,13 @@ switch (express„o)
       // bloco de comandos
 }
 ```
-* A *express„o* È avaliada uma vez e comparada com as *constantes* de cada bloco ***case***, na ordem estipulada.
-* Se/quando houver uma correspondÍncia, o *bloco de comandos* correspondente È executados.
-* Ao encontrar a cl·usula ***break***, a estrutura ***switch*** È finalizada.
-* Se um block ***case*** n„o for finalizado com ***break***,  os *blocos de comandos* subsequentes s„o executados tambÈm (atÈ que um ***break*** seja encontrado).
-* Se/quando a express„o n„o corresponder a nenhuma das *constantes*, o *bloco de comandos* apÛs a cl·usula ***default*** È executado.
+* A *express√£o* √© avaliada uma vez e comparada com as *constantes* de cada bloco ***case***, na ordem estipulada.
+* Se/quando houver uma correspond√™ncia, o *bloco de comandos* correspondente √© executados.
+* Ao encontrar a cl√°usula ***break***, a estrutura ***switch*** √© finalizada.
+* Se um block ***case*** n√£o for finalizado com ***break***,  os *blocos de comandos* subsequentes s√£o executados tamb√©m (at√© que um ***break*** seja encontrado).
+* Se/quando a express√£o n√£o corresponder a nenhuma das *constantes*, o *bloco de comandos* ap√≥s a cl√°usula ***default*** √© executado.
 
-8. **DESAFIO**: Sem olhar o resultado abaixo, monte uma estrutura ***switch/case*** para alterar os valores das vari·veis *x* e *y* em funÁ„o dos valores de *joy*.
+8. **DESAFIO**: Sem olhar o resultado abaixo, monte uma estrutura ***switch/case*** para alterar os valores das vari√°veis *x* e *y* em fun√ß√£o dos valores de *joy*.
 ```c
 		joy = JoystickRead(0);
 		
@@ -450,30 +527,30 @@ switch (express„o)
 		}
 ```
 
-9. Compile e rode o programa (dica: teste com toques BEM r·pidos na teclas de setas).
+9. Compile e rode o programa (dica: teste com toques BEM r√°pidos na teclas de setas).
 
-10. Discuss„o:
-* O que houve? Por quÍ?
+10. Discuss√£o:
+* O que houve? Por qu√™?
 
-### 3.3. Detectando colis„o.
+### 3.3. Detectando colis√£o.
 ###### *Github Ticket/Branch: 15/TKT0015.*
 
-##### Objetivo: Detectar colis„o da cobra com as paredes e consigo mesma e finalizar o jogo (previs„o: 20 minutos).
+##### Objetivo: Detectar colis√£o da cobra com as paredes e consigo mesma e finalizar o jogo (previs√£o: 20 minutos).
 
 1. Entendendo um pouquinho mais sobre a VRAM.
-* Tabelas padrıes, nomes e cores da screen 1.
-* Lembrando da funÁ„o BASE() do MSX-BASIC (https://www.msx.org/wiki/BASE()).
-* Lembrando da funÁ„o VPEEK() do MSX-BASIC (https://www.msx.org/wiki/VPEEK).
+* Tabelas padr√µes, nomes e cores da screen 1.
+* Lembrando da fun√ß√£o BASE() do MSX-BASIC (https://www.msx.org/wiki/BASE()).
+* Lembrando da fun√ß√£o VPEEK() do MSX-BASIC (https://www.msx.org/wiki/VPEEK).
 
-2. Crie a constante NAMETABLE no arquivo *msxromapp.c*, entre as cl·usulas *#include* e as declaraÁıes de vari·veis:
+2. Crie a constante NAMETABLE no arquivo *msxromapp.c*, entre as cl√°usulas *#include* e as declara√ß√µes de vari√°veis:
 ```c
 #define NAMETABLE			0x1800
 ```
 
-3. Discuss„o:
-* Como converter os valores das vari·veis *x* e *y* nos endereÁos de VRAM correspondentes?
+3. Discuss√£o:
+* Como converter os valores das vari√°veis *x* e *y* nos endere√ßos de VRAM correspondentes?
 
-4. **DESAFIO**: Sem olhar as respostas abaixo, recupere o conte˙do do jardim (tela) na posiÁ„o para onde a cabeÁa da cobra est· indo e armezene na vari·vel *content*.
+4. **DESAFIO**: Sem olhar as respostas abaixo, recupere o conte√∫do do jardim (tela) na posi√ß√£o para onde a cabe√ßa da cobra est√° indo e armezene na vari√°vel *content*.
 ```c
 bool EoG;
 unsigned char x, y;
@@ -489,7 +566,7 @@ unsigned char content;
 		content = Vpeek(NAMETABLE + y * 32 + x);
 ```
 
-5. **DESAFIO**: Sem olhar as respostas abaixo, ajuste a vari·vel EoG se o valor da vari·vel content for diferente de 32 (ASCII do espaÁo).
+5. **DESAFIO**: Sem olhar as respostas abaixo, ajuste a vari√°vel EoG se o valor da vari√°vel content for diferente de 32 (ASCII do espa√ßo).
 ```c
 		content = Vpeek(NAMETABLE + y * 32 + x);
 		if ((joy > 0) && (content != 32)) {
@@ -505,17 +582,17 @@ Ou, pensando em C:
 
 6. Compile e rode o programa.
 
-### 3.4. Controlando a cadÍncia do jogo.
+### 3.4. Controlando a cad√™ncia do jogo.
 ###### *Github Ticket/Branch: 16/TKT0016.*
 
-##### Objetivo: Controlar a velocidade o jogo atravÈs do sistema de interrupÁıes do MSX (previs„o: 20 minutos).
+##### Objetivo: Controlar a velocidade o jogo atrav√©s do sistema de interrup√ß√µes do MSX (previs√£o: 20 minutos).
 
-1. Entendendo o b·sico de interrupÁıes do VDP.
-* Rotina de tratamento de interrupÁ„o;
+1. Entendendo o b√°sico de interrup√ß√µes do VDP.
+* Rotina de tratamento de interrup√ß√£o;
 * Halt do Z80;
 * Apoio da BIOS. Jiffy.
 
-2. Crie uma vari·vel inteira, sem sinal e de 16 bits para controlar o progresso do *Jiffy* chamada *lastJiffy*. No final de loop, grave o ˙ltimo *Jiffy* detectado na vari·vel e no inÌcio do loop do jogo aguarde atÈ a BIOS mudar o valor do *Jiffy*.
+2. Crie uma vari√°vel inteira, sem sinal e de 16 bits para controlar o progresso do *Jiffy* chamada *lastJiffy*. No final de loop, grave o √∫ltimo *Jiffy* detectado na vari√°vel e no in√≠cio do loop do jogo aguarde at√© a BIOS mudar o valor do *Jiffy*.
 ```c
 unsigned char content;
 unsigned int lastJiffy;
@@ -532,7 +609,7 @@ unsigned int lastJiffy;
 	}
 ```
 
-3. Apenas para manter nossa lembranÁa, vamos colocar um coment·rio no final do loop de jogo, agora sincronizado a 1 execuÁ„o por frame, que ali futuramente colocaremos nossa rotina simples de geraÁ„o dos sons:
+3. Apenas para manter nossa lembran√ßa, vamos colocar um coment√°rio no final do loop de jogo, agora sincronizado a 1 execu√ß√£o por frame, que ali futuramente colocaremos nossa rotina simples de gera√ß√£o dos sons:
 
 ```c
 		Locate(x, y);
@@ -546,7 +623,7 @@ unsigned int lastJiffy;
 ```
 4. Compile e rode o programa.
 
-5. Agora, para movimentar a cabeÁa da cobra, vamos colocar uma velocidade inicial de 4 posiÁıes por segundo. Assim, supondo NTSC e PAL-M com 60 frames por segundo, vamos aguardar o Jiffy chegar a 15 para executar a movimentaÁ„o e, em seguida, zeramos essa vari·vel para outro ciclo. Lembre-se que o bloco de efeitos sonoros deve ser executado a cada frame.
+5. Agora, para movimentar a cabe√ßa da cobra, vamos colocar uma velocidade inicial de 4 posi√ß√µes por segundo. Assim, supondo NTSC e PAL-M com 60 frames por segundo, vamos aguardar o Jiffy chegar a 15 para executar a movimenta√ß√£o e, em seguida, zeramos essa vari√°vel para outro ciclo. Lembre-se que o bloco de efeitos sonoros deve ser executado a cada frame.
 ```c
 	// Initialize game variables
 	x = 10;
@@ -572,14 +649,14 @@ unsigned int lastJiffy;
 		{
 		}
 ```
-### 3.5. FinalizaÁ„o da Sess„o 3
-##### Objetivo: Discutir os tÛpicos tratados e o modelo/din‚mica do workshop (previs„o: 10 minutos).
+### 3.5. Finaliza√ß√£o da Sess√£o 3
+##### Objetivo: Discutir os t√≥picos tratados e o modelo/din√¢mica do workshop (previs√£o: 10 minutos).
 
-1. Discuss„o geral da apresentaÁ„o:
+1. Discuss√£o geral da apresenta√ß√£o:
 * Switch/Case;
 * VDP, tabelas, VPEEK, VPOKE.
-* InterrupÁıes, temporizaÁ„o, Jiffy.
-* Os v·rios loops internos do programa para controle de temporizaÁ„o.
-* Din‚mica geral do workshop: feedbacks e ideias.
+* Interrup√ß√µes, temporiza√ß√£o, Jiffy.
+* Os v√°rios loops internos do programa para controle de temporiza√ß√£o.
+* Din√¢mica geral do workshop: feedbacks e ideias.
 
 ---
