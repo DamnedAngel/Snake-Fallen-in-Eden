@@ -106,14 +106,14 @@ Caso você pretenda utilizar o MS Visual Studio, comece o processo de instalaç�
 
 ##### Objetivo: REVISAR pré-requisitos para o workshop (previsão: 10 minutos).
 
-* VS Instalado.
-* Templates MSX (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instruções em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
+* Para quem vai usar o Visual Studio:
+	* VS Instalado.
+	* Templates MSX para Visual Studio (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instruções em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
+* Para quem não vai usar o Visual Studio:
+	* Templates MSX para uso SEM Visual Studio (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instruções em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
 * SDCC, Hex2Bin e Python instalados e configurados no PATH.
 * Fusion-C baixada e descompactada.
-* OpenMSX instalado e rodando. Seguir roteiro do Lavadeira em:
-* Parte 1: https://medium.com/relearning-msx/relearning-msx-5-setting-up-the-msx-c-environment-part-1-797d14e03a1d
-* Parte 2: https://medium.com/relearning-msx/relearning-msx-6-7a5d8e3ef6a3
-* Demais partes são interessantes, mas opcionais. O que precisamos é de um OpenMSX rodando MSXDOS para o caso de desenvolvimento para esse ambiente.
+* OpenMSX instalado e rodando.
 * OpenMSX Debugger instalado e rodando.
 
 
@@ -121,10 +121,18 @@ Caso você pretenda utilizar o MS Visual Studio, comece o processo de instalaç�
 ###### *Github Ticket/Branch: 2/TKT0002.*
 ##### Objetivo: Dominar a criação de projetos MSX a partir dos templates (previsão: 10 minutos).
 
+#### 1.2.a. Criando o projeto no Visual Studio
 1. Clique no botão **Create a New Project** na janela de abertura do VS. Alternativamente, selecione **File|New|Project**.
 2. Na lista de templates mostrada, selecione **MSX ROM Application** (caso queira fazer o projeto no formato MSX-DOS, escolha o template **MSX-DOS Application**. Provavelmente esse item estará no final da lista, então faça o scroll down.
-3. Configure o nome da aplicação, a localização do projeto no seu disco e o nome da solução (a solução é um agregador de projetos).
+3. Configure o nome da aplicação, a localização do projeto no seu disco (preferivelmente usar a pasta **projects** da estrutura de diretório estabelecida no roteiro de configuração do ambiente na sessão 0) e o nome da solução (a solução é um agregador de projetos).
 4. Clique o botão **Create** e o VS criará seu projeto. Para ter certeza que o projeto foi criado corretamente, compile-o com **Build|Build Solution**. A tela de output deverá, ao final da compilação, mostrar a mensagem **"Rebuild All: 1 succeeded, 0 failed, 0 skipped"**.
+
+#### 1.2.b. Criando o projeto fora do Visual Studio
+1. Localize a pasta que você quer utilizar como base de seus projetos (preferivelmente usar a pasta **projects** da estrutura de diretório estabelecida no roteiro de configuração do ambiente na sessão 0);
+2. Recomendo que seja criado um diretório nessa pasta que seria o similar ao diretório da "solução" no ambiente Visual Studio, para dentro dele ter o diretório do projeto. Mantendo esses dois diretórios permite não apenas ter projetos relacionados dentro de uma mesma solução, mas também manter os caminhos relativos até o diretório de bibliotecas. Você pode dar o nome que quiser para esse diretório.
+3. Faça download ou copie o template **MSX.ROM.Application.zip** para o diretório estabelecido no item anterior.
+4. Descompacte o arquivo observando os diretórios do zip. Ele gerará o diretório do projeto. Você pode renomear esse diretório para o nome que você quiser.
+5. Abra os arquivos do projeto com seu editor ou IDE preferidos.
 
 ### 1.3. Compilando e rodando no OpenMSX
 ##### Objetivo: Executar programas MSX em desenvolvimento (previsão: 10 minutos).
