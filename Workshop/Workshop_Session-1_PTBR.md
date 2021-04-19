@@ -91,6 +91,7 @@ Se você não tem o ambiente de desenvolvimento configurado na sua máquina aind
 2. Configurando nome da aplicação em TargetConfig_Debug.txt e TargetConfig_Release.txt.
 3. Explorando os arquivos de configuração do projeto.
 4. Explorando a estrutura do projeto:
+
 * msxromapp.c
 * msxromapp.s
 * msxromcrt0.s
@@ -114,5 +115,6 @@ Se você não tem o ambiente de desenvolvimento configurado na sua máquina aind
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
+
 * Tópicos apresentados.
 * Dinâmica geral do workshop: feedbacks e ideias.
