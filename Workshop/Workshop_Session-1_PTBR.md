@@ -3,7 +3,11 @@
 
 Escrito por Damned Angel, 2020-2021
 
+Vídeo da sessão 01: https://youtu.be/TYXZTF-IzWs
+
 ---
+
+## Nota do autor
 
 __A participação no workshop, bem como a utilização dos materiais associados, é livre e gratuita. 
 No entanto, vale lembrar que a preparação das sessões, o desenvolvimento e a manutenção dos templates, a escrita dos programas de exemplo, a preparação da infra-estrutura e edição dos vídeos consomem tempo e recursos razoáveis.
@@ -28,7 +32,7 @@ VS: Visual Studio 2019
 Esse documento é dividido em sessões de workshop, e as sessões são divididas em tópicos de estudo.
 
 Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3 formatos:
-* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em XXX)
+* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em https://youtu.be/TYXZTF-IzWs)
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
@@ -52,7 +56,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 * OpenMSX instalado e rodando.
 * OpenMSX Debugger instalado e rodando.
 
-Se você não tem o ambiente de desenvolvimento configurado na sua máquina ainda, por favor veja o vídeo sobre o roteiro de configuração em https://www.youtube.com/watch?v=RGDKg4krgFc.
+Se você não tem o ambiente de desenvolvimento configurado na sua máquina ainda, por favor veja o vídeo sobre o roteiro de configuração em https://youtu.be/RGDKg4krgFc.
 **Não deixe de se inscrever no canal e dar like no vídeo!**
 
 
@@ -91,7 +95,6 @@ Se você não tem o ambiente de desenvolvimento configurado na sua máquina aind
 2. Configurando nome da aplicação em TargetConfig_Debug.txt e TargetConfig_Release.txt.
 3. Explorando os arquivos de configuração do projeto.
 4. Explorando a estrutura do projeto:
-
 * msxromapp.c
 * msxromapp.s
 * msxromcrt0.s
@@ -115,6 +118,5 @@ Se você não tem o ambiente de desenvolvimento configurado na sua máquina aind
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-
 * Tópicos apresentados.
 * Dinâmica geral do workshop: feedbacks e ideias.
