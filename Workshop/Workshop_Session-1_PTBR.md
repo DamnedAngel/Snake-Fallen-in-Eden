@@ -72,7 +72,7 @@ Se você não tem o ambiente de desenvolvimento configurado na sua máquina aind
 
 #### 1.2.a. Criando o projeto no Visual Studio
 1. Clique no botão **Create a New Project** na janela de abertura do VS. Alternativamente, selecione **File|New|Project**.
-2. Na lista de templates mostrada, selecione **MSX ROM Application** (caso queira fazer o projeto no formato MSX-DOS, escolha o template **MSX-DOS Application**. Provavelmente esse item estará no final da lista, então faça o scroll down.
+2. Na lista de templates mostrada, selecione **MSX ROM Application**. Provavelmente esse item estará no final da lista, então faça o scroll down.
 3. Configure o nome da aplicação, a localização do projeto no seu disco (preferivelmente usar a pasta **projects** da estrutura de diretório estabelecida no roteiro de configuração do ambiente na sessão 0) e o nome da solução (a solução é um agregador de projetos).
 4. Clique o botão **Create** e o VS criará seu projeto. Para ter certeza que o projeto foi criado corretamente, compile-o com **Build|Build Solution**. A tela de output deverá, ao final da compilação, mostrar a mensagem **"Rebuild All: 1 succeeded, 0 failed, 0 skipped"**.
 
