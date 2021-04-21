@@ -1,9 +1,15 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 01
+# Sessão 0: Configurando o Ambiente de Desenvolvimento
 
-Escrito por Damned Angel, 2020-2021
+Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 01: https://youtu.be/TYXZTF-IzWs
+Vídeo da sessão 1: https://youtu.be/TYXZTF-IzWs
+
+Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
+
+Discord server **MSX Revamp**: https://discord.gg/f3HDgfXKxE
+
+Templates de projetos MSX: https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio/releases
 
 ---
 
@@ -48,9 +54,9 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 * Para quem vai usar o Visual Studio:
 	* VS Instalado.
-	* Templates MSX para Visual Studio (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instruções em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
+	* Templates MSX para Visual Studio (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS.
 * Para quem não vai usar o Visual Studio:
-	* Templates MSX para uso SEM Visual Studio (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) instalados no VS, conforme instruções em https://docs.google.com/document/d/1Y2rTTMBN08Au59e44pzdX0ptVWfLfMgG1gp2e-KUVIE/edit#.
+	* Templates MSX para uso SEM Visual Studio (https://github.com/DamnedAngel/MSX-Templates-for-VisualStudio) baixados.
 * SDCC, Hex2Bin e Python instalados e configurados no PATH.
 * Fusion-C baixada e descompactada.
 * OpenMSX instalado e rodando.
@@ -73,7 +79,7 @@ Se você não tem o ambiente de desenvolvimento configurado na sua máquina aind
 #### 1.2.b. Criando o projeto fora do Visual Studio
 1. Localize a pasta que você quer utilizar como base de seus projetos (preferivelmente usar a pasta **projects** da estrutura de diretório estabelecida no roteiro de configuração do ambiente na sessão 0);
 2. Recomendo que seja criado um diretório nessa pasta que seria o similar ao diretório da "solução" no ambiente Visual Studio, para dentro dele ter o diretório do projeto. Mantendo esses dois diretórios permite não apenas ter projetos relacionados dentro de uma mesma solução, mas também manter os caminhos relativos até o diretório de bibliotecas. Você pode dar o nome que quiser para esse diretório.
-3. Faça download ou copie o template **MSX.ROM.Application.zip** para o diretório estabelecido no item anterior.
+3. Faça download ou copie o template **MSX.ROM.Application.zip** baixado previamente para o diretório estabelecido no item anterior.
 4. Descompacte o arquivo observando os diretórios do zip. Ele gerará o diretório do projeto. Você pode renomear esse diretório para o nome que você quiser.
 5. Abra os arquivos do projeto com seu editor ou IDE preferidos.
 
@@ -107,7 +113,7 @@ Se você não tem o ambiente de desenvolvimento configurado na sua máquina aind
 * symbol.p
 
 ### 1.5. Criando projetos MSX-DOS e BIN
-##### Objetivo: Compreender a estrutura do projeto MSX (previsão: 20 minutos).
+##### Objetivo: Experimentar a criação de outros projetos MSX e explorá-los (previsão: 20 minutos).
 
 *Nota: Salve e feche o projeto ROM antes de iniciar esse item.*
 
@@ -120,3 +126,7 @@ Se você não tem o ambiente de desenvolvimento configurado na sua máquina aind
 1. Discussão geral da apresentação:
 * Tópicos apresentados.
 * Dinâmica geral do workshop: feedbacks e ideias.
+
+---
+
+**Happy MSX'ing.**
