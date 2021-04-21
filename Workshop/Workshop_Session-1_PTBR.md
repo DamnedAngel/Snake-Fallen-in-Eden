@@ -1,5 +1,5 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 0: Configurando o Ambiente de Desenvolvimento
+# Sessão 1: Usando Templates de Projetos
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
@@ -23,7 +23,7 @@ Se você quiser reconhecer esse trabalho e prestigiar a iniciativa, faça sua co
 * PayPal: danilo@angelo.eng.br
 * Pix: danilo@angelo.eng.br
 
-Long live MSX!
+**Long live MSX!**
 
 ---
 
