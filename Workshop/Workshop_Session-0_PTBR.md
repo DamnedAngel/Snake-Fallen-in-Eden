@@ -23,7 +23,7 @@ Se você quiser reconhecer esse trabalho e prestigiar a iniciativa, faça sua co
 * PayPal: danilo@angelo.eng.br
 * Pix: danilo@angelo.eng.br
 
-Long live **MSX**!
+**Long live **MSX**!**
 
 ---
 
