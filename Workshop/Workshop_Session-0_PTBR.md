@@ -1,5 +1,5 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 0: Sessão 0: Configurando o Ambiente de Desenvolvimento
+# Sessão 0: Configurando o Ambiente de Desenvolvimento
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
