@@ -51,30 +51,9 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ### 2.1. Integrando a biblioteca Fusion-C
 ###### *Github Ticket/Branch: 7/TKT0007.*
 
-##### Objetivo: Entender a inclusão de bibliotecas externas ao projeto (previsão: 15 minutos).
+##### Objetivo: Entender a inclusão de bibliotecas externas ao projeto; familiarizar-se com a Fusion-C (previsão: 15 minutos).
 
-1. Vamos primeiramente configurar o VDP para o modo que usaremos no jogo. No arquivo *msxromapp.c*, substitua o conteúdo da função main() por
-```c
-void main(void) {
-	Screen(1);
-	Width(32);
-}
-```
-Tente compilar e você receberá um erro, já que as funções *Screen()* e *Width()* não estão disponíveis nativamente na linguagem C. A biblioteca Fusion-C as implementa, mas ainda não a integramos no projeto. Vamos então fazer isso, seguindo os passos abaixo.
-
-2. Descomente a linha abaixo no arquivo *IncludeDirectories.txt*:
-```
-[MSX_LIB_PATH]\fusion-c\header
-```
-Isso fará os arquivos .h nesse diretório acessíveis por cláusulas *include*. Você poderá ter que adaptar o caminho caso tenha usado um diretório diferente na instalação da Fusion-C.
-
-3. Adicione a linha abaixo no início do seu fonte *msxromapp.c*:
-```c
-#include "msx_fusion.h"
-```
-Isso importará todas as declarações de funções da Fusion-C.
-
-4. Entendendo o básico sobre arquivos header em C.
+1. Explorando a Fusion-C: revisando o header *msx_fusion.h*.
 
 Note que o arquivo *msx_fusion.h* contém a declaração da função, mas não a implementação (abra o arquivo e veja por você mesmo!).
 
@@ -82,15 +61,43 @@ Se você nunca trabalhou com arquivos header (\*.h), não é esperado que nesse 
 
 Referência: **C Para Leigos, Davis**, *Stephen R.*
 
-5. Tente compilar o programa. O que houve?
+2. Vamos primeiramente configurar o VDP para o modo que usaremos no jogo. No arquivo *msxromapp.c*, substitua o conteúdo da função main() por
+```c
+void main(void) {
+	Screen(1);
+	Width(32);
+	
+	print("Oi!\0");
+}
+```
+Tente compilar e você receberá um erro, já que as funções *Screen()* e *Width()* não estão disponíveis nativamente na linguagem C. A biblioteca Fusion-C as implementa, mas ainda não a integramos no projeto. Vamos então fazer isso, seguindo os passos abaixo.
 
-6. No próximo passo incluremos a implementação da função ao projeto. Descomente a linha abaixo no arquivo *Libraries.txt*:
+3. Adicione a linha abaixo no início do seu fonte *msxromapp.c*:
+```c
+#include "msx_fusion.h"
+```
+Isso instruirá ao compilador para considerar todas os símbolos (funcões, variáveis, estruturas etc.) do header.
+
+Tente compilar. O que houve?
+
+4. Descomente a linha abaixo no arquivo *IncludeDirectories.txt*:
+```
+[MSX_LIB_PATH]\fusion-c\header
+```
+Isso fará os arquivos .h nesse diretório acessíveis por cláusulas *include*. Você poderá ter que adaptar o caminho caso tenha usado um diretório diferente na instalação da Fusion-C.
+
+Tente compilar. O que houve?
+
+5. No próximo passo incluremos a implementação da função ao projeto. Descomente a linha abaixo no arquivo *Libraries.txt*:
 ```
 [MSX_LIB_PATH]\fusion-c\lib\fusion.lib
 ```
+
+Tente compilar. O que houve?
+
 Com isso terminamos a inclusão da biblioteca no processo de compilação do projeto.
 
-7. Compile o programa para se certificar que ele está funcional. Se quiser, teste-o no OpenMSX.
+6. Teste seu programa no OpenMSX.
 
 ### 2.2. Criando o loop externo do programa
 ###### *Github Ticket/Branch: 6/TKT0006.*
@@ -101,23 +108,33 @@ Com isso terminamos a inclusão da biblioteca no processo de compilação do pro
 * onCall*
 * onDevice*
 
+Tente compilar. O que houve?
+
+2. Como removemos as rotinas de exemplo de extensão do CALL e de DEVICES, precisamos configurar o projeto para não incluir o suporte a essas extensões. Altere os seguintes parâmetros, em *ApplicationSettings.txt* para **OFF**:
+```c
+CALL_EXPANSION			_OFF						; _ON: expands BASIC's CALL instruction; _OFF: Don't expand
+DEVICE_EXPANSION		_OFF						; _ON: creates BASIC's device; _OFF: Don't create
+```
+
+Tente compilar. O que houve?
+
 2. No mesmo arquivo, crie stubs para as funções de exibição de título do jogo, da lógica de jogo e da exibição da tela de fim de jogo:
 ```c
 void title() {
 	Cls();
-	print ("My Snake Game");
+	print ("My Snake Game\0";
 	InputChar();
 }
 
 void game() {
 	Cls();
-	print ("Game");
+	print ("Game\0");
 	InputChar();
 }
 
 void gameOver() {
 	Cls();
-	print ("Game Over");
+	print ("Game Over\0");
 	InputChar();
 }
 ```
@@ -182,7 +199,7 @@ static const char gameScreen[] = \
 
 4. Por fim, precisamos substituir o stub de tela de jogo pelo novo background, simples mas funcional. Na função *game()*, substitua a impressão da string *"Game"* pela impressão de nossa nova constante *gameScreen*:
 ```c
-	//print("Game");
+	//print("Game\0");
 	print(gameScreen);
 ```
 
@@ -208,7 +225,7 @@ A criação da tela de abertura é similar à criação da tela de background do
 
 2. Na função *title()*, substitua a impressão da string *"My Snake Game"* pela impressão da constante *titleScreen*.
 ```c
-	//print("My Snake Game");
+	//print("My Snake Game\0");
 	print(titleScreen);
 ```
 
@@ -229,7 +246,7 @@ A criação da tela de fim de jogo é um pouco diferente, pois queremos permitir
 ```c
 void gameOver() {
 	//Cls();
-	//print("Game Over");
+	//print("Game Over\0");
 	Locate(0, 9);
 	print(gameOverMsg);
 	InputChar();
