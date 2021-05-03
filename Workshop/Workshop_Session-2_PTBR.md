@@ -122,7 +122,7 @@ Tente compilar. O que houve?
 ```c
 void title() {
 	Cls();
-	print ("My Snake Game\0";
+	print ("My Snake Game\0");
 	InputChar();
 }
 
