@@ -178,10 +178,8 @@ void game() {
 
 3. Adicione, após a inicialização da variáveis, mas antes do *InputChar()*, comandos para impressão da cabeça:
 ```c
-void game() {
 	Locate(x, y);
 	print("*");
-}
 ```
 
 4. Compile e execute.
