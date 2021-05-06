@@ -1,5 +1,5 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 3: Implementando a Cobra! (parte 1)
+# Sessão 3: Telas do jogo e a Cobra!
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
@@ -46,9 +46,109 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ---
 
-## Sessão 3: Implementando a Cobra! (parte 1)
+## Sessão 3: Telas do Jogo e a Cobra!
 
-### 3.1. Uma cabeça no jardim
+### 3.1. Criando uma tela funcional para o jogo
+###### *Github Ticket/Branch: 8/TKT0008.*
+
+##### Objetivo: Estabelecer uma tela de fundo funcional para o desenvolvimento do jogo (previsão:20 minutos).
+
+1. Vamos primeiramente criar um arquivo header (*screens.h*) no qual declararemos nossas telas. Siga os passos:
+* No VS, garanta que o Solution Explorer está visível, selecionando **View|Solution Explorer**.
+* No Solution Explorer, expanda a pasta (filtro, na verdade) **[Solution]|[Projeto]|Header Files**.
+* Clique o botão direito no filtro **Header Files** e selecione a opção **Add|New Item**.
+* Na tela que apareceu, selecione o tipo **Header File (.h)**, dê o nome *screens.h* para o arquivo, certifique-se que o campo **Location** tem o diretório do seu projeto (deve ser por default) e clique em **Add**.
+* Note que o arquivo foi criado e a referência a ele apareceu no Solution Explorer, sob o filtro **Header Files**.
+
+Nota: Se você não está usando o VS, faça processo similar na sua IDE, ou simplesmente crie o arquivo *screens.h* no diretório do seu projeto.
+
+2. No arquivo *screens.h*, crie uma constante (*static const char gameScreen[]*, terminada em nulo) com o mapa da tela do jogo, de 32x24 posições, com uma borda nas 23 linhas superiores e informações de status (score, hiscore e level) na última linha.
+
+* Use "-" para bordas horizontais, "|" pa verticais e "+" para as intersecções.
+
+```c
+#pragma once
+
+static const char gameScreen[] = \
+"+------------------------------+"\
+"|                              |"\
+
+(... repete 19 linhas ...)
+
+"|                              |"\
+"+------------------------------+"\
+" Score 0     High 0    Level 1  \0";
+```
+
+3. Agora, para utilizar o que definimos no aquivo *screens.h*, em nossa rotina de exibição de tela no arquivo *msxromapp.c*, esse último precisa "conhecer" o primeiro. Precisamos, assim, referenciar o arquivo header no *msxromapp.c*. Para isso, inclua a seguinte linha no topo do arquivo .c, após outras cláusulas "include":
+
+```c
+#include "screens.h"
+```
+
+4. Por fim, precisamos substituir o stub de tela de jogo pelo novo background, simples mas funcional. Na função *game()*, substitua a impressão da string *"Game"* pela impressão de nossa nova constante *gameScreen*:
+```c
+	//print("Game\0");
+	print(gameScreen);
+```
+
+5. Compile e execute o programa.
+
+6. Discussão de resultados e percepções sobre:
+* constantes;
+* arquivos header;
+* a impressão na última posição da tela (canto inferior direito, ou coordenadas (31,23)); print versus vpoke;
+* diferenças para BASIC, Pascal ou outras linguagens.
+
+7. Ajuste, se necessário, a impressão do último caracter da tela para evitar o scroll.
+* Esse ajuste é preliminar, até construirmos nossa própria rotina de impressão em Assembly, que vai permitir desenhar o gramado, dar mais velocidade para a criação da tela e evitar o scroll quando usamos a última posição da tela.
+
+### 3.2. Criando uma tela de abertura funcional
+###### *Github Ticket/Branch: 10/TKT0010*
+
+##### Objetivo: Estabelecer uma tela de abertura informativa para o jogo (previsão:10 minutos).
+
+A criação da tela de abertura é similar à criação da tela de background do jogo. Assim os passos são similares:
+
+1. No arquivo *screens.h*, crie a constante *titleScreen[]* com o mapa da tela de abertura, de forma similar à *gameScreen*, também com 32x24 posições.
+
+2. Na função *title()*, substitua a impressão da string *"My Snake Game"* pela impressão da constante *titleScreen*.
+```c
+	//print("My Snake Game\0");
+	print(titleScreen);
+```
+
+3. Compile e execute o programa.
+
+
+### 3.3. Criando uma tela de fim de jogo funcional
+###### *Github Ticket/Branch: 11/TKT0011*
+
+##### Objetivo: Estabelecer uma tela de fim de jogo adequada para o jogo (previsão:10 minutos).
+
+A criação da tela de fim de jogo é um pouco diferente, pois queremos permitir que o jogador avalie a situação geral do jogo e revise o placar.
+
+1. No arquivo *screens.h*, crie a constante *gameOverMsg[]* com uma mensagem de 3 linhas (32 x 3 posições) de "Game Over" o mapa da tela de abertura:
+
+2. Remova o *Cls()* da função *gameOver()* e substitua a impressão da string *"My Snake Game"* pela constante *gameOverMsg*, a partir da linha 9:
+
+```c
+void gameOver() {
+	//Cls();
+	//print("Game Over\0");
+	Locate(0, 9);
+	print(gameOverMsg);
+	InputChar();
+	
+	
+	
+}
+```
+*Note que a função Locate() é implementada pela biblioteca **Fusion-C**.*
+
+3. Compile e execute o programa.
+ 
+### 3.4. Uma cabeça no jardim
 ###### *Github Ticket/Branch: 13/TKT0013.*
 
 ##### Objetivo: Fazer a cabeça da cobra aparecer no jardim, com posição controlada por variáveis (previsão: 15 minutos).
@@ -93,7 +193,7 @@ void game() {
 
 7. Restaure os valores de *x=10* e *y=10*.
 
-### 3.2. Movimentando a cabeça.
+### 3.5. Movimentando a cabeça.
 ###### *Github Ticket/Branch: 14/TKT0014.*
 
 ##### Objetivo: Fazer a cabeça da cobra passear pelo jardim, comandada pelas setas do teclado (previsão: 30 minutos).
@@ -206,7 +306,7 @@ switch (expressão)
 10. Discussão:
 * O que houve? Por quê?
 
-### 3.3. Detectando colisão.
+### 3.6. Detectando colisão.
 ###### *Github Ticket/Branch: 15/TKT0015.*
 
 ##### Objetivo: Detectar colisão da cobra com as paredes e consigo mesma e finalizar o jogo (previsão: 20 minutos).
@@ -256,7 +356,7 @@ Ou, pensando em C:
 
 6. Compile e rode o programa.
 
-### 3.4. Controlando a cadência do jogo.
+### 3.7. Controlando a cadência do jogo.
 ###### *Github Ticket/Branch: 16/TKT0016.*
 
 ##### Objetivo: Controlar a velocidade o jogo através do sistema de interrupções do MSX (previsão: 20 minutos).
@@ -323,7 +423,7 @@ unsigned int lastJiffy;
 		{
 		}
 ```
-### 3.5. Finalização da Sessão 3
+### 3.8. Finalização da Sessão 3
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
