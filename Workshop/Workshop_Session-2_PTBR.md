@@ -3,7 +3,7 @@
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 2: XXX
+Vídeo da sessão 2: https://youtu.be/BNeZ2RBIkuc
 
 Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
 
@@ -38,7 +38,7 @@ VS: Visual Studio 2019
 Esse documento é dividido em sessões de workshop, e as sessões são divididas em tópicos de estudo.
 
 Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3 formatos:
-* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em XXX)
+* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em https://youtu.be/BNeZ2RBIkuc)
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
