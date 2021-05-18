@@ -214,57 +214,8 @@ switch (expressão)
 13. Discussão:
 * O que houve? Por quê?
 
-### 4.3. Detectando colisão.
-###### *Github Ticket/Branch: 15/TKT0015.*
 
-##### Objetivo: Detectar colisão da cobra com as paredes e consigo mesma e finalizar o jogo (previsão: 20 minutos).
-
-1. Entendendo um pouquinho mais sobre a VRAM.
-* Tabelas padrões, nomes e cores da screen 1.
-* Lembrando da função BASE() do MSX-BASIC (https://www.msx.org/wiki/BASE()).
-* Lembrando da função VPEEK() do MSX-BASIC (https://www.msx.org/wiki/VPEEK).
-
-2. Crie a constante NAMETABLE no arquivo *msxromapp.c*, entre as cláusulas *#include* e as declarações de variáveis:
-```c
-#define NAMETABLE			0x1800
-```
-
-3. Discussão:
-* Como converter os valores das variáveis *x* e *y* nos endereços de VRAM correspondentes?
-
-4. **DESAFIO**: Sem olhar as respostas abaixo, use a função *Vpeek* para recuperar o conteúdo do jardim (tela) na posição para onde a cabeça da cobra está indo e armezene na variável *content*.
-```c
-bool EoG;
-unsigned char x, y;
-unsigned char joy;
-unsigned char content;
-```
-```c
-		// move snake
-		switch (joy) {
-			...
-		}
-
-		content = Vpeek(NAMETABLE + y * 32 + x);
-```
-
-5. **DESAFIO**: Sem olhar as respostas abaixo, ajuste a variável EoG se o valor da variável content for diferente de 32 (ASCII do espaço).
-```c
-		content = Vpeek(NAMETABLE + y * 32 + x);
-		if ((joy > 0) && (content != 32)) {
-			EoG = true;
-		}
-
-```
-Ou, pensando em C:
-```c
-		content = Vpeek(NAMETABLE + y * 32 + x);
-		EoG = ((joy > 0) && (content != ' '));
-```
-
-6. Compile e rode o programa.
-
-### 4.4. Finalização da Sessão 4
+### 4.3. Finalização da Sessão 4
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Lição de casa: Se tornar familiarizado com o sistema de interrupções do VDP.
@@ -273,7 +224,6 @@ Ou, pensando em C:
 
 2. Discussão geral da apresentação:
 * Switch/Case;
-* VDP, tabelas, VPEEK, VPOKE.
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
