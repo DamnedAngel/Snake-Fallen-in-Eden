@@ -115,30 +115,30 @@ Ou, pensando em C:
 * [Arquitetura MSX] Hooks e, em particular, o Hook H.TIMI (FD9Fh).
 
 2. Comparando quatro estratégias de temporização:
-* [Z80] Rotinas de tratamento de interrupção;
+* **[Z80] Rotinas de tratamento de interrupção**
   * Vantagens:
-    * **Execução mais rápida possível ("O que vc não precisa, se você está usando C" - Grauw).**
+    * *Execução mais rápida possível ("O que vc não precisa, se você está usando C" - Grauw).*
     * Não trava o processador enquanto a interrupção não acontecer.
   * Desvantagens:
     * "Bypass" da BIOS;
     * Demanda instalação de rotinas de tratamento de interrupção.
-* [Z80] A Instrução Halt do Z80;
+* **[Z80] A Instrução Halt do Z80**
   * Vantagem:
-    * **Implementação mais simples possível.**
+    * *Implementação mais simples possível.*
     * Não faz "Bypass" da BIOS;
     * Não demanda instalação de rotinas de tratamento de interrupção nem de hook.
   * Desvantagem:
     * Trava o processador enquanto a interrupção não acontecer.
-* [Arquitetura MSX] O Hook H.TIMI (FD9Fh);
+* **[Arquitetura MSX] O Hook H.TIMI (FD9Fh)**
   * Vantagem:
-    * **Forma recomendada pelo padrão.**
+    * *Forma recomendada pelo padrão.*
     * Não faz "Bypass" da BIOS;
     * Não trava o processador enquanto a interrupção não acontecer.
   * Desvantagem:
     * Demanda instalação de rotinas de tratamento de hook.
-* [Arquitetura MSX] A variável Jiffy.
+* **[Arquitetura MSX] A variável Jiffy**
   * Vantagem:
-    * **Estratégia que demanda o menor domínio sobre interrupções.**
+    * *Estratégia que demanda o menor domínio sobre interrupções.*
     * Não faz "Bypass" da BIOS;
     * Não trava o processador enquanto a interrupção não acontecer;
     * Não demanda instalação de rotinas de tratamento de interrupção nem de hook;
@@ -225,6 +225,9 @@ unsigned int lastJiffy;
 * Interrupções, temporização, Jiffy.
 * Os vários loops internos do programa para controle de temporização.
 * Dinâmica geral do workshop: feedbacks e ideias.
+
+2. Tarefa opcional "para casa":
+* Além do Jiffy: Transforme sua temporização da estratégia Jiffy para uso do Hook H.TIMI.
 
 ---
 
