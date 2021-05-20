@@ -122,36 +122,36 @@ Referências:
 * Muito de tudo acima: http://www.msxtop.msxall.com/Portugues/Projeto_msx_top_secret.htm (português).
 
 2. Comparando quatro estratégias de temporização:
-* **[Z80] Rotinas de tratamento de interrupção**
-  * Vantagens:
-    * *Execução mais rápida possível ("O que vc não precisa, se você está usando C" - Grauw).*
-    * Não trava o processador enquanto a interrupção não acontecer.
-  * Desvantagens:
-    * "Bypass" da BIOS;
-    * Demanda instalação de rotinas de tratamento de interrupção.
-* **[Z80] A Instrução Halt do Z80**
-  * Vantagem:
-    * *Implementação mais simples possível.*
-    * Não faz "Bypass" da BIOS;
-    * Não demanda instalação de rotinas de tratamento de interrupção nem de hook.
-  * Desvantagem:
-    * Trava o processador enquanto a interrupção não acontecer.
-* **[Arquitetura MSX] O Hook H.TIMI (FD9Fh)**
-  * Vantagem:
-    * *Forma recomendada pelo padrão.*
-    * Não faz "Bypass" da BIOS;
-    * Não trava o processador enquanto a interrupção não acontecer.
-  * Desvantagem:
-    * Demanda instalação de rotinas de tratamento de hook.
-* **[Arquitetura MSX] A variável Jiffy**
-  * Vantagem:
-    * *Estratégia que demanda o menor domínio sobre interrupções.*
-    * Não faz "Bypass" da BIOS;
-    * Não trava o processador enquanto a interrupção não acontecer;
-    * Não demanda instalação de rotinas de tratamento de interrupção nem de hook;
-    * Já fornece um contador confiável de frames.
-  * Desvantagem:
-    * **Funciona bem, mas é o mais próximo que existe de uma gambiarra.**
+	2.1. **[Z80] Rotinas de tratamento de interrupção**
+		* Vantagens
+			* *Execução mais rápida possível ("O que vc não precisa, se você está usando C" - Grauw).*
+			* Não trava o processador enquanto a interrupção não acontecer.
+		* Desvantagens:
+			* "Bypass" da BIOS;
+			* Demanda instalação de rotinas de tratamento de interrupção.
+	2.2. **[Z80] A Instrução Halt do Z80**
+  		* Vantagens:
+  			* *Implementação mais simples possível.*
+  			* Não faz "Bypass" da BIOS;
+  			* Não demanda instalação de rotinas de tratamento de interrupção nem de hook.
+  		* Desvantagem:
+    			* Trava o processador enquanto a interrupção não acontecer.
+	2.3. **[Arquitetura MSX] O Hook H.TIMI (FD9Fh)**
+		* Vantagens:
+			* *Forma recomendada pelo padrão.*
+			* Não faz "Bypass" da BIOS;
+			* Não trava o processador enquanto a interrupção não acontecer.
+		* Desvantagem:
+			* Demanda instalação de rotinas de tratamento de hook.
+	2.4. **[Arquitetura MSX] A variável Jiffy**
+		* Vantagens:
+			* *Estratégia que demanda o menor domínio sobre interrupções.*
+			* Não faz "Bypass" da BIOS;
+			* Não trava o processador enquanto a interrupção não acontecer;
+			* Não demanda instalação de rotinas de tratamento de interrupção nem de hook;
+			* Já fornece um contador confiável de frames.
+		* Desvantagem:
+			* **Funciona bem, mas é o mais próximo que existe de uma gambiarra.**
 
 3. Explorando o suporte da Fusion-C para o tratamento de interrupções
 * [Fusion-C] Suporte a rotinas de tratamento de interrupção;
