@@ -55,8 +55,8 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 1. Entendendo um pouquinho mais sobre a VRAM.
 * Tabelas padrões, nomes e cores da screen 1.
-* Lembrando da função BASE() do MSX-BASIC (https://www.msx.org/wiki/BASE()).
-* Lembrando da função VPEEK() do MSX-BASIC (https://www.msx.org/wiki/VPEEK).
+* Lembrando da função BASE() do MSX-BASIC: https://www.msx.org/wiki/BASE() (inglês).
+* Lembrando da função VPEEK() do MSX-BASIC: https://www.msx.org/wiki/VPEEK (inglês).
 
 2. Crie a constante NAMETABLE no arquivo *msxromapp.c*, entre as cláusulas *#include* e as declarações de variáveis:
 ```c
@@ -113,6 +113,13 @@ Ou, pensando em C:
 * [VDP] A interrupção VBlank do TMS9918.
 * [Z80] O tratamento de interrupções no Z80.
 * [Arquitetura MSX] Hooks e, em particular, o Hook H.TIMI (FD9Fh).
+
+Referências:
+TMS9918: http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf (inglês).
+vBlank: https://www.youtube.com/watch?v=aUkHk_mjtOU (espanhol).
+Interrupções no Z80: http://map.grauw.nl/articles/interrupts.php (inglês).
+Hooks: https://www.msx.org/wiki/System_hooks (inglês).
+Muito de tudo acima: http://www.msxtop.msxall.com/Portugues/Projeto_msx_top_secret.htm (português).
 
 2. Comparando quatro estratégias de temporização:
 * **[Z80] Rotinas de tratamento de interrupção**
