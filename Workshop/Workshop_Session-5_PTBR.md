@@ -128,9 +128,9 @@ Referências:
 	* Vantagens
 		* *Execução mais rápida possível ("O que vc não precisa, se você está usando C" - Grauw).*
 		* Não trava o processador enquanto a interrupção não acontecer.
-    * Desvantagens:
+	* Desvantagens:
 		* "Bypass" da BIOS;
-		* Demanda instalação de rotinas de tratamento de interrupção.
+		* Demanda instalação de rotinas de tratamento de interrupção e identificação do dispositivo que gerou a interrupção.
 
 	2.2. **[Z80] A Instrução Halt do Z80**
     
@@ -138,7 +138,7 @@ Referências:
 		* *Implementação mais simples possível.*
   		* Não faz "Bypass" da BIOS;
   		* Não demanda instalação de rotinas de tratamento de interrupção nem de hook.
-  	* Desvantagem:
+	* Desvantagem:
     	* Trava o processador enquanto a interrupção não acontecer.
         
 	2.3. **[Arquitetura MSX] O Hook H.TIMI (FD9Fh)**
@@ -152,7 +152,7 @@ Referências:
 	
     2.4. **[Arquitetura MSX] A variável Jiffy**
 	
-    * Vantagens:
+	* Vantagens:
 		* *Estratégia que demanda o menor domínio sobre interrupções.*
 		* Não faz "Bypass" da BIOS;
 		* Não trava o processador enquanto a interrupção não acontecer;
@@ -239,11 +239,11 @@ unsigned int lastJiffy;
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Tarefa opcional "para casa":
-* Indo além do Jiffy: Transforme sua temporização da estratégia Jiffy para uso do Hook H.TIMI.
+* Indo além do *Jiffy*: Transforme sua temporização da estratégia *Jiffy* para uso do Hook H.TIMI.
 
 2. Discussão geral da apresentação:
 * VDP, tabelas, VPEEK, VPOKE.
-* Interrupções, temporização, Jiffy.
+* Interrupções, temporização, *Jiffy*.
 * Os vários loops internos do programa para controle de temporização.
 * Dinâmica geral do workshop: feedbacks e ideias.
 
