@@ -107,7 +107,7 @@ Ou, pensando em C:
 ### 5.2. Controlando a cadência do jogo.
 ###### *Github Ticket/Branch: 16/TKT0016.*
 
-##### Objetivo: Controlar a velocidade o jogo através do sistema de interrupções do MSX (previsão: 30 minutos).
+##### Objetivo: Controlar a velocidade o jogo através do sistema de interrupções do MSX (previsão: 60 minutos).
 
 1. Entendendo o básico de interrupções no MSX.
 * [VDP] A interrupção VBlank do TMS9918.
@@ -115,11 +115,11 @@ Ou, pensando em C:
 * [Arquitetura MSX] Hooks e, em particular, o Hook H.TIMI (FD9Fh).
 
 Referências:
-TMS9918: http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf (inglês).
-vBlank: https://www.youtube.com/watch?v=aUkHk_mjtOU (espanhol).
-Interrupções no Z80: http://map.grauw.nl/articles/interrupts.php (inglês).
-Hooks: https://www.msx.org/wiki/System_hooks (inglês).
-Muito de tudo acima: http://www.msxtop.msxall.com/Portugues/Projeto_msx_top_secret.htm (português).
+* TMS9918: http://map.grauw.nl/resources/video/ti-vdp-programmers-guide.pdf (inglês).
+* vBlank: https://www.youtube.com/watch?v=aUkHk_mjtOU (espanhol).
+* Interrupções no Z80: http://map.grauw.nl/articles/interrupts.php (inglês).
+* Hooks: https://www.msx.org/wiki/System_hooks (inglês).
+* Muito de tudo acima: http://www.msxtop.msxall.com/Portugues/Projeto_msx_top_secret.htm (português).
 
 2. Comparando quatro estratégias de temporização:
 * **[Z80] Rotinas de tratamento de interrupção**
