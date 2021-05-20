@@ -102,7 +102,7 @@ Ou, pensando em C:
 7. Discussão:
 * Por que precisamos incluir o teste "joy > 0" na avaliação da de EoG?
 
-8. Compile e rode o programa.
+8. Compile e rode o programa. O que houve?
 
 ### 5.2. Controlando a cadência do jogo.
 ###### *Github Ticket/Branch: 16/TKT0016.*
@@ -232,6 +232,9 @@ unsigned int lastJiffy;
 		{
 		}
 ```
+
+9. Compile e rode o programa. E agora, o que houve?
+
 ### 5.3. Finalização da Sessão 5
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
