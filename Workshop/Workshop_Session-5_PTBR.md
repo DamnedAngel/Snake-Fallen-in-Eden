@@ -235,14 +235,14 @@ unsigned int lastJiffy;
 ### 5.3. Finalização da Sessão 5
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
-1. Discussão geral da apresentação:
+1. Tarefa opcional "para casa":
+* Indo além do Jiffy: Transforme sua temporização da estratégia Jiffy para uso do Hook H.TIMI.
+
+2. Discussão geral da apresentação:
 * VDP, tabelas, VPEEK, VPOKE.
 * Interrupções, temporização, Jiffy.
 * Os vários loops internos do programa para controle de temporização.
 * Dinâmica geral do workshop: feedbacks e ideias.
-
-2. Tarefa opcional "para casa":
-* Além do Jiffy: Transforme sua temporização da estratégia Jiffy para uso do Hook H.TIMI.
 
 ---
 
