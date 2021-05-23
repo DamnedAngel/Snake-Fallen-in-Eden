@@ -1,5 +1,5 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 5: Colisão: os limites do Eden.
+# Sessão 5: Colisão: os limites do Éden.
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
@@ -46,7 +46,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ---
 
-# Sessão 5: Colisão: os limites do Eden.
+# Sessão 5: Colisão: os limites do Éden.
 
 ### 5.1. Detectando colisão.
 ###### *Github Ticket/Branch: 15/TKT0015.*
