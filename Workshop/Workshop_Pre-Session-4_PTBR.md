@@ -3,7 +3,7 @@
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 4: XXX
+Vídeo da sessão 4: https://youtu.be/LLTqwnI-kjQ
 
 Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
 
@@ -38,7 +38,7 @@ VS: Visual Studio 2019
 Esse documento é dividido em sessões de workshop, e as sessões são divididas em tópicos de estudo.
 
 Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3 formatos:
-* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em XXX)
+* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em https://youtu.be/LLTqwnI-kjQ)
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
@@ -132,7 +132,7 @@ bool EoG;
 
 8. **DESAFIO**: Sem olhar as respostas abaixo, pesquise como fazer uma leitura de Joystick na Fusion-C e implemente a leitura na variável joy.
 ```c
-*** Resposta ao desafio somente será adicionada ao roteiro após a sessão. ***
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 9. Conhecendo a estrutura ***switch/case*** em C:
@@ -180,7 +180,7 @@ switch (expressão)
 
 11. **DESAFIO**: Sem olhar o resultado abaixo, complemente a estrutura ***switch/case*** para alterar os valores das variáveis *x* e *y* em função dos outros valores de *joy*.
 ```c
-*** Resposta ao desafio somente será adicionada ao roteiro após a sessão. ***
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 12. Compile e rode o programa (dica: teste com toques BEM rápidos na teclas de setas).
@@ -188,46 +188,16 @@ switch (expressão)
 13. Discussão:
 * O que houve? Por quê?
 
-### 4.3. Detectando colisão.
-###### *Github Ticket/Branch: 15/TKT0015.*
 
-##### Objetivo: Detectar colisão da cobra com as paredes e consigo mesma e finalizar o jogo (previsão: 20 minutos).
-
-1. Entendendo um pouquinho mais sobre a VRAM.
-* Tabelas padrões, nomes e cores da screen 1.
-* Lembrando da função BASE() do MSX-BASIC (https://www.msx.org/wiki/BASE()).
-* Lembrando da função VPEEK() do MSX-BASIC (https://www.msx.org/wiki/VPEEK).
-
-2. Crie a constante NAMETABLE no arquivo *msxromapp.c*, entre as cláusulas *#include* e as declarações de variáveis:
-```c
-#define NAMETABLE			0x1800
-```
-
-3. Discussão:
-* Como converter os valores das variáveis *x* e *y* nos endereços de VRAM correspondentes?
-
-4. **DESAFIO**: Sem olhar as respostas abaixo, use a função *Vpeek* para recuperar o conteúdo do jardim (tela) na posição para onde a cabeça da cobra está indo e armezene na variável *content*.
-```c
-*** Resposta ao desafio somente será adicionada ao roteiro após a sessão. ***
-```
-
-5. **DESAFIO**: Sem olhar as respostas abaixo, ajuste a variável EoG se o valor da variável content for diferente de 32 (ASCII do espaço).
-```c
-*** Resposta ao desafio somente será adicionada ao roteiro após a sessão. ***
-```
-
-6. Compile e rode o programa.
-
-### 4.4. Finalização da Sessão 4
+### 4.3. Finalização da Sessão 4
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Lição de casa: Se tornar familiarizado com o sistema de interrupções do VDP.
-* Ler Seções XXXXXX do Manual do VPD.
 * Assistir https://www.youtube.com/watch?v=aUkHk_mjtOU (espanhol!).
+* Ler http://map.grauw.nl/articles/interrupts.php (inglês).
 
 2. Discussão geral da apresentação:
 * Switch/Case;
-* VDP, tabelas, VPEEK, VPOKE.
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
