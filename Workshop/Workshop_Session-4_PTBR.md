@@ -106,7 +106,7 @@ bool EoG;
 	// Initialize game variables
 	x = 10;
 	y = 10;
-	EoG = true;
+	EoG = false;
 ```
 
 3. Por fim, criemos a estrutura do loop ao redor dos comandos para impressão da cabeça da cobra. Com isso, o jogo ficará agora em um loop eterno, mas mais tarde artibuiremos *true* à EoG quando a cobra colidir com as paredes ou com ela mesma, o que permitirá ao jogo sair do loop:
