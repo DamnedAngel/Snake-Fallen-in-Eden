@@ -1,3 +1,5 @@
+## Documento deprecado. Documentos específicos criados para cada sessão.
+
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
 
 Escrito por Damned Angel, 2020-2021
