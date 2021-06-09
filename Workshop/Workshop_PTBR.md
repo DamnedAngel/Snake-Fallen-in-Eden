@@ -380,7 +380,7 @@ void gameOver() {
 
 ---
 
-## Sess√£o 3: Implementando a cobra
+## Sess„o 3: Implementando a cobra - Parte 1
 
 ### 3.1. Uma cabe√ßa no jardim
 ###### *Github Ticket/Branch: 13/TKT0013.*
@@ -668,3 +668,6 @@ unsigned int lastJiffy;
 * Din√¢mica geral do workshop: feedbacks e ideias.
 
 ---
+
+## Sess„o 4: Implementando a cobra - Parte 2
+
