@@ -231,13 +231,31 @@ unsigned char x, y, direction, lastDirection;
 				direction = joy;
 ```
 
-### 7.X. Finalização da Sessão 7
+6. Compile e rode o programa.
+
+### 7.5. Desligando o "key click".
+###### *Github Ticket/Branch: 24/TKT0024.*
+
+##### Objetivo: Desligar o key click padrão do MSX, melhorando a experiência do jogo (previsão: 5 minutos).
+
+1. **DESAFIO**: Sem olhar a resposta abaixo, descubra qual a função da Fusion-C que liga e desliga o "key click", e o desligue!
+
+```c
+void main(void) {
+	KeySound(0);
+	Screen(1);
+	Width(32);
+```
+
+2. Compile e rode o programa.
+
+### 7.6. Finalização da Sessão 7
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-* XXX
-* YYY
-* ZZZ
+* Novas funções da Fusion-C
+* Lógica em geral
+* Experiência do jogador
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---

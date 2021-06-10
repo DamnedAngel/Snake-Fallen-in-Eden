@@ -171,6 +171,7 @@ void gameOver() {
 //	Your fun starts here!!!
 //	Replace the code below with your art.
 void main(void) {
+	KeySound(0);
 	Screen(1);
 	Width(32);
 
