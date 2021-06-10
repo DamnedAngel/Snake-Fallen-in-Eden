@@ -88,14 +88,15 @@ void game() {
 
 	// Game's main loop
 	while (!EoG) {
-		while (lastJiffy == Peekw(BIOS_JIFFY)) {}
-		// from this point on, 1 pass per frame
-
-		if (Peekw(BIOS_JIFFY) == 15) {
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {
 			joy = JoystickRead(0);
 			if ((joy == UP) || (joy == RIGHT) || (joy == DOWN) || (joy == LEFT)) {
 				direction = joy;
 			}
+		}
+		// from this point on, 1 pass per frame
+
+		if (Peekw(BIOS_JIFFY) == 15) {
 
 			// move snake
 			switch (direction) {
