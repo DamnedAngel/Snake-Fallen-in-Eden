@@ -3,7 +3,7 @@
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 6: XXX
+Vídeo da sessão 7: XXX
 
 Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
 
@@ -49,24 +49,29 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 # Sessão 7: O movimento constante da cobra.
 
 ### 7.1. Mostrando as telas Iniciais e de Game Over corretamente.
-###### *Github Ticket/Branch: XX/TKT00XX.*
+###### *Github Ticket/Branch: 20/TKT0020.*
 
 ##### Objetivo: Aguardar o jogador parar de dar comandos antes de apagar as telas Iniciais e de Game Over (previsão: 10 minutos).
 
-1. Crie uma variável inteira, sem sinal e de 16 bits para controlar o progresso do *Jiffy* chamada *lastJiffy*. No final de loop, grave o último *Jiffy* detectado na variável.
-```c
-unsigned char content;
-unsigned int lastJiffy;
-```
-```c
-	// Game's main loop
-	while (!EoG) {
+1. O atual estado do jogo tem um comandos *InputChar* para aguardar o jogador apertar uma tecla para sair da tela inicial e de game over. O problema é que se o jogador já veio da tela anterior com alguma tecla apertada, o *InputChar* recebe o código da tecla e passa de tela. Isso faz com que seja muito dificil ver a telas de game over ou incil após perder um jogo. Vamos então aguardar não existirem teclas apertadas ou dados no buffer do teclado. 
 
-		...
+2. **DESAFIO**: Remova o *InputChar* da função *game()* e, manipulando a variável *Jiffy*, aguarde 1,5 segundos (90 *Jiffys*) antes de retornar para a função. Isso gerará uma espera anes de mostrar a mensagem de Game Over.
 
-		lastJiffy = Peekw(BIOS_JIFFY);
-	}
+```c
+	Poke(BIOS_JIFFY, 0);
+	while (Peek(BIOS_JIFFY) < 90) {}
 ```
+
+3. Compile e rode o programa.
+
+4. **DESAFIO**: Sem olhar as respostas abaixo, descubra qual a função da Fusion-C lê o conteúdo do teclado, sem aguardar se não houver teclas apertadas. Use essa função para aguardar não haver teclas apertadas antes de executar o *InputChar* nas funções *title()* e *gameOver()*.
+
+```c
+	while (Inkey() > 0) {}    // wait until key release
+	InputChar();              // wait for keypress
+```
+
+5. Compile e rode o programa.
 
 
 ### 7.X. Finalização da Sessão 7
