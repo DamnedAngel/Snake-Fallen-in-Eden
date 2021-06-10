@@ -14,7 +14,7 @@
 #define NAMETABLE					0x1800
 
 bool EoG;
-unsigned char x, y, direction;
+unsigned char x, y, direction, lastDirection;
 unsigned char joy;
 unsigned char content;
 unsigned int lastJiffy;
@@ -83,6 +83,7 @@ void game() {
 	x = 10;
 	y = 10;
 	direction = RIGHT;
+	lastDirection = 0;	// initially, none
 	EoG = false;
 	Pokew(BIOS_JIFFY, 0);
 
@@ -90,9 +91,29 @@ void game() {
 	while (!EoG) {
 		while (lastJiffy == Peekw(BIOS_JIFFY)) {
 			joy = JoystickRead(0);
-			if ((joy == UP) || (joy == RIGHT) || (joy == DOWN) || (joy == LEFT)) {
-				direction = joy;
+
+			// Alternative 1: IFs inside SWITCH/CASE
+			switch (lastDirection) {
+			case UP:
+				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
+				break;
+			case RIGHT:
+				if ((joy == UP) || (joy == DOWN)) direction = joy;
+				break;
+			case DOWN:
+				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
+				break;
+			case LEFT:
+				if ((joy == UP) || (joy == DOWN)) direction = joy;
+				break;
 			}
+
+/*
+			// Alternative 2: Composition of Conditions in a single IF
+			if ((((lastDirection == UP) || (lastDirection == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
+				(((lastDirection == RIGHT) || (lastDirection == LEFT)) && ((joy == UP) || (joy == DOWN))))
+				direction = joy;
+*/
 		}
 		// from this point on, 1 pass per frame
 
@@ -120,6 +141,7 @@ void game() {
 			Locate(x, y);
 			print("*");
 
+			lastDirection = direction;		// saves last direction after moving
 			Pokew(BIOS_JIFFY, 0);
 		}
 

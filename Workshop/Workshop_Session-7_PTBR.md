@@ -91,7 +91,16 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 unsigned char x, y, direction;            // wait for keypress
 ```
 
-2. **DESAFIO**: Sem olhar as resposta abaixo, atualize o valor da variável *direction* se - e apenas se - o valor da variável *joy* for ovimentos diagonais. Então os valors válidos serão apenas 1 (UP), 3 (RIGHT), 5 (DOWN) e 7 (LEFT).
+2. Inicialize a variável *direction* com o valor *RIGHT* (3), dentro da função *game*:
+
+```c
+	// Initialize game variables
+	x = 10;
+	y = 10;
+	direction = RIGHT;
+```
+
+3. **DESAFIO**: Sem olhar as resposta abaixo, atualize o valor da variável *direction* se - e apenas se - o valor da variável *joy* for ovimentos diagonais. Então os valors válidos serão apenas 1 (UP), 3 (RIGHT), 5 (DOWN) e 7 (LEFT).
 
 ```c
 			joy = JoystickRead(0);
@@ -100,32 +109,32 @@ unsigned char x, y, direction;            // wait for keypress
 			}
 ```
 
-3. Substitua *joy* por *direction* no comnda *case* que implementa a movimentação da cobra:
+4. Substitua *joy* por *direction* no comnda *case* que implementa a movimentação da cobra:
 
 ```c
 			// move snake
 			switch (direction) {
 ```
 
-4. Compile e rode o programa. Discuta o resultado:
+5. Compile e rode o programa. Discuta o resultado:
 * O movimento constante funcionou?
 * Comandos para direcionar a cobra funcionaram? Que situações não funcionam bem?
 * O que houve com a o sistema de detecção de colisão?
 
-5. **DESAFIO**: Sem olhar a resposta abaixo, corrija o problema de detecção de colisão:
+6. **DESAFIO**: Sem olhar a resposta abaixo, corrija o problema de detecção de colisão:
 
 ```c
 			EoG = (content != ' ');
 ```
 
-6. Compile e rode o programa. Discuta o resultado.
+7. Compile e rode o programa. Discuta o resultado.
 
 ### 7.3. Corrigindo o problema de comandos que falham.
 ###### *Github Ticket/Branch: 22/TKT0022.*
 
 ##### Objetivo: Dar uma sensação mais fluida ao controle da cobra (previsão: 10 minutos).
 
-1. Discussão: porque os comandos direcionais estão falhando em algumas situações?
+1. Discussão: por que os comandos direcionais estão falhando em algumas situações?
 
 2. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, corrija o problema das falhas intermitentes de comandos:
 
@@ -152,6 +161,75 @@ unsigned char x, y, direction;            // wait for keypress
 ```
 
 3. Compile e rode o programa. O problema foi resolvido?
+
+### 7.4. Evitando curvas de 180 graus.
+###### *Github Ticket/Branch: 23/TKT0023.*
+
+##### Objetivo: Evitar que a cobra se mate voltando por cima de ela mesma (previsão: 30 minutos).
+
+1. Discussão: O que precisaríamos fazer para evitar que a cobra volte por cima de ela mesma?
+
+2. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, use a combinação de comandos *if* (ou do comando *switch/case* com comandos *if*) para evitar curvas de 180 graus:
+
+```c
+			// Alternative 1: IFs inside SWITCH/CASE
+			joy = JoystickRead(0);
+			switch (direction) {
+			case UP:
+				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
+				break;
+			case RIGHT:
+				if ((joy == UP) || (joy == DOWN)) direction = joy;
+				break;
+			case DOWN:
+				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
+				break;
+			case LEFT:
+				if ((joy == UP) || (joy == DOWN)) direction = joy;
+				break;
+			}
+```
+
+```c
+			// Alternative 2: Composition of Conditions in a single IF
+			if ((((direction == UP) || (direction == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
+				(((direction == RIGHT) || (direction == LEFT)) && ((joy == UP) || (joy == DOWN))))
+				direction = joy;
+```
+
+3. Compile e rode o programa.
+
+4. Discussão: O problema foi resolvido? Você consegue imaginar uma forma de ainda causar curvas de 180 graus?
+
+5. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, implemente a solução para o ainda possível caso de curvas de 180 graus:
+
+```c
+unsigned char x, y, direction, lastDirection;
+```
+```c
+	// Initialize game variables
+	x = 10;
+	y = 10;
+	direction = RIGHT;
+	lastDirection = 0;	// initially, none
+```
+```c
+			Locate(x, y);
+			print("*");
+
+			lastDirection = direction;  // saves last direction after moving
+			Pokew(BIOS_JIFFY, 0);
+```
+```c
+			// Alternative 1: IFs inside SWITCH/CASE
+			switch (lastDirection) {
+```
+```c
+			// Alternative 2: Composition of Conditions in a single IF
+			if ((((lastDirection == UP) || (lastDirection == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
+				(((lastDirection == RIGHT) || (lastDirection == LEFT)) && ((joy == UP) || (joy == DOWN))))
+				direction = joy;
+```
 
 ### 7.X. Finalização da Sessão 7
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
