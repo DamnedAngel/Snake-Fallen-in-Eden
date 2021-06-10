@@ -58,8 +58,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 2. **DESAFIO**: Sem olhar a resposta abaixo, remova o *InputChar* da função *game()* e, manipulando a variável *Jiffy*, aguarde 1,5 segundos (90 *Jiffys*) antes de retornar para a função. Isso gerará uma espera anes de mostrar a mensagem de Game Over.
 
 ```c
-	Poke(BIOS_JIFFY, 0);
-	while (Peek(BIOS_JIFFY) < 90) {}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 3. Coloque um *Beep* para aviso sonoro que a cobra colidiu imediatamente antes do código do item anterior. Isso ajudará o jogador a entender por que o jogo ficou 1,5 segundos sem responder comandos. Mais tarde, melhoraremos esse aviso.
@@ -73,8 +72,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 5. **DESAFIO**: Sem olhar a resposta abaixo, descubra qual a função da Fusion-C lê o conteúdo do teclado, sem aguardar se não houver teclas apertadas. Use essa função para aguardar não haver teclas apertadas antes de executar o *InputChar* nas funções *title()* e *gameOver()*.
 
 ```c
-	while (Inkey() > 0) {}    // wait until key release
-	InputChar();              // wait for keypress
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 5. Compile e rode o programa.
@@ -103,10 +101,7 @@ unsigned char x, y, direction;            // wait for keypress
 3. **DESAFIO**: Sem olhar as resposta abaixo, atualize o valor da variável *direction* se - e apenas se - o valor da variável *joy* for ovimentos diagonais. Então os valors válidos serão apenas 1 (UP), 3 (RIGHT), 5 (DOWN) e 7 (LEFT).
 
 ```c
-			joy = JoystickRead(0);
-			if ((joy == UP) || (joy == RIGHT) || (joy == DOWN) || (joy == LEFT)) {
-				direction = joy;
-			}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 4. Substitua *joy* por *direction* no comnda *case* que implementa a movimentação da cobra:
@@ -124,7 +119,7 @@ unsigned char x, y, direction;            // wait for keypress
 6. **DESAFIO**: Sem olhar a resposta abaixo, corrija o problema de detecção de colisão:
 
 ```c
-			EoG = (content != ' ');
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 7. Compile e rode o programa. Discuta o resultado.
@@ -139,25 +134,7 @@ unsigned char x, y, direction;            // wait for keypress
 2. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, corrija o problema das falhas intermitentes de comandos:
 
 ```c
-		if (Peekw(BIOS_JIFFY) == 15) {
-
-			// <tratamento de joystic removido daqui...>
-
-			// move snake
-			switch (direction) {
-```
-
-```c
-		while (lastJiffy == Peekw(BIOS_JIFFY)) {
-
-			// <...e inserido aqui!!!>
-
-			joy = JoystickRead(0);
-			if ((joy == UP) || (joy == RIGHT) || (joy == DOWN) || (joy == LEFT)) {
-				direction = joy;
-			}
-		}
-		// from this point on, 1 pass per frame
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 3. Compile e rode o programa. O problema foi resolvido?
@@ -172,29 +149,7 @@ unsigned char x, y, direction;            // wait for keypress
 2. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, use a combinação de comandos *if* (ou do comando *switch/case* com comandos *if*) para evitar curvas de 180 graus:
 
 ```c
-			// Alternative 1: IFs inside SWITCH/CASE
-			joy = JoystickRead(0);
-			switch (direction) {
-			case UP:
-				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
-				break;
-			case RIGHT:
-				if ((joy == UP) || (joy == DOWN)) direction = joy;
-				break;
-			case DOWN:
-				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
-				break;
-			case LEFT:
-				if ((joy == UP) || (joy == DOWN)) direction = joy;
-				break;
-			}
-```
-
-```c
-			// Alternative 2: Composition of Conditions in a single IF
-			if ((((direction == UP) || (direction == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
-				(((direction == RIGHT) || (direction == LEFT)) && ((joy == UP) || (joy == DOWN))))
-				direction = joy;
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 3. Compile e rode o programa.
@@ -204,31 +159,7 @@ unsigned char x, y, direction;            // wait for keypress
 5. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, implemente a solução para o ainda possível caso de curvas de 180 graus:
 
 ```c
-unsigned char x, y, direction, lastDirection;
-```
-```c
-	// Initialize game variables
-	x = 10;
-	y = 10;
-	direction = RIGHT;
-	lastDirection = 0;	// initially, none
-```
-```c
-			Locate(x, y);
-			print("*");
-
-			lastDirection = direction;  // saves last direction after moving
-			Pokew(BIOS_JIFFY, 0);
-```
-```c
-			// Alternative 1: IFs inside SWITCH/CASE
-			switch (lastDirection) {
-```
-```c
-			// Alternative 2: Composition of Conditions in a single IF
-			if ((((lastDirection == UP) || (lastDirection == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
-				(((lastDirection == RIGHT) || (lastDirection == LEFT)) && ((joy == UP) || (joy == DOWN))))
-				direction = joy;
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 6. Compile e rode o programa.
@@ -241,10 +172,7 @@ unsigned char x, y, direction, lastDirection;
 1. **DESAFIO**: Sem olhar a resposta abaixo, descubra qual a função da Fusion-C que liga e desliga o "key click", e o desligue!
 
 ```c
-void main(void) {
-	KeySound(0);
-	Screen(1);
-	Width(32);
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 2. Compile e rode o programa.
