@@ -14,7 +14,7 @@
 #define NAMETABLE					0x1800
 
 bool EoG;
-unsigned char x, y;
+unsigned char x, y, direction;
 unsigned char joy;
 unsigned char content;
 unsigned int lastJiffy;
@@ -82,6 +82,7 @@ void game() {
 	// Initialize game variables
 	x = 10;
 	y = 10;
+	direction = RIGHT;
 	EoG = false;
 	Pokew(BIOS_JIFFY, 0);
 
@@ -92,25 +93,28 @@ void game() {
 
 		if (Peekw(BIOS_JIFFY) == 15) {
 			joy = JoystickRead(0);
+			if ((joy == UP) || (joy == RIGHT) || (joy == DOWN) || (joy == LEFT)) {
+				direction = joy;
+			}
 
 			// move snake
-			switch (joy) {
-			case 1:
+			switch (direction) {
+			case UP:
 				y--;
 				break;
-			case 3:
+			case RIGHT:
 				x++;
 				break;
-			case 5:
+			case DOWN:
 				y++;
 				break;
-			case 7:
+			case LEFT:
 				x--;
 				break;
 			}
 
 			content = Vpeek(NAMETABLE + y * 32 + x);
-			EoG = ((joy > 0) && (content != ' '));
+			EoG = (content != ' ');
 
 			Locate(x, y);
 			print("*");
@@ -125,6 +129,7 @@ void game() {
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
+	Beep();
 	Poke(BIOS_JIFFY, 0);
 	while (Peek(BIOS_JIFFY) < 90) {}
 }

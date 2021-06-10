@@ -55,16 +55,22 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 1. O atual estado do jogo tem um comandos *InputChar* para aguardar o jogador apertar uma tecla para sair da tela inicial e de game over. O problema é que se o jogador já veio da tela anterior com alguma tecla apertada, o *InputChar* recebe o código da tecla e passa de tela. Isso faz com que seja muito dificil ver a telas de game over ou incil após perder um jogo. Vamos então aguardar não existirem teclas apertadas ou dados no buffer do teclado. 
 
-2. **DESAFIO**: Remova o *InputChar* da função *game()* e, manipulando a variável *Jiffy*, aguarde 1,5 segundos (90 *Jiffys*) antes de retornar para a função. Isso gerará uma espera anes de mostrar a mensagem de Game Over.
+2. **DESAFIO**: Sem olhar a resposta abaixo, remova o *InputChar* da função *game()* e, manipulando a variável *Jiffy*, aguarde 1,5 segundos (90 *Jiffys*) antes de retornar para a função. Isso gerará uma espera anes de mostrar a mensagem de Game Over.
 
 ```c
 	Poke(BIOS_JIFFY, 0);
 	while (Peek(BIOS_JIFFY) < 90) {}
 ```
 
-3. Compile e rode o programa.
+3. Coloque um *Beep* para aviso sonoro que a cobra colidiu imediatamente antes do código do item anterior. Isso ajudará o jogador a entender por que o jogo ficou 1,5 segundos sem responder comandos. Mais tarde, melhoraremos esse aviso.
 
-4. **DESAFIO**: Sem olhar as respostas abaixo, descubra qual a função da Fusion-C lê o conteúdo do teclado, sem aguardar se não houver teclas apertadas. Use essa função para aguardar não haver teclas apertadas antes de executar o *InputChar* nas funções *title()* e *gameOver()*.
+```c
+	Beep();
+```
+
+4. Compile e rode o programa.
+
+5. **DESAFIO**: Sem olhar a resposta abaixo, descubra qual a função da Fusion-C lê o conteúdo do teclado, sem aguardar se não houver teclas apertadas. Use essa função para aguardar não haver teclas apertadas antes de executar o *InputChar* nas funções *title()* e *gameOver()*.
 
 ```c
 	while (Inkey() > 0) {}    // wait until key release
@@ -72,6 +78,47 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ```
 
 5. Compile e rode o programa.
+
+
+### 7.2. O movimento constante da Cobra.
+###### *Github Ticket/Branch: 21/TKT0021.*
+
+##### Objetivo: Implementar o movimento esperado da cabeça da cobra: ela deve se movimentar constantemente e os comandos devem alterar a direção, ao invés de ficar parada e os comandos fazê-la andar (previsão: 30 minutos).
+
+1. Crie a variável global *direction* para armazenar a direção da cobra. O padrão de valores dela será semelhante ao retornado pela função *JoystickRead()* (ou *STICK* do MSXBASIC). No jogo do workshop não trabalharemos com movimentos diagonais. Então os valors válidos serão apenas 1 (UP), 3 (RIGHT), 5 (DOWN) e 7 (LEFT). Essa variável também não poderá assumir o valor 0 (cobra parada):
+
+```c
+unsigned char x, y, direction;            // wait for keypress
+```
+
+2. **DESAFIO**: Sem olhar as resposta abaixo, atualize o valor da variável *direction* se - e apenas se - o valor da variável *joy* for ovimentos diagonais. Então os valors válidos serão apenas 1 (UP), 3 (RIGHT), 5 (DOWN) e 7 (LEFT).
+
+```c
+			joy = JoystickRead(0);
+			if ((joy == UP) || (joy == RIGHT) || (joy == DOWN) || (joy == LEFT)) {
+				direction = joy;
+			}
+```
+
+3. Substitua *joy* por *direction* no comnda *case* que implementa a movimentação da cobra:
+
+```c
+			// move snake
+			switch (direction) {
+```
+
+4. Compile e rode o programa. Discuta o resultado:
+* O movimento constante funcionou?
+* Comandos para direcionar a cobra funcionaram? Que situações não funcionam bem?
+* O que houve com a o sistema de detecção de colisão?
+
+5. **DESAFIO**: Sem olhar a resposta abaixo, corrija o problema de detecção de colisão
+
+```c
+			EoG = (content != ' ');
+```
+
+6. Compile e rode o programa. Discuta o resultado.
 
 
 ### 7.X. Finalização da Sessão 7
