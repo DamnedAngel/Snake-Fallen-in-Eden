@@ -112,7 +112,7 @@ unsigned char x, y, direction;            // wait for keypress
 * Comandos para direcionar a cobra funcionaram? Que situações não funcionam bem?
 * O que houve com a o sistema de detecção de colisão?
 
-5. **DESAFIO**: Sem olhar a resposta abaixo, corrija o problema de detecção de colisão
+5. **DESAFIO**: Sem olhar a resposta abaixo, corrija o problema de detecção de colisão:
 
 ```c
 			EoG = (content != ' ');
@@ -120,6 +120,38 @@ unsigned char x, y, direction;            // wait for keypress
 
 6. Compile e rode o programa. Discuta o resultado.
 
+### 7.3. Corrigindo o problema de comandos que falham.
+###### *Github Ticket/Branch: 22/TKT0022.*
+
+##### Objetivo: Dar uma sensação mais fluida ao controle da cobra (previsão: 10 minutos).
+
+1. Discussão: porque os comandos direcionais estão falhando em algumas situações?
+
+2. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, corrija o problema das falhas intermitentes de comandos:
+
+```c
+		if (Peekw(BIOS_JIFFY) == 15) {
+
+			// <tratamento de joystic removido daqui...>
+
+			// move snake
+			switch (direction) {
+```
+
+```c
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {
+
+			// <...e inserido aqui!!!>
+
+			joy = JoystickRead(0);
+			if ((joy == UP) || (joy == RIGHT) || (joy == DOWN) || (joy == LEFT)) {
+				direction = joy;
+			}
+		}
+		// from this point on, 1 pass per frame
+```
+
+3. Compile e rode o programa. O problema foi resolvido?
 
 ### 7.X. Finalização da Sessão 7
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
