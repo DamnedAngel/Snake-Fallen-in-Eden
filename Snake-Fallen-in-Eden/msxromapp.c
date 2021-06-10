@@ -45,6 +45,7 @@ void _print(char* msg) {
 		ld		iy, (#0xfcc0); BIOS_ROMSLT
 		ld		ix, #0x00a2; BIOS_CHPUT
 		call	#0x001c; BIOS_CALSLT
+		ei
 		pop		ix
 		pop		hl
 		inc		hl
@@ -69,7 +70,9 @@ void print(char* msg) {
 void title() {
 	Cls();
 	print(titleScreen);
-	InputChar();
+
+	while (Inkey() > 0) {}			// wait until key release
+	InputChar();					// wait for keypress
 }
 
 void game() {
@@ -122,13 +125,16 @@ void game() {
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
-	InputChar();
+	Poke(BIOS_JIFFY, 0);
+	while (Peek(BIOS_JIFFY) < 90) {}
 }
 
 void gameOver() {
 	Locate(0, 9);
 	print(gameOverMsg);
-	InputChar();
+
+	while (Inkey() > 0) {}			// wait until key release
+	InputChar();					// wait for keypress
 }
 
 // ----------------------------------------------------------
