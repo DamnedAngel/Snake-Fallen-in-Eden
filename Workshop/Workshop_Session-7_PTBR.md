@@ -88,7 +88,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 1. Crie a variável global *direction* para armazenar a direção da cobra. O padrão de valores dela será semelhante ao retornado pela função *JoystickRead()* (ou *STICK* do MSXBASIC). No jogo do workshop não trabalharemos com movimentos diagonais. Então os valors válidos serão apenas 1 (UP), 3 (RIGHT), 5 (DOWN) e 7 (LEFT). Essa variável também não poderá assumir o valor 0 (cobra parada):
 
 ```c
-unsigned char x, y, direction;            // wait for keypress
+unsigned char x, y, direction;
 ```
 
 2. Inicialize a variável *direction* com o valor *RIGHT* (3), dentro da função *game*:
@@ -162,94 +162,7 @@ unsigned char x, y, direction;            // wait for keypress
 
 3. Compile e rode o programa. O problema foi resolvido?
 
-### 7.4. Evitando curvas de 180 graus.
-###### *Github Ticket/Branch: 23/TKT0023.*
-
-##### Objetivo: Evitar que a cobra se mate voltando por cima de ela mesma (previsão: 30 minutos).
-
-1. Discussão: O que precisaríamos fazer para evitar que a cobra volte por cima de ela mesma?
-
-2. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, use a combinação de comandos *if* (ou do comando *switch/case* com comandos *if*) para evitar curvas de 180 graus:
-
-```c
-			// Alternative 1: IFs inside SWITCH/CASE
-			joy = JoystickRead(0);
-			switch (direction) {
-			case UP:
-				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
-				break;
-			case RIGHT:
-				if ((joy == UP) || (joy == DOWN)) direction = joy;
-				break;
-			case DOWN:
-				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
-				break;
-			case LEFT:
-				if ((joy == UP) || (joy == DOWN)) direction = joy;
-				break;
-			}
-```
-
-```c
-			// Alternative 2: Composition of Conditions in a single IF
-			if ((((direction == UP) || (direction == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
-				(((direction == RIGHT) || (direction == LEFT)) && ((joy == UP) || (joy == DOWN))))
-				direction = joy;
-```
-
-3. Compile e rode o programa.
-
-4. Discussão: O problema foi resolvido? Você consegue imaginar uma forma de ainda causar curvas de 180 graus?
-
-5. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, implemente a solução para o ainda possível caso de curvas de 180 graus:
-
-```c
-unsigned char x, y, direction, lastDirection;
-```
-```c
-	// Initialize game variables
-	x = 10;
-	y = 10;
-	direction = RIGHT;
-	lastDirection = 0;	// initially, none
-```
-```c
-			Locate(x, y);
-			print("*");
-
-			lastDirection = direction;  // saves last direction after moving
-			Pokew(BIOS_JIFFY, 0);
-```
-```c
-			// Alternative 1: IFs inside SWITCH/CASE
-			switch (lastDirection) {
-```
-```c
-			// Alternative 2: Composition of Conditions in a single IF
-			if ((((lastDirection == UP) || (lastDirection == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
-				(((lastDirection == RIGHT) || (lastDirection == LEFT)) && ((joy == UP) || (joy == DOWN))))
-				direction = joy;
-```
-
-6. Compile e rode o programa.
-
-### 7.5. Desligando o "key click".
-###### *Github Ticket/Branch: 24/TKT0024.*
-
-##### Objetivo: Desligar o key click padrão do MSX, melhorando a experiência do jogo (previsão: 5 minutos).
-
-1. **DESAFIO**: Sem olhar a resposta abaixo, descubra qual a função da Fusion-C que liga e desliga o "key click", e o desligue!
-
-```c
-void main(void) {
-	KeySound(0);
-	Screen(1);
-	Width(32);
-```
-
-2. Compile e rode o programa.
-
-### 7.6. Finalização da Sessão 7
+### 7.4. Finalização da Sessão 7
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:

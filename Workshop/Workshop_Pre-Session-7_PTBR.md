@@ -86,7 +86,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 1. Crie a variável global *direction* para armazenar a direção da cobra. O padrão de valores dela será semelhante ao retornado pela função *JoystickRead()* (ou *STICK* do MSXBASIC). No jogo do workshop não trabalharemos com movimentos diagonais. Então os valors válidos serão apenas 1 (UP), 3 (RIGHT), 5 (DOWN) e 7 (LEFT). Essa variável também não poderá assumir o valor 0 (cobra parada):
 
 ```c
-unsigned char x, y, direction;            // wait for keypress
+unsigned char x, y, direction;
 ```
 
 2. Inicialize a variável *direction* com o valor *RIGHT* (3), dentro da função *game*:
@@ -139,45 +139,7 @@ unsigned char x, y, direction;            // wait for keypress
 
 3. Compile e rode o programa. O problema foi resolvido?
 
-### 7.4. Evitando curvas de 180 graus.
-###### *Github Ticket/Branch: 23/TKT0023.*
-
-##### Objetivo: Evitar que a cobra se mate voltando por cima de ela mesma (previsão: 30 minutos).
-
-1. Discussão: O que precisaríamos fazer para evitar que a cobra volte por cima de ela mesma?
-
-2. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, use a combinação de comandos *if* (ou do comando *switch/case* com comandos *if*) para evitar curvas de 180 graus:
-
-```c
-*** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
-
-3. Compile e rode o programa.
-
-4. Discussão: O problema foi resolvido? Você consegue imaginar uma forma de ainda causar curvas de 180 graus?
-
-5. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, implemente a solução para o ainda possível caso de curvas de 180 graus:
-
-```c
-*** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
-
-6. Compile e rode o programa.
-
-### 7.5. Desligando o "key click".
-###### *Github Ticket/Branch: 24/TKT0024.*
-
-##### Objetivo: Desligar o key click padrão do MSX, melhorando a experiência do jogo (previsão: 5 minutos).
-
-1. **DESAFIO**: Sem olhar a resposta abaixo, descubra qual a função da Fusion-C que liga e desliga o "key click", e o desligue!
-
-```c
-*** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
-
-2. Compile e rode o programa.
-
-### 7.6. Finalização da Sessão 7
+### 7.4. Finalização da Sessão 7
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
