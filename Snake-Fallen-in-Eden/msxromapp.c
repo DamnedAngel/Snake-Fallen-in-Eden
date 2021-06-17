@@ -13,14 +13,23 @@
 
 #define NAMETABLE					0x1800
 
+#define TILE_GRASS					' '
+#define TILE_SNAKETAIL				'o'
+#define TILE_SNAKEHEAD				'*'
+
+
 bool EoG;
-unsigned char x, y, direction, lastDirection;
+unsigned int snakeHeadPos;
+unsigned char direction, lastDirection;
 unsigned char joy;
 unsigned char content;
 unsigned int lastJiffy;
 
-#define Peek( address )				( *( (volatile unsigned char*)(address) ) )
-#define Peekw( address )			( *( (volatile unsigned int*)(address) ) )
+unsigned int snake[512];
+unsigned int *snakeHead, *snakeTail;
+
+//#define Peek( address )				( *( (volatile unsigned char*)(address) ) )
+//#define Peekw( address )			( *( (volatile unsigned int*)(address) ) )
 
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
@@ -80,12 +89,19 @@ void game() {
 	print(gameScreen);
 
 	// Initialize game variables
-	x = 10;
-	y = 10;
+	snakeHeadPos = NAMETABLE + 10 * 32 + 11;
 	direction = RIGHT;
 	lastDirection = 0;	// initially, none
 	EoG = false;
 	Pokew(BIOS_JIFFY, 0);
+
+	// initialize snake
+	snakeTail = snake;
+	snakeHead = snake + 1;
+	snake[0] = snakeHeadPos - 1;
+	snake[1] = snakeHeadPos;
+	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
+	Vpoke(snakeHeadPos, TILE_SNAKEHEAD);
 
 	// Game's main loop
 	while (!EoG) {
@@ -122,24 +138,35 @@ void game() {
 			// move snake
 			switch (direction) {
 			case UP:
-				y--;
+				snakeHeadPos-=32;
 				break;
 			case RIGHT:
-				x++;
+				snakeHeadPos++;
 				break;
 			case DOWN:
-				y++;
+				snakeHeadPos+=32;
 				break;
 			case LEFT:
-				x--;
+				snakeHeadPos--;
 				break;
 			}
 
-			content = Vpeek(NAMETABLE + y * 32 + x);
+			content = Vpeek(snakeHeadPos);
 			EoG = (content != ' ');
 
-			Locate(x, y);
-			print("*");
+			// Erases last tail segment
+			Vpoke(*snakeTail, TILE_GRASS);
+			snakeTail++;
+			if (snakeTail > &snake[511]) snakeTail = snake;
+
+			// Replaces head with tail segment
+			Vpoke(*snakeHead, TILE_SNAKETAIL);
+
+			// Draws head in new position
+			Vpoke (snakeHeadPos, TILE_SNAKEHEAD);
+			snakeHead++;
+			if (snakeHead > &snake[511]) snakeHead = snake;
+			*snakeHead = snakeHeadPos;
 
 			lastDirection = direction;		// saves last direction after moving
 			Pokew(BIOS_JIFFY, 0);
