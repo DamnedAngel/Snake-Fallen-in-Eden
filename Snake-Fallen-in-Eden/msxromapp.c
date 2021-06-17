@@ -14,7 +14,7 @@
 #define NAMETABLE					0x1800
 
 bool EoG;
-unsigned char x, y;
+unsigned char x, y, direction, lastDirection;
 unsigned char joy;
 unsigned char content;
 unsigned int lastJiffy;
@@ -45,6 +45,7 @@ void _print(char* msg) {
 		ld		iy, (#0xfcc0); BIOS_ROMSLT
 		ld		ix, #0x00a2; BIOS_CHPUT
 		call	#0x001c; BIOS_CALSLT
+		ei
 		pop		ix
 		pop		hl
 		inc		hl
@@ -69,7 +70,9 @@ void print(char* msg) {
 void title() {
 	Cls();
 	print(titleScreen);
-	InputChar();
+
+	while (Inkey() > 0) {}			// wait until key release
+	InputChar();					// wait for keypress
 }
 
 void game() {
@@ -79,39 +82,66 @@ void game() {
 	// Initialize game variables
 	x = 10;
 	y = 10;
+	direction = RIGHT;
+	lastDirection = 0;	// initially, none
 	EoG = false;
 	Pokew(BIOS_JIFFY, 0);
 
 	// Game's main loop
 	while (!EoG) {
-		while (lastJiffy == Peekw(BIOS_JIFFY)) {}
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {
+			joy = JoystickRead(0);
+
+			// Alternative 1: IFs inside SWITCH/CASE
+			switch (lastDirection) {
+			case UP:
+				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
+				break;
+			case RIGHT:
+				if ((joy == UP) || (joy == DOWN)) direction = joy;
+				break;
+			case DOWN:
+				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
+				break;
+			case LEFT:
+				if ((joy == UP) || (joy == DOWN)) direction = joy;
+				break;
+			}
+
+/*
+			// Alternative 2: Composition of Conditions in a single IF
+			if ((((lastDirection == UP) || (lastDirection == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
+				(((lastDirection == RIGHT) || (lastDirection == LEFT)) && ((joy == UP) || (joy == DOWN))))
+				direction = joy;
+*/
+		}
 		// from this point on, 1 pass per frame
 
 		if (Peekw(BIOS_JIFFY) == 15) {
-			joy = JoystickRead(0);
 
 			// move snake
-			switch (joy) {
-			case 1:
+			switch (direction) {
+			case UP:
 				y--;
 				break;
-			case 3:
+			case RIGHT:
 				x++;
 				break;
-			case 5:
+			case DOWN:
 				y++;
 				break;
-			case 7:
+			case LEFT:
 				x--;
 				break;
 			}
 
 			content = Vpeek(NAMETABLE + y * 32 + x);
-			EoG = ((joy > 0) && (content != ' '));
+			EoG = (content != ' ');
 
 			Locate(x, y);
 			print("*");
 
+			lastDirection = direction;		// saves last direction after moving
 			Pokew(BIOS_JIFFY, 0);
 		}
 
@@ -122,13 +152,17 @@ void game() {
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
-	InputChar();
+	Beep();
+	Poke(BIOS_JIFFY, 0);
+	while (Peek(BIOS_JIFFY) < 90) {}
 }
 
 void gameOver() {
 	Locate(0, 9);
 	print(gameOverMsg);
-	InputChar();
+
+	while (Inkey() > 0) {}			// wait until key release
+	InputChar();					// wait for keypress
 }
 
 // ----------------------------------------------------------
@@ -137,6 +171,7 @@ void gameOver() {
 //	Your fun starts here!!!
 //	Replace the code below with your art.
 void main(void) {
+	KeySound(0);
 	Screen(1);
 	Width(32);
 
