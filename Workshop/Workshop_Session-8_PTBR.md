@@ -78,8 +78,10 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ```c
 			// Alternative 2: Composition of Conditions in a single IF
-			if ((((direction == UP) || (direction == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
-				(((direction == RIGHT) || (direction == LEFT)) && ((joy == UP) || (joy == DOWN))))
+			if ((((direction == UP) || (direction == DOWN)) &&
+			     ((joy == RIGHT) || (joy == LEFT))) ||
+			    (((direction == RIGHT) || (direction == LEFT)) &&
+			     ((joy == UP) || (joy == DOWN))))
 				direction = joy;
 ```
 
@@ -112,8 +114,10 @@ unsigned char x, y, direction, lastDirection;
 ```
 ```c
 			// Alternative 2: Composition of Conditions in a single IF
-			if ((((lastDirection == UP) || (lastDirection == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
-				(((lastDirection == RIGHT) || (lastDirection == LEFT)) && ((joy == UP) || (joy == DOWN))))
+			if ((((lastDirection == UP) || (lastDirection == DOWN)) &&
+			     ((joy == RIGHT) || (joy == LEFT))) ||
+			    (((lastDirection == RIGHT) || (lastDirection == LEFT)) &&
+			     ((joy == UP) || (joy == DOWN))))
 				direction = joy;
 ```
 
@@ -163,7 +167,18 @@ https://icarus.cs.weber.edu/~dab/cs1410/textbook/4.Pointers/operators.html
 
 ##### Objetivo: Construir e animar o rabo da cobra (previsão: 40 minutos).
 
-1. Para padronizar a forma de endereçamento, refatore nosso código para termos um endereço único da posição da cabeça da cobra para apontar diretamente para a posição na VRAM.
+1. Antes de implementar o funcionamento do rabo da cobra, vamos refatorar o nosso motor de movimento e endereçamento da VRAM para torná-lo um pouco mais eficiente e apropriado. Inicialmente, defina quais caracteres usaremos, no momento, como grama, cabeça e rabo da cobra:
+
+```c
+#define NAMETABLE	0x1800
+
+#define TILE_GRASS	' '
+#define TILE_SNAKETAIL	'o'
+#define TILE_SNAKEHEAD	'*'
+```
+
+2. Agora, para padronizar a forma de endereçamento, refatore o código para usarmos endereço de VRAM para posição da cabeça da cobra, ao invés de coordenadas X e Y:
+
 ```c
 --> substitua
 
@@ -173,18 +188,6 @@ unsigned char x, y, direction, lastDirection;
 
 unsigned int snakeHeadPos;
 unsigned char direction, lastDirection;
-```
-```c
---> substitua
-
-	// Initialize game variables
-	x = 10;
-	y = 10;
-
---> por
-
-	// Initialize game variables
-	snakeHeadPos = NAMETABLE + 10 * 32 + 11;
 ```
 ```c
 --> substitua
@@ -257,16 +260,7 @@ unsigned char direction, lastDirection;
 
 ```
 
-2. Rode o programa.
-
-3. Defina quais caracteres usaremos, no momento, como grama, cabeça e rabo da cobra:
-```c
-#define NAMETABLE	0x1800
-
-#define TILE_GRASS	' '
-#define TILE_SNAKETAIL	'o'
-#define TILE_SNAKEHEAD	'*'
-```
+3. Rode o programa.
 
 4. Logo abaixo das variávei globais já definidas, crie um vetor/array chamado *snake*, de 512 posições do tipo unsigned int (16 bits). Esse vetor ocupará 1000 bytes de memória. Cada posição desse vetor apontará para um endereço de VRAM onde aquele segmento de rabo está localizado.
 
@@ -289,8 +283,8 @@ unsigned int* snakeHead, snakeTail;
 	Pokew(BIOS_JIFFY, 0);
 
 	// initialize snake
-	snakeTail = snake[0];
-	snakeHead = snake + 1;
+	snakeTail = snake;	// snakeTail will point to first element of snake.
+	snakeHead = snake + 1;	// snakeHead will point to second element of snake, two bytes ahead of snakeTail.
 	snake[0] = snakeHeadPos - 1;
 	snake[1] = snakeHeadPos;
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
