@@ -6,6 +6,7 @@
 // ----------------------------------------------------------
 
 #include <stdbool.h>
+#include <stdlib.h>
 #include "targetconfig.h"
 #include "MSX/BIOS/msxbios.h"
 #include "msx_fusion.h"
@@ -16,6 +17,7 @@
 #define TILE_GRASS					' '
 #define TILE_SNAKETAIL				'o'
 #define TILE_SNAKEHEAD				'*'
+#define TILE_APPLE					'#'
 
 
 bool EoG;
@@ -28,8 +30,7 @@ unsigned int lastJiffy;
 unsigned int snake[512];
 unsigned int *snakeHead, *snakeTail;
 
-//#define Peek( address )				( *( (volatile unsigned char*)(address) ) )
-//#define Peekw( address )			( *( (volatile unsigned int*)(address) ) )
+unsigned int applePos;
 
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
@@ -84,7 +85,16 @@ void title() {
 	InputChar();					// wait for keypress
 }
 
+void dropApple() {
+	do {
+		applePos = NAMETABLE + 32 + rand() % (21 * 32);
+	} while (Vpeek(applePos) != TILE_GRASS);
+	Vpoke(applePos, TILE_APPLE);
+}
+
 void game() {
+	srand(Peekw(BIOS_JIFFY));
+
 	Cls();
 	print(gameScreen);
 
@@ -102,6 +112,9 @@ void game() {
 	snake[1] = snakeHeadPos;
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
 	Vpoke(snakeHeadPos, TILE_SNAKEHEAD);
+
+	// Drop first apple
+	dropApple();
 
 	// Game's main loop
 	while (!EoG) {

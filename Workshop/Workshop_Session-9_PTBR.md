@@ -48,85 +48,98 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 # Sessão 9: A maçã do bem e do mal.
 
-### 9.1. Materializando uma maçã.
-###### *Github Ticket/Branch: 23/TKT0023.*
+### 9.1. Materializando uma maçã (e entendendo um pouco mais do linkers do SDCC e pacotes .lib).
+###### *Github Ticket/Branch: 28/TKT0028.*
 
-##### Objetivo: Evitar que a cobra se mate voltando por cima de ela mesma (previsão: 30 minutos).
+##### Objetivo: Fazer uma maçã aparecer em um lugar aleatório, mas desocupado, do jardim (previsão: 20 minutos).
 
-1. Discussão: O que precisaríamos fazer para evitar que a cobra volte por cima de ela mesma?
+1. Definindo as mecânicas da maçã:
+- A primeira maçã aparece assim que o jogo começa;
+- A colisão da cabeça da cobra com a maçã faz a cobra comer a maçã;
+- Maçãs subsequentes aparecem quando a maçã anterior é comida.
 
-2. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, use a combinação de comandos *if* (ou do comando *switch/case* com comandos *if*) para evitar curvas de 180 graus:
-
-```c
-			// Alternative 1: IFs inside SWITCH/CASE
-			joy = JoystickRead(0);
-			switch (direction) {
-			case UP:
-				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
-				break;
-			case RIGHT:
-				if ((joy == UP) || (joy == DOWN)) direction = joy;
-				break;
-			case DOWN:
-				if ((joy == LEFT) || (joy == RIGHT)) direction = joy;
-				break;
-			case LEFT:
-				if ((joy == UP) || (joy == DOWN)) direction = joy;
-				break;
-			}
-```
+2. Defina o caracter que usaremos temporariamente para a maçã:
 
 ```c
-			// Alternative 2: Composition of Conditions in a single IF
-			if ((((direction == UP) || (direction == DOWN)) &&
-			     ((joy == RIGHT) || (joy == LEFT))) ||
-			    (((direction == RIGHT) || (direction == LEFT)) &&
-			     ((joy == UP) || (joy == DOWN))))
-				direction = joy;
+#define TILE_GRASS		' '
+#define TILE_SNAKETAIL		'o'
+#define TILE_SNAKEHEAD		'*'
+#define TILE_APPLE		'#'
 ```
 
-3. Compile e rode o programa.
-
-4. Discussão: O problema foi resolvido? Você consegue imaginar uma forma de ainda causar curvas de 180 graus?
-
-5. **DESAFIO**: Com base na discussão do item anterior, e sem olhar a resposta abaixo, implemente a solução para o ainda possível caso de curvas de 180 graus:
+3. Crie uma nova função *dropApple()* sem parâmetros e sem retorno, antes da função *game()*:
 
 ```c
-unsigned char x, y, direction, lastDirection;
-```
-```c
-	// Initialize game variables
-	x = 10;
-	y = 10;
-	direction = RIGHT;
-	lastDirection = 0;	// initially, none
-```
-```c
-			Locate(x, y);
-			print("*");
-
-			lastDirection = direction;  // saves last direction after moving
-			Pokew(BIOS_JIFFY, 0);
-```
-```c
-			// Alternative 1: IFs inside SWITCH/CASE
-			switch (lastDirection) {
-```
-```c
-			// Alternative 2: Composition of Conditions in a single IF
-			if ((((lastDirection == UP) || (lastDirection == DOWN)) &&
-			     ((joy == RIGHT) || (joy == LEFT))) ||
-			    (((lastDirection == RIGHT) || (lastDirection == LEFT)) &&
-			     ((joy == UP) || (joy == DOWN))))
-				direction = joy;
+void dropApple() {
+}
 ```
 
-6. Compile e rode o programa.
+4. Entendendo as funções *rand()* e *srand()* e a constante *RAND_MAX* da biblioteca padrão do C.
+
+5. **DESAFIO**: Utilizando a função de geração de números aleatórios rand, gere uma posição aleatória para a maçã na função *dropApple*, dentro dos limites do jardim, considerando o layout de endereçamento da tabela de nomes do VDP na VRAM. Não se preocupe, ainda, com colisões com a cobra ou com as bordas laterais:
+
+```c
+unsigned int applePos;
+```
+```c
+void dropApple() {
+	applePos = NAMETABLE + 32 + rand () % (21*32);
+}
+```
+
+6. Sem adicionar *#include <stdlib.h>*, compile o programa. O que houve?
+
+7. Entendendo um pouco mais do linker do SDCC e pacotes .lib.
+
+8. Resolva o warning da compilação, incluindo o header *stdlib*:
+
+```c
+#include <stdbool.h>
+#include <stdlib.h>
+```
+
+9. Compile o programa e confirme que o warning foi resolvido.
+
+10. **DESAFIO**: Com um loop, garanta que a posição escolhida para a maçã está livre (não está ocupada nem pela cobra e nem pelas bordas laterais), e mostre a maçã no jardim:
+
+```c
+void dropApple() {
+	do {
+		applePos = NAMETABLE + 32 + rand() % (21 * 32);
+	} while (Vpeek(applePos) != TILE_GRASS);
+	Vpoke(applePos, TILE_APPLE);
+}
+```
+
+11. Após inicialização da cobra na função game(), gere a primeira maçã do jogo:
+
+```c
+	// Drop first apple
+	dropApple();
+}
+```
+
+12. Compile execute o programa. O que aconteceu? O que acontece se você executa multiplas vezes o jogo sem rebootar o emulador? O que acontece se você reboota o emulador e inicia uma partida?
+
+13. **DESAFIO**: Com base na discussão que fizemos sobre as funções de números aleatórios, como você resolveria o problema identificado?
+
+```c
+void game() {
+	srand(Peek(BIOS_JIFFY));
+```
+
+14. Compile execute o programa. O que aconteceu?
 
 ### 8.2. Desligando o "key click".
 ###### *Github Ticket/Branch: 24/TKT0024.*
 
 ##### Objetivo: Desligar o key click padrão do MSX, melhorando a experiência do jogo (previsão: 5 minutos).
+
+1. Definindo as mecânicas da maçã:
+- Comer a maçã é o que faz a cobra crescer;
+- Cada vez que a maçã é comida, a cobra cresce um número aleatório de segmentos, de 1 a 9.
+- A primeira maçã aparece assim que o jogo começa;
+- Maçãs subsequentes aparecem quando 
 
 1. **DESAFIO**: Sem olhar a resposta abaixo, descubra qual a função da Fusion-C que liga e desliga o "key click", e o desligue!
 
