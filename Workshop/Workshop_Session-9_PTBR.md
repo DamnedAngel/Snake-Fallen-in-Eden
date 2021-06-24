@@ -196,7 +196,7 @@ unsigned char growth;
 ```
 
 ### 9.4. Quem está contando?
-###### *Github Ticket/Branch: 26/TKT0026.*
+###### *Github Ticket/Branch: 31/TKT0031.*
 
 ##### Objetivo: Implementar sistema de contagem de pontos (previsão: 20 minutos).
 
@@ -232,6 +232,12 @@ unsigned int score;
 unsigned int highscore = 0;
 ```
 ```c
+	Cls();
+	print(gameScreen);
+	Locate(18, 23);
+	PrintNumber(highscore);
+```
+```c
 				bonus = (rand() & 7) + 1;
 				growth += bonus;
 				score += bonus;
@@ -241,12 +247,13 @@ unsigned int highscore = 0;
 
 5. Rode o programa.
 
-### 8.6. Finalização da Sessão 8
+### 9.5. Finalização da Sessão 9
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-* PONTEIROS!
+* O jogo funcional
 * Lógica em geral
+* LIBs x RELs
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
