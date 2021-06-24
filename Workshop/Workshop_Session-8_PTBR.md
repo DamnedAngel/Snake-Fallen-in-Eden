@@ -160,7 +160,7 @@ Referências:
 https://www.tutorialspoint.com/cprogramming/c_pointers.htm
 https://icarus.cs.weber.edu/~dab/cs1410/textbook/4.Pointers/operators.html
 
-3. Interlúdio: Instalando uma rotina de tratamento de interrupção em C puro usando ponteiros.
+3. Interlúdio: Instalando uma rotina de tratamento de interrupção em C puro usando ponteiros (veja projeto no arquivo *Interrupt_Handler_Pointer.zip*).
 
 ### 8.5. Construindo o rabo.
 ###### *Github Ticket/Branch: 26/TKT0026.*
