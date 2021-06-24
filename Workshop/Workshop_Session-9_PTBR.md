@@ -196,12 +196,15 @@ unsigned char growth;
 ```
 
 ### 9.4. Quem está contando?
-###### *Github Ticket/Branch: 26/TKT0026.*
+###### *Github Ticket/Branch: 31/TKT0031.*
 
 ##### Objetivo: Implementar sistema de contagem de pontos (previsão: 20 minutos).
 
 1. Definindo a mecânica da pontuação:
+- A pontuação é zerada no início de cada jogo.
 - A pontuação será incrementada com o mesmo número de pontos quanto for o crescimento da cobra em segmentos, no momento que a cobra come uma maçã.
+- O recorde é zerado no início do programa. 
+- O recorde é atualizado para o valor da pontuação toda vez que a pontuação for maior que ele.
 
 2. **DESAFIO**: Sem olhar a resposta abaixo, incremente a pontuação conforme tamanho do crescimento da cobra quando ela come uma maçã.
 
@@ -221,75 +224,36 @@ unsigned int score;
 				PrintNumber(score);
 ```
 
-
 3. Rode o programa.
 
-4. Logo abaixo das variávei globais já definidas, crie um vetor/array chamado *snake*, de 512 posições do tipo unsigned int (16 bits). Esse vetor ocupará 1000 bytes de memória. Cada posição desse vetor apontará para um endereço de VRAM onde aquele segmento de rabo está localizado.
+4. **DESAFIO**: Sem olhar a resposta abaixo, incremente o recorde sempre que a pontuação for maior que ele.
 
 ```c
-unsigned int lastJiffy;
-
-unsigned int snake[512];
+unsigned int highscore = 0;
 ```
-
-5. Crie dois ponteiros *snakeHead* e *snakeTail* que serão utilizados, respectivamente, para definir a primeira posição da cobra (cabeça) quanto a última posição da cobra (ponta do rabo).
-
 ```c
-unsigned int snake[512];
-unsigned int* snakeHead, snakeTail;
+	Cls();
+	print(gameScreen);
+	Locate(18, 23);
+	PrintNumber(highscore);
 ```
-
-6. Na função *game()* Inicialize a cobra com tamanho 2: Uma cabeça e um segmento de rabo. Se preocupe tanto com as variáveis quanto com os tiles na VRAM.
-
 ```c
-	Pokew(BIOS_JIFFY, 0);
-
-	// initialize snake
-	snakeTail = snake;	// snakeTail will point to first element of snake.
-	snakeHead = snake + 1;	// snakeHead will point to second element of snake, two bytes ahead of snakeTail.
-	snake[0] = snakeHeadPos - 1;
-	snake[1] = snakeHeadPos;
-	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD);
+				bonus = (rand() & 7) + 1;
+				growth += bonus;
+				score += bonus;
+				Locate(7, 23);
+				PrintNumber(score);
 ```
 
-7. Imediatamente antes de desenhar a cabeça da cobra, apague a última posição do rabo, e incremente o ponteiro *snakeTail*:
-```c
-			// Erases last tail segment
-			Vpoke(*snakeTail, TILE_GRASS);
-			snakeTail++;
-			if (snakeTail > &snake[511]) snakeTail = snake;
+5. Rode o programa.
 
-			// Draws head in new position
-```
-
-8. Logo após, substitua a cabeça por um segmento de rabo:
-```c
-			if (snakeTail > &snake[511]) snakeTail = snake;
-
-			// Replaces head with tail segment
-			Vpoke(*snakeHead, TILE_SNAKETAIL);
-
-			// Draws head in new position
-```
-
-9. Logo após, incremente o ponteiro *snakeHead* e salve a nova posição da cabeça:
-```c
-			// Draws head in new position
-			Vpoke (snakeHeadPos, TILE_SNAKEHEAD);
-			snakeHead++;
-			if (snakeHead > &snake[511]) snakeHead = snake;
-			*snakeHead = snakeHeadPos;
-```
-
-10. Rode o programa.
-
-### 8.6. Finalização da Sessão 8
+### 9.5. Finalização da Sessão 9
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-* PONTEIROS!
+* O jogo funcional
 * Lógica em geral
+* LIBs x RELs
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---

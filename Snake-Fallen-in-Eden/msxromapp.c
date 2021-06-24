@@ -33,6 +33,10 @@ unsigned int *snakeHead, *snakeTail;
 unsigned int applePos;
 unsigned char growth;
 
+unsigned char bonus;
+unsigned int score;
+unsigned int highscore = 0;
+
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
 //	This is only for the demo app.
@@ -98,8 +102,11 @@ void game() {
 
 	Cls();
 	print(gameScreen);
+	Locate(18, 23);
+	PrintNumber(highscore);
 
 	// Initialize game variables
+	score = 0; 
 	growth = 0;
 	snakeHeadPos = NAMETABLE + 10 * 32 + 11;
 	direction = RIGHT;
@@ -170,7 +177,16 @@ void game() {
 
 			if (content == TILE_APPLE) {
 				dropApple();
-				growth = (rand() & 7) + 1;
+				bonus = (rand() & 7) + 1;
+				growth += bonus;
+				score += bonus;
+				Locate(7, 23);
+				PrintNumber(score);
+				if (score > highscore) {
+					highscore = score;
+					Locate(18, 23);
+					PrintNumber(highscore);
+				}
 			}
 			else {
 				EoG = (content != ' ');
