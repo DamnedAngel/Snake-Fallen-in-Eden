@@ -182,7 +182,7 @@ unsigned char growth;
 5. Compile e rode o programa.
 
 ### 9.3. Materializando muitas outras maçãs.
-###### *Github Ticket/Branch: 26/TKT0026.*
+###### *Github Ticket/Branch: 30/TKT0030.*
 
 ##### Objetivo: Sempre apresentar uma maçã a ser perseguida pela cobra (previsão: 5 minutos).
 
@@ -198,100 +198,29 @@ unsigned char growth;
 ### 9.4. Quem está contando?
 ###### *Github Ticket/Branch: 26/TKT0026.*
 
-##### Objetivo: Construir e animar o rabo da cobra (previsão: 40 minutos).
+##### Objetivo: Implementar sistema de contagem de pontos (previsão: 20 minutos).
 
-1. Antes de implementar o funcionamento do rabo da cobra, vamos refatorar o nosso motor de movimento e endereçamento da VRAM para torná-lo um pouco mais eficiente e apropriado. Inicialmente, defina quais caracteres usaremos, no momento, como grama, cabeça e rabo da cobra:
+1. Definindo a mecânica da pontuação:
+- A pontuação será incrementada com o mesmo número de pontos quanto for o crescimento da cobra em segmentos, no momento que a cobra come uma maçã.
 
-```c
-#define NAMETABLE	0x1800
-
-#define TILE_GRASS	' '
-#define TILE_SNAKETAIL	'o'
-#define TILE_SNAKEHEAD	'*'
-```
-
-2. Agora, para padronizar a forma de endereçamento, refatore o código para usarmos endereço de VRAM para posição da cabeça da cobra, ao invés de coordenadas X e Y:
+2. **DESAFIO**: Sem olhar a resposta abaixo, incremente a pontuação conforme tamanho do crescimento da cobra quando ela come uma maçã.
 
 ```c
---> substitua
-
-unsigned char x, y, direction, lastDirection;
-
---> por
-
-unsigned int snakeHeadPos;
-unsigned char direction, lastDirection;
+unsigned char bonus;
+unsigned int score;
 ```
 ```c
---> substitua
-
 	// Initialize game variables
-	x = 10;
-	y = 10;
-
---> por
-
-	// Initialize game variables
-	snakeHeadPos = NAMETABLE + 10 * 32 + 11;
+	score = 0;
 ```
 ```c
---> substitua
-
-			// move snake
-			switch (direction) {
-			case UP:
-				y--;
-				break;
-			case RIGHT:
-				x++;
-				break;
-			case DOWN:
-				y++;
-				break;
-			case LEFT:
-				x--;
-				break;
-			}
-
---> por
-
-			// move snake
-			switch (direction) {
-			case UP:
-				snakeHeadPos-=32;
-				break;
-			case RIGHT:
-				snakeHeadPos++;
-				break;
-			case DOWN:
-				snakeHeadPos+=32;
-				break;
-			case LEFT:
-				snakeHeadPos--;
-				break;
-			}
+				bonus = (rand() & 7) + 1;
+				growth += bonus;
+				score += bonus;
+				Locate(7, 23);
+				PrintNumber(score);
 ```
-```c
---> substitua
 
-			content = Vpeek(NAMETABLE + y * 32 + x);
-
---> por
-
-			content = Vpeek(snakeHeadPos);
-```
-```c
---> substitua
-
-			Locate(x, y);
-			print("*");
-
---> por
-
-			// Draws head in new position
-			Vpoke (snakeHeadPos, TILE_SNAKEHEAD);
-
-```
 
 3. Rode o programa.
 

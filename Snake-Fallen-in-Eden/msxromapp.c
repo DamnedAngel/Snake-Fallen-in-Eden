@@ -169,6 +169,7 @@ void game() {
 			content = Vpeek(snakeHeadPos);
 
 			if (content == TILE_APPLE) {
+				dropApple();
 				growth = (rand() & 7) + 1;
 			}
 			else {
