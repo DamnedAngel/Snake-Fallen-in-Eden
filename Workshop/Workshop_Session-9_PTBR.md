@@ -51,12 +51,11 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ### 9.1. Materializando uma maçã (e entendendo um pouco mais do linkers do SDCC e pacotes .lib).
 ###### *Github Ticket/Branch: 28/TKT0028.*
 
-##### Objetivo: Fazer uma maçã aparecer em um lugar aleatório, mas desocupado, do jardim (previsão: 20 minutos).
+##### Objetivo: Fazer uma maçã aparecer em um lugar aleatório, mas desocupado, do jardim (previsão: 40 minutos).
 
 1. Definindo as mecânicas da maçã:
 - A primeira maçã aparece assim que o jogo começa;
-- A colisão da cabeça da cobra com a maçã faz a cobra comer a maçã;
-- Maçãs subsequentes aparecem quando a maçã anterior é comida.
+- A maçã deve aparecer em uma posição livre do jardim, dentro dos limites e sem nenhum segmento da cobra.
 
 2. Defina o caracter que usaremos temporariamente para a maçã:
 
@@ -130,52 +129,73 @@ void game() {
 
 14. Compile execute o programa. O que aconteceu?
 
-### 8.2. Desligando o "key click".
-###### *Github Ticket/Branch: 24/TKT0024.*
+### 9.2. Comer, comer... é o melhor para poder crescer!
+###### *Github Ticket/Branch: 29/TKT0029.*
 
-##### Objetivo: Desligar o key click padrão do MSX, melhorando a experiência do jogo (previsão: 5 minutos).
+##### Objetivo: Implementar a ação da cobra de  comer... e crecer! (previsão: 20 minutos).
 
-1. Definindo as mecânicas da maçã:
-- Comer a maçã é o que faz a cobra crescer;
-- Cada vez que a maçã é comida, a cobra cresce um número aleatório de segmentos, de 1 a 9.
-- A primeira maçã aparece assim que o jogo começa;
-- Maçãs subsequentes aparecem quando 
+1. Definindo as mecânicas da alimentação:
+- Quando a cabeça da cobra colide com uma maçã, a cobra come a maçã.
+- Cada vez que a maçã é comida, ela desaparece e a cobra cresce um número aleatório de segmentos, definido na variável *growth*, 1 <= *growth* <= 8.
+- O crescimento da cobra se dará em 1 segmento por movimentação. Ou seja, a extremidade final deve ficar fixa por *growth* ciclos de movimentação.
 
-1. **DESAFIO**: Sem olhar a resposta abaixo, descubra qual a função da Fusion-C que liga e desliga o "key click", e o desligue!
+2. **DESAFIO**: Sem olhar a resposta abaixo, detecte que a cabeça colidiu com a maçã e evite que essa colisão finalize o jogo. Defina, também, um bloco ({}) para tratarmos posteriormente a colisão;
 
 ```c
-void main(void) {
-	KeySound(0);
-	Screen(1);
-	Width(32);
+			if (content == TILE_APPLE) {
+			}
+			else {
+				EoG = (content != ' ');
+			}
 ```
 
-2. Compile e rode o programa.
+3. Compile e rode o programa.
 
-### 8.4. Modelando o rabo.
+4. **DESAFIO**: Sem olhar a resposta abaixo, crie a variável *growth* e gere um valor aleatório de crescimento a cada vez que uma maçã é comida. Em seguida, implemente o crescimento da cobra.
 
-##### Objetivo: Discutir o modelo de dados que suportará a implementação da cobra (previsão: 30 minutos).
+```c
+unsigned int applePos;
+unsigned char growth;
+```
+```c
+	// Initialize game variables
+	growth = 0;
+```
+```c
+			if (content == TILE_APPLE) {
+				growth = (rand() & 7) + 1;
+			}
+```
+```c
+			// Erases last tail segment
+			if (growth == 0) {
+				Vpoke(*snakeTail, TILE_GRASS);
+				snakeTail++;
+				if (snakeTail > &snake[511])
+					snakeTail = snake;
+			}
+			else {
+				growth--;
+			}
+```
 
-1. Modelando o rabo da cobra.
-- A estrutura de dados;
-- O tamanho da estrutura;
-- Métodos de acessos.
+5. Compile e rode o programa.
 
-2. Entendendo o básico de ponteiros/apontadores.
-- O que são ponteiros?
-- Como usar?
-- Ponteiros nulos.
-- O operador *.
-- O operador &.
-- Aritmética de ponteiros.
+### 9.3. Materializando muitas outras maçãs.
+###### *Github Ticket/Branch: 26/TKT0026.*
 
-Referências:
-https://www.tutorialspoint.com/cprogramming/c_pointers.htm
-https://icarus.cs.weber.edu/~dab/cs1410/textbook/4.Pointers/operators.html
+##### Objetivo: Sempre apresentar uma maçã a ser perseguida pela cobra (previsão: 5 minutos).
 
-3. Interlúdio: Instalando uma rotina de tratamento de interrupção em C puro usando ponteiros.
+1. **DESAFIO**: Sem olhar a resposta abaixo, materialize uma maçã toda vez que a anterior for comida pela cobra.
 
-### 8.5. Construindo o rabo.
+```c
+			if (content == TILE_APPLE) {
+				dropApple();
+				growth = (rand() & 7) + 1;
+			}
+```
+
+### 9.4. Quem está contando?
 ###### *Github Ticket/Branch: 26/TKT0026.*
 
 ##### Objetivo: Construir e animar o rabo da cobra (previsão: 40 minutos).

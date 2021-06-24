@@ -31,6 +31,7 @@ unsigned int snake[512];
 unsigned int *snakeHead, *snakeTail;
 
 unsigned int applePos;
+unsigned char growth;
 
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
@@ -99,6 +100,7 @@ void game() {
 	print(gameScreen);
 
 	// Initialize game variables
+	growth = 0;
 	snakeHeadPos = NAMETABLE + 10 * 32 + 11;
 	direction = RIGHT;
 	lastDirection = 0;	// initially, none
@@ -165,12 +167,24 @@ void game() {
 			}
 
 			content = Vpeek(snakeHeadPos);
-			EoG = (content != ' ');
+
+			if (content == TILE_APPLE) {
+				growth = (rand() & 7) + 1;
+			}
+			else {
+				EoG = (content != ' ');
+			}
 
 			// Erases last tail segment
-			Vpoke(*snakeTail, TILE_GRASS);
-			snakeTail++;
-			if (snakeTail > &snake[511]) snakeTail = snake;
+			if (growth == 0) {
+				Vpoke(*snakeTail, TILE_GRASS);
+				snakeTail++;
+				if (snakeTail > &snake[511])
+					snakeTail = snake;
+			}
+			else {
+				growth--;
+			}
 
 			// Replaces head with tail segment
 			Vpoke(*snakeHead, TILE_SNAKETAIL);
