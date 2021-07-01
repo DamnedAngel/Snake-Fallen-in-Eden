@@ -1,5 +1,5 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 10: Joysticks, Édens de dificuldade e uma maçã vermelha.
+# Sessão 10: Joysticks, Édens de dificuldade e uma fonte diferenciada.
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
@@ -46,7 +46,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ---
 
-# Sessão 10: Joysticks, Édens de dificuldade e uma maçã vermelha.
+# Sessão 10: Joysticks, Édens de dificuldade e uma fonte diferenciada.
 
 ### 10.1. Consertar a espera pela liberação das teclas.
 ###### *Github Ticket/Branch: 32/TKT0032.*
@@ -64,8 +64,8 @@ void title() {
 
 	// ...
 
-	while (JoystickRead(0)) {}	// waits for key release
-	while (!JoystickRead(0)) {}	// waits for key press
+	while (JoystickRead(0) || TriggerRead(0)) {}	// waits for key release
+	while (!(JoystickRead(0) || TriggerRead(0))) {}	// waits for key press
 }
 ```
 ```c
@@ -73,25 +73,28 @@ void gameOver() {
 
 	// ...
 
-	while (JoystickRead(0)) {}	// waits for key release
-	while (!JoystickRead(0)) {}	// waits for key press
+	while (JoystickRead(0) || TriggerRead(0)) {}	// waits for key release
+	while (!(JoystickRead(0) || TriggerRead(0))) {}	// waits for key press
 }
 ```
 
 ### 10.2. Implementando suporte a Joysticks.
 ###### *Github Ticket/Branch: 37/TKT0037.*
 
-##### Objetivo: Permitir que o jogador controle a cobra pelo teclado ou por qualquer uma das portas de joystick (previsão: 15 minutos).
+##### Objetivo: Permitir que o jogador controle a cobra pelo teclado ou por qualquer uma das portas de joystick (previsão: 30 minutos).
 
 1. Definindo as mecânica de uso de múltiplos joysticks:
 - Não colocaremos opção de seleção de joysticks. Todos funcionarão durante o jogo, de forma priorizada.
 - Setas terão prioridade sobre o Joystick 1. Ambos terão prioridade sobre o Joystick 2.
+- Os botões dos Joysticks e a barra de espaço terão funcionalidades idênticas, sem diferença de prioridades.
 - Ou seja:
+  - Qualquer botão de joystick apertado ou a barra de espaço pressionada contarão como disparo de gatilho (servirá para mudançda de tela).
   - Se algum comando das setas estiver sendo dado, use esse comando.
   - Senão, se algum comando no Joystick 1 estiver sendo dado, use esse comando.
   - Senão, use quaisquer comandos do Joystick 2 (ou nenhum, se não houver).
 
-2. **DESAFIO**: Sem olhar a resposta abaixo, crie a função allJoysticks sem parâmetros que retorna comandos conforme a estratégia estabelecida acima.
+
+2. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *allJoysticks* sem parâmetros que retorna comandos conforme a estratégia estabelecida acima.
 
 ```c
 char allJoysticks() {
@@ -102,16 +105,26 @@ char allJoysticks() {
 }
 ```
 
-2. Substitua *JoystickRead()* por *allJoysticks()* na atribuição a variável *joy*.
+3. **DESAFIO**: Similarmente, sem olhar a resposta abaixo crie a função *allTriggers* sem parâmetros que retorna um comando de gatilho se qualquer botão de joystick estiver apertado ou se a barra de espaço estiver apertada.
+
+```c
+char allTriggers() {
+	return TriggerRead(0) ||
+		TriggerRead(1) || TriggerRead(2) ||
+		TriggerRead(3) || TriggerRead(4);
+}
+```
+
+4. Substitua *JoystickRead()* por *allJoysticks()* na atribuição a variável *joy*.
 
 ```c
 		while (lastJiffy == Peekw(BIOS_JIFFY)) {
 			joy = allJoysticks();
 ```
 
-3. Compile e rode o programa. Como testar?
+5. Compile e rode o programa. Como testar?
 
-4. Substitua *JoystickRead()* por *allJoysticks()* na espera de liberação de teclas, tanto em *title() *quanto em *gameOver()*.
+6. **DESAFIO**: Sem olhar a resposta abaixo, altere os testes de entradas do jogador nas funções *title()* e *gameOver()* para aceitarem comandos de teclas ou gatilhos para trocar de tela:
 
 ```c
 	while (allJoysticks()) {}	// waits for key release
@@ -142,7 +155,7 @@ unsigned char waitFrames;
 	waitFrames = 15;
 ```
 
-4. Use a variável *waitFrames* para controlar a condição de movimento:
+4. **DESAFIO**: Sem olhar a resposta abaixo, use a variável *waitFrames* para controlar a condição de movimento:
 
 ```c
 		// from this point on, 1 pass per frame
@@ -163,7 +176,7 @@ unsigned char waitFrames, waitMoves;
 	waitMoves = 100;
 ```
 
-7. Use a variável *waitMoves* para controlar a condição de progresso de Eden:
+7. **DESAFIO**: Sem olhar a resposta abaixo, crie um bloco (vazio ainda) para implementarmos o progresso de Édens e use a variável *waitMoves* para controlorar a execução desse bloco:
 
 ```c
 		if (Peekw(BIOS_JIFFY) >= waitFrames) {
@@ -203,67 +216,75 @@ unsigned char waitFrames, waitMoves, eden;
 			}
 ```
 
-11. Compile e teste o jogo. O que achou?
+11. Compile e teste o jogo. O que achou do resultado ate agora?
 
-### 9.4. Quem está contando?
-###### *Github Ticket/Branch: 31/TKT0031.*
+### 10.4. Uma fonte diferenciada.
+###### *Github Ticket/Branch: 38/TKT0038.*
 
-##### Objetivo: Implementar sistema de contagem de pontos (previsão: 20 minutos).
+##### Objetivo: Implementar uma fonte diferenciada da padrão (previsão: 15 minutos).
 
-1. Definindo a mecânica da pontuação:
-- A pontuação é zerada no início de cada jogo.
-- A pontuação será incrementada com o mesmo número de pontos quanto for o crescimento da cobra em segmentos, no momento que a cobra come uma maçã.
-- O recorde é zerado no início do programa. 
-- O recorde é atualizado para o valor da pontuação toda vez que a pontuação for maior que ele.
+1. Definindo a estratégia da montagem da nova fonte.
+- Relembrando o funcionamento do VDP.
+- Partição da tabela de padrões em áreas de fonte e de tiles gráficos: manteremos os tiles de 0 a 127 para fonte, e reservaremos os tiles de 128 a 256 para gráficos.
+- Mecanismo de montagem da fonte: deslocamento de todos os pixels das 4 primeiras linhas do tile para a direita, para configurar uma versão em itálico da fonte original do MSX.
 
-2. **DESAFIO**: Sem olhar a resposta abaixo, incremente a pontuação conforme tamanho do crescimento da cobra quando ela come uma maçã.
-
-```c
-unsigned char bonus;
-unsigned int score;
-```
-```c
-	// Initialize game variables
-	score = 0;
-```
-```c
-				bonus = (rand() & 7) + 1;
-				growth += bonus;
-				score += bonus;
-				Locate(7, 23);
-				PrintNumber(score);
-```
-
-3. Rode o programa.
-
-4. **DESAFIO**: Sem olhar a resposta abaixo, incremente o recorde sempre que a pontuação for maior que ele.
+2. **DESAFIO**: Sem olhar a resposta abaixo, defina a constrante *PATTERNTABLE*, de forma similar à definição que já fizemos da constante *NAMETABLE*.
 
 ```c
-unsigned int highscore = 0;
-```
-```c
-	Cls();
-	print(gameScreen);
-	Locate(18, 23);
-	PrintNumber(highscore);
-```
-```c
-				bonus = (rand() & 7) + 1;
-				growth += bonus;
-				score += bonus;
-				Locate(7, 23);
-				PrintNumber(score);
+#define NAMETABLE					0x1800
+#define PATTERNTABLE				0x0000
 ```
 
-5. Rode o programa.
+3. **DESAFIO**: Sem olhar a resposta abaixo, implemente a função buildFont() que altera o padrão dos tiles 0 a 128, conforme 
 
-### 9.5. Finalização da Sessão 9
+```c
+void buildFont() {
+	// Italic
+	unsigned char temp;
+	for (int i = 0; i < 128; i++) {
+		for (int j = 0; j < 4; j++) {
+			temp = Vpeek(PATTERNTABLE + i * 8 + j);
+			Vpoke(PATTERNTABLE + i * 8 + j, temp >> 1);
+		}
+	}
+}
+```
+4. Chame a rotina buildFont após a mudança de modo da tela:
+
+```c
+	Screen(1);
+	Width(32);
+	buildFont();
+```
+
+5. Compile e rode o programa.
+
+### 10.5. Ajustando as cores básicas.
+###### *Github Ticket/Branch: 39/TKT0039.*
+
+##### Objetivo: Deixar o jogo com "cara" de jardim (previsão: 5 minutos).
+
+1. **DESAFIO**: Sem olhar a resposta abaixo, ajuste as cores do jogo para verde escuro sobre verde médio, e deixe a borda preta.
+
+```c
+	Screen(1);
+	Width(32);
+	buildFont();
+	SetColors(12, 3, 1);
+```
+
+2. Compile e rode o programa.
+
+### 10.6. Finalização da Sessão 10
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-* O jogo funcional
-* Lógica em geral
-* LIBs x RELs
+* Comentários sobre o estado corrente do jogo
+* Novas ideias?
+* Joysticks e triggers
+* Dificuldade progressiva
+* Relembrando o VDP
+* Redefinição de tiles/fonts
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
