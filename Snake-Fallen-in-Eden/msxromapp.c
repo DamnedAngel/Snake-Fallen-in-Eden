@@ -285,6 +285,7 @@ void main(void) {
 	Screen(1);
 	Width(32);
 	buildFont();
+	SetColors(12, 3, 1);
 
 		// program's infinite loop
 	while (1) {
