@@ -13,6 +13,7 @@
 #include "screens.h"
 
 #define NAMETABLE					0x1800
+#define PATTERNTABLE				0x0000
 
 #define TILE_GRASS					' '
 #define TILE_SNAKETAIL				'o'
@@ -83,6 +84,17 @@ void print(char* msg) {
 	return;
 }
 
+void buildFont() {
+	// Italic
+	unsigned char temp;
+	for (int i = 0; i < 128; i++) {
+		for (int j = 0; j < 4; j++) {
+			temp = Vpeek(PATTERNTABLE + i * 8 + j);
+			Vpoke(PATTERNTABLE + i * 8 + j, temp >> 1);
+		}
+	}
+}
+
 char allJoysticks() {
 	char result;
 	if (result = JoystickRead(0)) return result;
@@ -90,12 +102,18 @@ char allJoysticks() {
 	return JoystickRead(2);
 }
 
+char allTriggers() {
+	return TriggerRead(0) ||
+		TriggerRead(1) || TriggerRead(2) ||
+		TriggerRead(3) || TriggerRead(4);
+}
+
 void title() {
 	Cls();
 	print(titleScreen);
 
-	while (allJoysticks()) {}	// waits until key release
-	while (!allJoysticks()) {}	// waits until key press
+	while (allJoysticks() || allTriggers()) {}		// waits until key release
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 }
 
 void dropApple() {
@@ -253,8 +271,8 @@ void gameOver() {
 	Locate(0, 9);
 	print(gameOverMsg);
 
-	while (allJoysticks()) {}	// waits for key release
-	while (!allJoysticks()) {}	// waits for key press
+	while (allJoysticks() || allTriggers()) {}		// waits until key release
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 }
 
 // ----------------------------------------------------------
@@ -266,6 +284,9 @@ void main(void) {
 	KeySound(0);
 	Screen(1);
 	Width(32);
+	buildFont();
+	SetColors(12, 3, 1);
+
 		// program's infinite loop
 	while (1) {
 		title();
