@@ -19,7 +19,6 @@
 #define TILE_SNAKEHEAD				'*'
 #define TILE_APPLE					'#'
 
-
 bool EoG;
 unsigned int snakeHeadPos;
 unsigned char direction, lastDirection;
@@ -82,13 +81,19 @@ void print(char* msg) {
 	return;
 }
 
+char allJoysticks() {
+	char result;
+	if (result = JoystickRead(0)) return result;
+	if (result = JoystickRead(1)) return result;
+	return JoystickRead(2);
+}
+
 void title() {
 	Cls();
 	print(titleScreen);
 
-	while (JoystickRead(0) > 0) {}	// waits until key release
-	KillKeyBuffer();				// forgets all key pressed
-	InputChar();					// waits for keypress
+	while (allJoysticks()) {}	// waits until key release
+	while (!allJoysticks()) {}	// waits until key press
 }
 
 void dropApple() {
@@ -129,7 +134,7 @@ void game() {
 	// Game's main loop
 	while (!EoG) {
 		while (lastJiffy == Peekw(BIOS_JIFFY)) {
-			joy = JoystickRead(0);
+			joy = allJoysticks();
 
 			// Alternative 1: IFs inside SWITCH/CASE
 			switch (lastDirection) {
@@ -233,9 +238,8 @@ void gameOver() {
 	Locate(0, 9);
 	print(gameOverMsg);
 
-	while (JoystickRead(0) > 0) {}	// waits until key release
-	KillKeyBuffer();				// forgets all key pressed
-	InputChar();					// waits for keypress
+	while (allJoysticks()) {}	// waits for key release
+	while (!allJoysticks()) {}	// waits for key press
 }
 
 // ----------------------------------------------------------
@@ -247,8 +251,7 @@ void main(void) {
 	KeySound(0);
 	Screen(1);
 	Width(32);
-
-	// program's infinite loop
+		// program's infinite loop
 	while (1) {
 		title();
 		game();

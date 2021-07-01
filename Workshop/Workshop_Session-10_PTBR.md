@@ -57,16 +57,15 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 - Diferença de tratamento entre teclado e joysticks.
 - A dualidade das setas e barra de espaço.
 
-2. **DESAFIO**: Com base na discussão que fizemos sobre as funções de números aleatórios, resolva o problema identificado.
+2. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão que fizemos sobre as funções de números aleatórios, resolva o problema identificado.
 
 ```c
 void title() {
 
 	// ...
 
-	while (JoystickRead(0) > 0) {}	// waits until key release
-	KillKeyBuffer();		// forgets all key pressed
-	InputChar();			// waits for keypress
+	while (JoystickRead(0)) {}	// waits for key release
+	while (!JoystickRead(0)) {}	// waits for key press
 }
 ```
 ```c
@@ -74,124 +73,50 @@ void gameOver() {
 
 	// ...
 
-	while (JoystickRead(0) > 0) {}	// waits until key release
-	KillKeyBuffer();		// forgets all key pressed
-	InputChar();			// waits for keypress
+	while (JoystickRead(0)) {}	// waits for key release
+	while (!JoystickRead(0)) {}	// waits for key press
 }
 ```
-
-3. Crie uma nova função *dropApple()* sem parâmetros e sem retorno, antes da função *game()*:
-
-```c
-void dropApple() {
-}
-```
-
-4. Entendendo as funções *rand()* e *srand()* e a constante *RAND_MAX* da biblioteca padrão do C.
-
-5. **DESAFIO**: Utilizando a função de geração de números aleatórios rand, gere uma posição aleatória para a maçã na função *dropApple*, dentro dos limites do jardim, considerando o layout de endereçamento da tabela de nomes do VDP na VRAM. Não se preocupe, ainda, com colisões com a cobra ou com as bordas laterais:
-
-```c
-unsigned int applePos;
-```
-```c
-void dropApple() {
-	applePos = NAMETABLE + 32 + rand () % (21*32);
-}
-```
-
-6. Sem adicionar *#include <stdlib.h>*, compile o programa. O que houve?
-
-7. Entendendo um pouco mais do linker do SDCC e pacotes .lib.
-
-8. Resolva o warning da compilação, incluindo o header *stdlib*:
-
-```c
-#include <stdbool.h>
-#include <stdlib.h>
-```
-
-9. Compile o programa e confirme que o warning foi resolvido.
-
-10. **DESAFIO**: Com um loop, garanta que a posição escolhida para a maçã está livre (não está ocupada nem pela cobra e nem pelas bordas laterais), e mostre a maçã no jardim:
-
-```c
-void dropApple() {
-	do {
-		applePos = NAMETABLE + 32 + rand() % (21 * 32);
-	} while (Vpeek(applePos) != TILE_GRASS);
-	Vpoke(applePos, TILE_APPLE);
-}
-```
-
-11. Após inicialização da cobra na função game(), gere a primeira maçã do jogo:
-
-```c
-	// Drop first apple
-	dropApple();
-}
-```
-
-12. Compile execute o programa. O que aconteceu? O que acontece se você executa multiplas vezes o jogo sem rebootar o emulador? O que acontece se você reboota o emulador e inicia uma partida?
-
-13. **DESAFIO**: Com base na discussão que fizemos sobre as funções de números aleatórios, como você resolveria o problema identificado?
-
-```c
-void game() {
-	srand(Peek(BIOS_JIFFY));
-```
-
-14. Compile execute o programa. O que aconteceu?
 
 ### 10.2. Implementando suporte a Joysticks.
 ###### *Github Ticket/Branch: 37/TKT0037.*
 
 ##### Objetivo: Permitir que o jogador controle a cobra pelo teclado ou por qualquer uma das portas de joystick (previsão: 15 minutos).
 
-1. Definindo as mecânicas da alimentação:
-- Quando a cabeça da cobra colide com uma maçã, a cobra come a maçã.
-- Cada vez que a maçã é comida, ela desaparece e a cobra cresce um número aleatório de segmentos, definido na variável *growth*, 1 <= *growth* <= 8.
-- O crescimento da cobra se dará em 1 segmento por movimentação. Ou seja, a extremidade final deve ficar fixa por *growth* ciclos de movimentação.
+1. Definindo as mecânica de uso de múltiplos joysticks:
+- Não colocaremos opção de seleção de joysticks. Todos funcionarão durante o jogo, de forma priorizada.
+- Setas terão prioridade sobre o Joystick 1. Ambos terão prioridade sobre o Joystick 2.
+- Ou seja:
+  - Se algum comando das setas estiver sendo dado, use esse comando.
+  - Senão, se algum comando no Joystick 1 estiver sendo dado, use esse comando.
+  - Senão, use quaisquer comandos do Joystick 2 (ou nenhum, se não houver).
 
-2. **DESAFIO**: Sem olhar a resposta abaixo, detecte que a cabeça colidiu com a maçã e evite que essa colisão finalize o jogo. Defina, também, um bloco ({}) para tratarmos posteriormente a colisão;
-
-```c
-			if (content == TILE_APPLE) {
-			}
-			else {
-				EoG = (content != ' ');
-			}
-```
-
-3. Compile e rode o programa.
-
-4. **DESAFIO**: Sem olhar a resposta abaixo, crie a variável *growth* e gere um valor aleatório de crescimento a cada vez que uma maçã é comida. Em seguida, implemente o crescimento da cobra.
+2. **DESAFIO**: Sem olhar a resposta abaixo, crie a função allJoysticks sem parâmetros que retorna comandos conforme a estratégia estabelecida acima.
 
 ```c
-unsigned int applePos;
-unsigned char growth;
+char allJoysticks() {
+	char result;	
+	if (result = JoystickRead(0)) return result;
+	if (result = JoystickRead(1)) return result;
+	return JoystickRead(2);
+}
 ```
+
+2. Substitua *JoystickRead()* por *allJoysticks()* na atribuição a variável *joy*.
+
 ```c
-	// Initialize game variables
-	growth = 0;
+		while (lastJiffy == Peekw(BIOS_JIFFY)) {
+			joy = allJoysticks();
 ```
+
+3. Compile e rode o programa. Como testar?
+
+4. Substitua *JoystickRead()* por *allJoysticks()* na espera de liberação de teclas, tanto em *title() *quanto em *gameOver()*.
+
 ```c
-			if (content == TILE_APPLE) {
-				growth = (rand() & 7) + 1;
-			}
-```
-```c
-			// Erases last tail segment
-			if (growth == 0) {
-				Vpoke(*snakeTail, TILE_GRASS);
-				snakeTail++;
-				if (snakeTail > &snake[511])
-					snakeTail = snake;
-			}
-			else {
-				growth--;
-			}
-```
+	while (allJoysticks()) {}	// waits for key release
+	while (!allJoysticks()) {}	// waits for key press
+``` 
 
 5. Compile e rode o programa.
 
