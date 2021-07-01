@@ -120,19 +120,90 @@ char allJoysticks() {
 
 5. Compile e rode o programa.
 
-### 9.3. Materializando muitas outras maçãs.
-###### *Github Ticket/Branch: 30/TKT0030.*
+### 10.3. Aumentando a dificuldade.
+###### *Github Ticket/Branch: 33/TKT0033.*
 
-##### Objetivo: Sempre apresentar uma maçã a ser perseguida pela cobra (previsão: 5 minutos).
+##### Objetivo: Aumentar progressivamente a dificuldade do jogo, mapeada na transição entre "Édens"/níveis (previsão: 30 minutos).
 
-1. **DESAFIO**: Sem olhar a resposta abaixo, materialize uma maçã toda vez que a anterior for comida pela cobra.
+1. Definindo a mecânica de progressão de dificuldade:
+- A cada 100 movimentações da cobra, a cobra transiciona para o próximo Éden (aumenta o nível);
+- A cada progressão de Éden, a espera para o próximo passo diminui em 1 frame (ou seja, aumenta a velocidade).
+
+2. Crie a variável *waitFrames* para controlar o número de frames a serem aguardados antes de movimentar a cobra:
 
 ```c
-			if (content == TILE_APPLE) {
-				dropApple();
-				growth = (rand() & 7) + 1;
+unsigned char waitFrames;
+```
+
+3. Inicialize a variável *waitFrames* na função *game()*:
+
+```c
+	// initialize difficulty
+	waitFrames = 15;
+```
+
+4. Use a variável *waitFrames* para controlar a condição de movimento:
+
+```c
+		// from this point on, 1 pass per frame
+		if (Peekw(BIOS_JIFFY) >= waitFrames) {
+```
+
+5. Crie a variável *waitMoves* para controlar o número de movimentos da cobra antes de passar para o próximo Eden:
+
+```c
+unsigned char waitFrames, waitMoves;
+```
+
+6. Inicialize a variável *waitMoves* na função *game()*:
+
+```c
+	// initialize difficulty
+	waitFrames = 15;
+	waitMoves = 100;
+```
+
+7. Use a variável *waitMoves* para controlar a condição de progresso de Eden:
+
+```c
+		if (Peekw(BIOS_JIFFY) >= waitFrames) {
+
+			// Controls eden progression
+			if (! (--waitMoves)) {
+				// Next Eden
+
 			}
 ```
+
+8. Crie a variável *eden* para controlar em qual Éden (nível de  dificuldade) o jogo está:
+
+```c
+unsigned char waitFrames, waitMoves, eden;
+```
+
+9. Inicialize a variável *eden* na função *game()*:
+
+```c
+	// initialize difficulty
+	waitFrames = 15;
+	waitMoves = 100;
+	eden = 1;
+```
+
+10. **DESAFIO**: Sem olhar a resposta abaixo, implemente o processo de progredir para o próximo Éden, aumentando a velocidade do jogo: 
+
+```c
+			// Controls eden progression
+			if (! (--waitMoves)) {
+				// Next Eden
+				Locate(29, 23);
+				PrintNumber(++eden);
+				waitFrames--;
+				waitMoves = 100;
+			}
+```
+
+11. Compile e teste o jogo. O que achou?
 
 ### 9.4. Quem está contando?
 ###### *Github Ticket/Branch: 31/TKT0031.*
