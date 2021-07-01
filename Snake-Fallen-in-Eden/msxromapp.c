@@ -86,8 +86,9 @@ void title() {
 	Cls();
 	print(titleScreen);
 
-	while (Inkey() > 0) {}			// wait until key release
-	InputChar();					// wait for keypress
+	while (JoystickRead(0) > 0) {}	// waits until key release
+	KillKeyBuffer();				// forgets all key pressed
+	InputChar();					// waits for keypress
 }
 
 void dropApple() {
@@ -232,8 +233,9 @@ void gameOver() {
 	Locate(0, 9);
 	print(gameOverMsg);
 
-	while (Inkey() > 0) {}			// wait until key release
-	InputChar();					// wait for keypress
+	while (JoystickRead(0) > 0) {}	// waits until key release
+	KillKeyBuffer();				// forgets all key pressed
+	InputChar();					// waits for keypress
 }
 
 // ----------------------------------------------------------
