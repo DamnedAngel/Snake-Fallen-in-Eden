@@ -36,6 +36,8 @@ unsigned char bonus;
 unsigned int score;
 unsigned int highscore = 0;
 
+unsigned char waitFrames, waitMoves, eden;
+
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
 //	This is only for the demo app.
@@ -128,6 +130,11 @@ void game() {
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
 	Vpoke(snakeHeadPos, TILE_SNAKEHEAD);
 
+	// initialize difficulty
+	waitFrames = 15;
+	waitMoves = 100;
+	eden = 1;
+
 	// Drop first apple
 	dropApple();
 
@@ -160,8 +167,16 @@ void game() {
 */
 		}
 		// from this point on, 1 pass per frame
+		if (Peekw(BIOS_JIFFY) >= waitFrames) {
 
-		if (Peekw(BIOS_JIFFY) == 15) {
+			// Controls eden progression
+			if (! (--waitMoves)) {
+				// Next Eden
+				Locate(29, 23);
+				PrintNumber(++eden);
+				waitFrames--;
+				waitMoves = 100;
+			}
 
 			// move snake
 			switch (direction) {
