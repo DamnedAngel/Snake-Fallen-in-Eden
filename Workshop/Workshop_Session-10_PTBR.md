@@ -48,22 +48,36 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 # Sessão 10: Joysticks, Édens de dificuldade e uma maçã vermelha.
 
-### 10.1. Implementando suporte a Joysticks.
-###### *Github Ticket/Branch: 28/TKT0028.*
+### 10.1. Consertar a espera pela liberação das teclas.
+###### *Github Ticket/Branch: 32/TKT0032.*
 
-##### Objetivo: Permitir que o jogador controle a cobra pelo teclado ou por qualquer uma das portas de joystick (previsão: 15 minutos).
+##### Objetivo: Impedir a mudança de telas Game Over -> Abertura -> Jogos se o jogador estiver com alguma tecla ininterruptamente apertada (previsão: 15 minutos).
 
-1. Definindo as mecânicas da maçã:
-- A primeira maçã aparece assim que o jogo começa;
-- A maçã deve aparecer em uma posição livre do jardim, dentro dos limites e sem nenhum segmento da cobra.
+1. Entendo o problema atual: Por que o programa não está aguardando as teclas serem soltas?
+- Diferença de tratamento entre teclado e joysticks.
+- A dualidade das setas e barra de espaço.
 
-2. Defina o caracter que usaremos temporariamente para a maçã:
+2. **DESAFIO**: Com base na discussão que fizemos sobre as funções de números aleatórios, resolva o problema identificado.
 
 ```c
-#define TILE_GRASS		' '
-#define TILE_SNAKETAIL		'o'
-#define TILE_SNAKEHEAD		'*'
-#define TILE_APPLE		'#'
+void title() {
+
+	// ...
+
+	while (JoystickRead(0) > 0) {}	// waits until key release
+	KillKeyBuffer();		// forgets all key pressed
+	InputChar();			// waits for keypress
+}
+```
+```c
+void gameOver() {
+
+	// ...
+
+	while (JoystickRead(0) > 0) {}	// waits until key release
+	KillKeyBuffer();		// forgets all key pressed
+	InputChar();			// waits for keypress
+}
 ```
 
 3. Crie uma nova função *dropApple()* sem parâmetros e sem retorno, antes da função *game()*:
@@ -129,10 +143,10 @@ void game() {
 
 14. Compile execute o programa. O que aconteceu?
 
-### 9.2. Comer, comer... é o melhor para poder crescer!
-###### *Github Ticket/Branch: 29/TKT0029.*
+### 10.2. Implementando suporte a Joysticks.
+###### *Github Ticket/Branch: 37/TKT0037.*
 
-##### Objetivo: Implementar a ação da cobra de  comer... e crecer! (previsão: 20 minutos).
+##### Objetivo: Permitir que o jogador controle a cobra pelo teclado ou por qualquer uma das portas de joystick (previsão: 15 minutos).
 
 1. Definindo as mecânicas da alimentação:
 - Quando a cabeça da cobra colide com uma maçã, a cobra come a maçã.
