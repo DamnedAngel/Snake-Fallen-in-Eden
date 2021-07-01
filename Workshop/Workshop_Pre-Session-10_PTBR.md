@@ -60,22 +60,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 2. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão que fizemos sobre as funções de números aleatórios, resolva o problema identificado.
 
 ```c
-void title() {
-
-	// ...
-
-	while (JoystickRead(0) || TriggerRead(0)) {}	// waits for key release
-	while (!(JoystickRead(0) || TriggerRead(0))) {}	// waits for key press
-}
-```
-```c
-void gameOver() {
-
-	// ...
-
-	while (JoystickRead(0) || TriggerRead(0)) {}	// waits for key release
-	while (!(JoystickRead(0) || TriggerRead(0))) {}	// waits for key press
-}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 ### 10.2. Implementando suporte a Joysticks.
@@ -97,22 +82,13 @@ void gameOver() {
 2. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *allJoysticks* sem parâmetros que retorna comandos conforme a estratégia estabelecida acima.
 
 ```c
-char allJoysticks() {
-	char result;	
-	if (result = JoystickRead(0)) return result;
-	if (result = JoystickRead(1)) return result;
-	return JoystickRead(2);
-}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 3. **DESAFIO**: Similarmente, sem olhar a resposta abaixo crie a função *allTriggers* sem parâmetros que retorna um comando de gatilho se qualquer botão de joystick estiver apertado ou se a barra de espaço estiver apertada.
 
 ```c
-char allTriggers() {
-	return TriggerRead(0) ||
-		TriggerRead(1) || TriggerRead(2) ||
-		TriggerRead(3) || TriggerRead(4);
-}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 4. Substitua *JoystickRead()* por *allJoysticks()* na atribuição a variável *joy*.
@@ -127,9 +103,8 @@ char allTriggers() {
 6. **DESAFIO**: Sem olhar a resposta abaixo, altere os testes de entradas do jogador nas funções *title()* e *gameOver()* para aceitarem comandos de teclas ou gatilhos para trocar de tela:
 
 ```c
-	while (allJoysticks()) {}	// waits for key release
-	while (!allJoysticks()) {}	// waits for key press
-``` 
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
+```
 
 5. Compile e rode o programa.
 
@@ -158,8 +133,7 @@ unsigned char waitFrames;
 4. **DESAFIO**: Sem olhar a resposta abaixo, use a variável *waitFrames* para controlar a condição de movimento:
 
 ```c
-		// from this point on, 1 pass per frame
-		if (Peekw(BIOS_JIFFY) >= waitFrames) {
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 5. Crie a variável *waitMoves* para controlar o número de movimentos da cobra antes de passar para o próximo Eden:
@@ -179,13 +153,7 @@ unsigned char waitFrames, waitMoves;
 7. **DESAFIO**: Sem olhar a resposta abaixo, crie um bloco (vazio ainda) para implementarmos o progresso de Édens e use a variável *waitMoves* para controlorar a execução desse bloco:
 
 ```c
-		if (Peekw(BIOS_JIFFY) >= waitFrames) {
-
-			// Controls eden progression
-			if (! (--waitMoves)) {
-				// Next Eden
-
-			}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 8. Crie a variável *eden* para controlar em qual Éden (nível de  dificuldade) o jogo está:
@@ -206,14 +174,7 @@ unsigned char waitFrames, waitMoves, eden;
 10. **DESAFIO**: Sem olhar a resposta abaixo, implemente o processo de progredir para o próximo Éden, aumentando a velocidade do jogo: 
 
 ```c
-			// Controls eden progression
-			if (! (--waitMoves)) {
-				// Next Eden
-				Locate(29, 23);
-				PrintNumber(++eden);
-				waitFrames--;
-				waitMoves = 100;
-			}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 11. Compile e teste o jogo. O que achou do resultado ate agora?
@@ -231,24 +192,15 @@ unsigned char waitFrames, waitMoves, eden;
 2. **DESAFIO**: Sem olhar a resposta abaixo, defina a constrante *PATTERNTABLE*, de forma similar à definição que já fizemos da constante *NAMETABLE*.
 
 ```c
-#define NAMETABLE					0x1800
-#define PATTERNTABLE				0x0000
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 3. **DESAFIO**: Sem olhar a resposta abaixo, implemente a função buildFont() que altera o padrão dos tiles 0 a 128, conforme 
 
 ```c
-void buildFont() {
-	// Italic
-	unsigned char temp;
-	for (int i = 0; i < 128; i++) {
-		for (int j = 0; j < 4; j++) {
-			temp = Vpeek(PATTERNTABLE + i * 8 + j);
-			Vpoke(PATTERNTABLE + i * 8 + j, temp >> 1);
-		}
-	}
-}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
+
 4. Chame a rotina buildFont após a mudança de modo da tela:
 
 ```c
@@ -267,10 +219,7 @@ void buildFont() {
 1. **DESAFIO**: Sem olhar a resposta abaixo, ajuste as cores do jogo para verde escuro sobre verde claro, e deixe a borda preta.
 
 ```c
-	Screen(1);
-	Width(32);
-	buildFont();
-	SetColors(12, 3, 1);
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 2. Compile e rode o programa.

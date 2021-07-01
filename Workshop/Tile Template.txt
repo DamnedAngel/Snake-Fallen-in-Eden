@@ -1,0 +1,300 @@
+static const char tiles_apple[] = {
+	// 1 tile
+
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+};
+
+static const char tiles_snakeHead[] = {
+	// 4 tiles
+
+	// snake head up
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// snake head right
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// snake head down
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// snake head left
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+};
+
+static const char tiles_snakeBody[] = {
+	// 1 tile
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+};
+
+static const char tiles_headXplod[] = {
+	// 8 tiles
+
+	// Frame 1
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// Frame 2
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// Frame 3
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// Frame 4
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// Frame 5
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// Frame 6
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// Frame 7
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// Frame 8
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+};
+
+static const char tiles_vine[] = {
+	// 6 tiles
+
+	// vine vertical
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// vine horizontal
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// vine top-left
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// vine bottom-left
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// vine top-right
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// vine bottom-right
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+};
+
+static const char tiles_grass[] = {
+	// 8 tiles
+
+	// grass 0
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// grass 1
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// grass 2
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// grass 3
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+	0bxxxxxxxx,
+
+	// grass 4 (empty)
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+
+	// grass 5 (empty)
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+
+	// grass 6 (empty)
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+
+	// grass 7 (empty)
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+	0b00000000,
+};
