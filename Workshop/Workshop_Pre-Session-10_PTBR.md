@@ -57,7 +57,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 - Diferença de tratamento entre teclado e joysticks.
 - A dualidade das setas e barra de espaço.
 
-2. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão sobre as abstrações da BIOS de teclado e joyysticks, resolva o problema identificado.
+2. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão sobre as abstrações da BIOS de teclado e joysticks, resolva o problema identificado.
 
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
