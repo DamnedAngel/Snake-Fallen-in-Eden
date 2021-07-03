@@ -57,7 +57,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 - Diferença de tratamento entre teclado e joysticks.
 - A dualidade das setas e barra de espaço.
 
-2. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão que fizemos sobre as funções de números aleatórios, resolva o problema identificado.
+2. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão sobre as abstrações da BIOS de teclado e joyysticks, resolva o problema identificado.
 
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
@@ -73,7 +73,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 - Setas terão prioridade sobre o Joystick 1. Ambos terão prioridade sobre o Joystick 2.
 - Os botões dos Joysticks e a barra de espaço terão funcionalidades idênticas, sem diferença de prioridades.
 - Ou seja:
-  - Qualquer botão de joystick apertado ou a barra de espaço pressionada contarão como disparo de gatilho (servirá para mudançda de tela).
+  - Qualquer botão de joystick apertado ou a barra de espaço pressionada contarão como disparo de gatilho (servirá para mudança de tela).
   - Se algum comando das setas estiver sendo dado, use esse comando.
   - Senão, se algum comando no Joystick 1 estiver sendo dado, use esse comando.
   - Senão, use quaisquer comandos do Joystick 2 (ou nenhum, se não houver).
@@ -115,7 +115,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 1. Definindo a mecânica de progressão de dificuldade:
 - A cada 100 movimentações da cobra, a cobra transiciona para o próximo Éden (aumenta o nível);
-- A cada progressão de Éden, a espera para o próximo passo diminui em 1 frame (ou seja, aumenta a velocidade).
+- A cada progressão de Éden, a espera para o próximo passo da cobra diminui em 1 frame (ou seja, aumenta a velocidade de movimentação da cobra).
 
 2. Crie a variável *waitFrames* para controlar o número de frames a serem aguardados antes de movimentar a cobra:
 
@@ -195,7 +195,7 @@ unsigned char waitFrames, waitMoves, eden;
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
-3. **DESAFIO**: Sem olhar a resposta abaixo, implemente a função buildFont() que altera o padrão dos tiles 0 a 128, conforme 
+3. **DESAFIO**: Sem olhar a resposta abaixo, implemente a função buildFont() que altera o padrão dos tiles 0 a 127, conforme estratégia de montagem da fonte discutida acima.
 
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
