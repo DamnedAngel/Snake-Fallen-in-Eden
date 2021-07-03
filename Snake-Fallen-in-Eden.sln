@@ -14,12 +14,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workshop", "Workshop", "{DFA8554A-7EAB-43CF-9E3F-F339D982BD9F}"
 	ProjectSection(SolutionItems) = preProject
+		Workshop\Workshop_Pre-Session-10_PTBR.md = Workshop\Workshop_Pre-Session-10_PTBR.md
 		Workshop\Workshop_Pre-Session-4_PTBR.md = Workshop\Workshop_Pre-Session-4_PTBR.md
 		Workshop\Workshop_Pre-Session-5_PTBR.md = Workshop\Workshop_Pre-Session-5_PTBR.md
 		Workshop\Workshop_Pre-Session-7_PTBR.md = Workshop\Workshop_Pre-Session-7_PTBR.md
 		Workshop\Workshop_Pre-Session-9_PTBR.md = Workshop\Workshop_Pre-Session-9_PTBR.md
 		Workshop\Workshop_PTBR.md = Workshop\Workshop_PTBR.md
 		Workshop\Workshop_Session-0_PTBR.md = Workshop\Workshop_Session-0_PTBR.md
+		Workshop\Workshop_Session-10_PTBR.md = Workshop\Workshop_Session-10_PTBR.md
 		Workshop\Workshop_Session-1_PTBR.md = Workshop\Workshop_Session-1_PTBR.md
 		Workshop\Workshop_Session-2_PTBR.md = Workshop\Workshop_Session-2_PTBR.md
 		Workshop\Workshop_Session-3_PTBR.md = Workshop\Workshop_Session-3_PTBR.md

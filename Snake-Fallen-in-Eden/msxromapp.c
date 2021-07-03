@@ -13,12 +13,12 @@
 #include "screens.h"
 
 #define NAMETABLE					0x1800
+#define PATTERNTABLE				0x0000
 
 #define TILE_GRASS					' '
 #define TILE_SNAKETAIL				'o'
 #define TILE_SNAKEHEAD				'*'
 #define TILE_APPLE					'#'
-
 
 bool EoG;
 unsigned int snakeHeadPos;
@@ -36,6 +36,8 @@ unsigned char growth;
 unsigned char bonus;
 unsigned int score;
 unsigned int highscore = 0;
+
+unsigned char waitFrames, waitMoves, eden;
 
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
@@ -82,12 +84,36 @@ void print(char* msg) {
 	return;
 }
 
+void buildFont() {
+	// Italic
+	unsigned char temp;
+	for (int i = 0; i < 128; i++) {
+		for (int j = 0; j < 4; j++) {
+			temp = Vpeek(PATTERNTABLE + i * 8 + j);
+			Vpoke(PATTERNTABLE + i * 8 + j, temp >> 1);
+		}
+	}
+}
+
+char allJoysticks() {
+	char result;
+	if (result = JoystickRead(0)) return result;
+	if (result = JoystickRead(1)) return result;
+	return JoystickRead(2);
+}
+
+char allTriggers() {
+	return TriggerRead(0) ||
+		TriggerRead(1) || TriggerRead(2) ||
+		TriggerRead(3) || TriggerRead(4);
+}
+
 void title() {
 	Cls();
 	print(titleScreen);
 
-	while (Inkey() > 0) {}			// wait until key release
-	InputChar();					// wait for keypress
+	while (allJoysticks() || allTriggers()) {}		// waits until key release
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 }
 
 void dropApple() {
@@ -122,13 +148,18 @@ void game() {
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
 	Vpoke(snakeHeadPos, TILE_SNAKEHEAD);
 
+	// initialize difficulty
+	waitFrames = 15;
+	waitMoves = 100;
+	eden = 1;
+
 	// Drop first apple
 	dropApple();
 
 	// Game's main loop
 	while (!EoG) {
 		while (lastJiffy == Peekw(BIOS_JIFFY)) {
-			joy = JoystickRead(0);
+			joy = allJoysticks();
 
 			// Alternative 1: IFs inside SWITCH/CASE
 			switch (lastDirection) {
@@ -154,8 +185,16 @@ void game() {
 */
 		}
 		// from this point on, 1 pass per frame
+		if (Peekw(BIOS_JIFFY) >= waitFrames) {
 
-		if (Peekw(BIOS_JIFFY) == 15) {
+			// Controls eden progression
+			if (! (--waitMoves)) {
+				// Next Eden
+				Locate(29, 23);
+				PrintNumber(++eden);
+				waitFrames--;
+				waitMoves = 100;
+			}
 
 			// move snake
 			switch (direction) {
@@ -232,8 +271,8 @@ void gameOver() {
 	Locate(0, 9);
 	print(gameOverMsg);
 
-	while (Inkey() > 0) {}			// wait until key release
-	InputChar();					// wait for keypress
+	while (allJoysticks() || allTriggers()) {}		// waits until key release
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 }
 
 // ----------------------------------------------------------
@@ -245,8 +284,10 @@ void main(void) {
 	KeySound(0);
 	Screen(1);
 	Width(32);
+	buildFont();
+	SetColors(12, 3, 1);
 
-	// program's infinite loop
+		// program's infinite loop
 	while (1) {
 		title();
 		game();
