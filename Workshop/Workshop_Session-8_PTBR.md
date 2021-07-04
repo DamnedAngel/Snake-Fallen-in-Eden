@@ -274,7 +274,7 @@ unsigned int snake[512];
 
 ```c
 unsigned int snake[512];
-unsigned int* snakeHead, snakeTail;
+unsigned int *snakeHead, *snakeTail;
 ```
 
 6. Na função *game()* Inicialize a cobra com tamanho 2: Uma cabeça e um segmento de rabo. Se preocupe tanto com as variáveis quanto com os tiles na VRAM.
