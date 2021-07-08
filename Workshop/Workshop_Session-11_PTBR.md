@@ -177,92 +177,53 @@ void buildTiles() {
 
 13. Compile e rode o programa. A maçã apareceu no mapa de caracteres? E no jogo?
 
-### 10.3. Aumentando a dificuldade.
-###### *Github Ticket/Branch: 33/TKT0033.*
+### 11.3. Montando os outros tiles do jogo.
+###### *Github Ticket/Branch: 45/TKT0045.*
 
-##### Objetivo: Aumentar progressivamente a dificuldade do jogo, mapeada na transição entre "Édens"/níveis (previsão: 30 minutos).
+##### Objetivo: Montar os demais tiles do jogo (previsão: 30 minutos).
 
-1. Definindo a mecânica de progressão de dificuldade:
-- A cada 100 movimentações da cobra, a cobra transiciona para o próximo Éden (aumenta o nível);
-- A cada progressão de Éden, a espera para o próximo passo da cobra diminui em 1 frame (ou seja, aumenta a velocidade de movimentação da cobra).
-
-2. Crie a variável *waitFrames* para controlar o número de frames a serem aguardados antes de movimentar a cobra:
-
+1. Corrija a constante *tiles_snakeBody* no arquivo tiles.h para *tiles_snakeTail*.
 ```c
-unsigned char waitFrames;
+static const char tiles_snakeTail[] = {
 ```
 
-3. Inicialize a variável *waitFrames* na função *game()*:
+2. **DESAFIO**: Sem olhar a resposta abaixo, repita os passos 9 e 11 para cada grupo de tiles definido no arquivo tiles.h.
 
 ```c
-	// initialize difficulty
-	waitFrames = 15;
+#define TILE_APPLE		0x98
+#define TILE_SNAKEHEAD		0x80
+#define TILE_SNAKETAIL		0x88
+#define TILE_HEADXPLOD		0x90
+#define TILE_VINE		0xa0
+#define TILE_GRASS		0xa8
 ```
-
-4. **DESAFIO**: Sem olhar a resposta abaixo, use a variável *waitFrames* para controlar a condição de movimento:
-
 ```c
-		// from this point on, 1 pass per frame
-		if (Peekw(BIOS_JIFFY) >= waitFrames) {
+void buildTiles() {
+	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8,
+		tiles_apple, sizeof(tiles_apple));
+	blockToVRAM(PATTERNTABLE + TILE_SNAKEHEAD * 8,
+		tiles_snakeHead, sizeof(tiles_snakeHead));
+	blockToVRAM(PATTERNTABLE + TILE_SNAKETAIL * 8,
+		tiles_snakeTail, sizeof(tiles_snakeTail));
+	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8,
+		tiles_headXplod, sizeof(tiles_headXplod));
+	blockToVRAM(PATTERNTABLE + TILE_VINE * 8,
+		tiles_vine, sizeof(tiles_vine));
+	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8,
+		tiles_grass, sizeof(tiles_grass));
+}
 ```
 
-5. Crie a variável *waitMoves* para controlar o número de movimentos da cobra antes de passar para o próximo Eden:
+4. Compile e rode o programa. O mapa de caracteres foi atualizado? O que aconteceu com o jogo? Por quê?
 
+5. Corrija temporariamente o problema, alterando o endereço VRAM dos tiles de grama para o código original, de espaço:
 ```c
-unsigned char waitFrames, waitMoves;
+#define TILE_GRASS		' '
 ```
 
-6. Inicialize a variável *waitMoves* na função *game()*:
+6. Compile e rode o programa. Note a nova posição, temporária, dos tiles de grama. O jogo funcionou? O que está estranho?
 
-```c
-	// initialize difficulty
-	waitFrames = 15;
-	waitMoves = 100;
-```
-
-7. **DESAFIO**: Sem olhar a resposta abaixo, crie um bloco (vazio ainda) para implementarmos o progresso de Édens e use a variável *waitMoves* para controlorar a execução desse bloco:
-
-```c
-		if (Peekw(BIOS_JIFFY) >= waitFrames) {
-
-			// Controls eden progression
-			if (! (--waitMoves)) {
-				// Next Eden
-
-			}
-```
-
-8. Crie a variável *eden* para controlar em qual Éden (nível de  dificuldade) o jogo está:
-
-```c
-unsigned char waitFrames, waitMoves, eden;
-```
-
-9. Inicialize a variável *eden* na função *game()*:
-
-```c
-	// initialize difficulty
-	waitFrames = 15;
-	waitMoves = 100;
-	eden = 1;
-```
-
-10. **DESAFIO**: Sem olhar a resposta abaixo, implemente o processo de progredir para o próximo Éden, aumentando a velocidade do jogo: 
-
-```c
-			// Controls eden progression
-			if (! (--waitMoves)) {
-				// Next Eden
-				Locate(29, 23);
-				PrintNumber(++eden);
-				waitFrames--;
-				waitMoves = 100;
-			}
-```
-
-11. Compile e teste o jogo. O que achou do resultado ate agora?
-
-### 10.4. Uma fonte diferenciada.
+### 11.4. Olha pra frente!
 ###### *Github Ticket/Branch: 38/TKT0038.*
 
 ##### Objetivo: Implementar uma fonte diferenciada da padrão (previsão: 15 minutos).

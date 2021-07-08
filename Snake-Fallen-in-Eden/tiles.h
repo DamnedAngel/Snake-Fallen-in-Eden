@@ -1,9 +1,11 @@
 #pragma once
 
-#define TILE_GRASS					' '
-#define TILE_SNAKETAIL				'o'
-#define TILE_SNAKEHEAD				'*'
 #define TILE_APPLE					0x98
+#define TILE_SNAKEHEAD				0x80
+#define TILE_SNAKETAIL				0x88
+#define TILE_HEADXPLOD				0x90
+#define TILE_VINE					0xa0
+#define TILE_GRASS					' '
 
 static const char tiles_apple[] = {
 	// 1 tile
@@ -61,7 +63,7 @@ static const char tiles_snakeHead[] = {
 	0b00111000,
 };
 
-static const char tiles_snakeBody[] = {
+static const char tiles_snakeTail[] = {
 	// 1 tile
 	0b00111100,
 	0b01111110,

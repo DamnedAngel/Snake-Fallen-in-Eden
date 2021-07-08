@@ -110,6 +110,11 @@ void buildFont() {
 
 void buildTiles() {
 	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8, tiles_apple, sizeof(tiles_apple));
+	blockToVRAM(PATTERNTABLE + TILE_SNAKEHEAD * 8, tiles_snakeHead, sizeof(tiles_snakeHead));
+	blockToVRAM(PATTERNTABLE + TILE_SNAKETAIL * 8, tiles_snakeTail, sizeof(tiles_snakeTail));
+	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8, tiles_headXplod, sizeof(tiles_headXplod));
+	blockToVRAM(PATTERNTABLE + TILE_VINE * 8, tiles_vine, sizeof(tiles_vine));
+	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8, tiles_grass, sizeof(tiles_grass));
 }
 
 char allJoysticks() {
@@ -245,7 +250,7 @@ void game() {
 				}
 			}
 			else {
-				EoG = (content != ' ');
+				EoG = (content != TILE_GRASS);
 			}
 
 			// Erases last tail segment
