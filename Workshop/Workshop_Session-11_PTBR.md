@@ -170,8 +170,7 @@ void buildTiles() {
 #ifdef DEBUG
 	Cls();
 	charMap();
-	Locate(0, 20);
-	InputChar();
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 	Cls();
 #endif
 ``` 
