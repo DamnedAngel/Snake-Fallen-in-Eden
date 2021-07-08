@@ -95,6 +95,14 @@ void buildFont() {
 	}
 }
 
+#ifdef DEBUG
+void charMap() {
+	for (unsigned char y = 0; y < 16; y++)
+		for (unsigned char x = 0; x < 16; x++)
+			Vpoke(NAMETABLE + y * 32 + x, y * 16 + x);
+}
+#endif
+
 char allJoysticks() {
 	char result;
 	if (result = JoystickRead(0)) return result;
@@ -284,10 +292,18 @@ void main(void) {
 	KeySound(0);
 	Screen(1);
 	Width(32);
-	buildFont();
 	SetColors(12, 3, 1);
+	buildFont();
 
-		// program's infinite loop
+#ifdef DEBUG
+	Cls();
+	charMap();
+	Locate(0, 20);
+	InputChar();
+	Cls();
+#endif
+
+	// program's infinite loop
 	while (1) {
 		title();
 		game();
