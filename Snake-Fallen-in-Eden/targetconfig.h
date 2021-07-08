@@ -1,6 +1,6 @@
 //-------------------------------------------------	
 // targetconfig.h created automatically by make.bat	
-// on  5:36:19.23 , 08-Jul-21 				
+// on  7:28:28.23 , 08-Jul-21 				
 //														
 // DO NOT BOTHER EDITING THIS.							
 // ALL CHANGES WILL BE LOST.							
@@ -9,7 +9,7 @@
 #ifndef  __TARGETCONFIG_H__							
 #define  __TARGETCONFIG_H__							
 														
-//#define DEBUG						
+#define DEBUG						
 //#define OPENMSX_PROFILING						
 														
 #endif	//  __TARGETCONFIG_H__							
