@@ -49,36 +49,49 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 # Sessão 11: Gráficos!
 
 ### 11.1. Construindo um mapa de caracteres em modo debug.
-###### *Github Ticket/Branch: 32/TKT0032.*
+###### *Github Ticket/Branch: 43/TKT0043.*
 
-##### Objetivo: Impedir a mudança de telas Game Over -> Abertura -> Jogos se o jogador estiver com alguma tecla ininterruptamente apertada (previsão: 15 minutos).
+##### Objetivo: Ter uma ferramenta para visualizar e acompanhar a criação dos gráficos do jogo (previsão: 15 minutos).
 
-1. Entendo o problema atual: Por que o programa não está aguardando as teclas serem soltas?
-- Diferença de tratamento entre teclado e joysticks.
-- A dualidade das setas e barra de espaço.
+1. Relembrando os perfis de compilação DEBUG e RELEASE.
+- Diretivas de compilação.
+- Linha de comando para compilação do projeto.
+- A variável *DEBUG* nos arquivos TargetConfig_*.txt.
+- A diretiva DEBUG em targetconfig.s e targetconfig.h.
+- O *#include targetconfig.h* no arquivo msxromapp.c.
+- *#ifdef* e *#endif*. 
 
-2. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão sobre as abstrações da BIOS de teclado e joysticks, resolva o problema identificado.
+2. Compile o projeto tanto em modo DEBUG quanto em modo RELEASE e garanta que ambos os perfis estão funcionando, testando o executável gerado no emulador.
+
+3. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão sobre diretivas de compilação, implemente a função *charMap()* que mostra um mapa com os 256 caracteres (tiles/padrões) da screen 1 e a chame da função *main()* após a inicialização de vídeo. Tanto a função quanto a chamada a ela só deverá ser inclusa no executável quando o projeto for compilado em modo DEBUG.
 
 ```c
-void title() {
-
-	// ...
-
-	while (JoystickRead(0) || TriggerRead(0)) {}	// waits for key release
-	while (!(JoystickRead(0) || TriggerRead(0))) {}	// waits for key press
+#ifdef DEBUG
+void charMap() {
+	for (unsigned char y = 0; y < 16; y++)
+		for (unsigned char x = 0; x < 16; x++)
+			Vpoke(NAMETABLE + y * 32 + x, y * 16 + x);
 }
+#endif
 ```
 ```c
-void gameOver() {
+	SetColors(12, 3, 1);
+	buildFont();
 
-	// ...
-
-	while (JoystickRead(0) || TriggerRead(0)) {}	// waits for key release
-	while (!(JoystickRead(0) || TriggerRead(0))) {}	// waits for key press
-}
+#ifdef DEBUG
+	Cls();
+	charMap();
+	Locate(0, 20);
+	InputChar();
+	Cls();
+#endif
 ```
 
-### 10.2. Implementando suporte a Joysticks.
+4. Compile e execute o programa em modo DEBUG. O mapa de caracteres foi mostrado?
+
+5. Compile e execute o programa em modo RELEASE. O mapa de caracteres foi mostrado?
+
+### 11.2. Implementando suporte a Joysticks.
 ###### *Github Ticket/Branch: 37/TKT0037.*
 
 ##### Objetivo: Permitir que o jogador controle a cobra pelo teclado ou por qualquer uma das portas de joystick (previsão: 30 minutos).
