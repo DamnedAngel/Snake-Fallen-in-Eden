@@ -268,7 +268,7 @@ void game() {
 			Vpoke(*snakeHead, TILE_SNAKETAIL);
 
 			// Draws head in new position
-			Vpoke (snakeHeadPos, TILE_SNAKEHEAD);
+			Vpoke (snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
 			snakeHead++;
 			if (snakeHead > &snake[511]) snakeHead = snake;
 			*snakeHead = snakeHeadPos;

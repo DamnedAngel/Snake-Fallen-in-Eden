@@ -224,46 +224,28 @@ void buildTiles() {
 6. Compile e rode o programa. Note a nova posição, temporária, dos tiles de grama. O jogo funcionou? O que está estranho?
 
 ### 11.4. Olha pra frente!
-###### *Github Ticket/Branch: 38/TKT0038.*
+###### *Github Ticket/Branch: 46/TKT0046.*
 
-##### Objetivo: Implementar uma fonte diferenciada da padrão (previsão: 15 minutos).
+##### Objetivo: Fazer a cobra olhar sempre para frente (previsão: 5 minutos).
 
-1. Definindo a estratégia da montagem da nova fonte.
-- Relembrando o funcionamento do VDP.
-- Partição da tabela de padrões em áreas de fonte e de tiles gráficos: manteremos os tiles de 0 a 127 para fonte, e reservaremos os tiles de 128 a 256 para gráficos.
-- Mecanismo de montagem da fonte: deslocamento de todos os pixels das 4 primeiras linhas do tile para a direita, para configurar uma versão em itálico da fonte original do MSX.
-
-2. **DESAFIO**: Sem olhar a resposta abaixo, defina a constrante *PATTERNTABLE*, de forma similar à definição que já fizemos da constante *NAMETABLE*.
-
+1. **DESAFIO**: Sem olhar a resposta abaixo, selecione o tile correto da cabeça da cobra, em função da direção, em cada movimento.
 ```c
-#define NAMETABLE					0x1800
-#define PATTERNTABLE				0x0000
+			Vpoke (snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
 ```
 
-3. **DESAFIO**: Sem olhar a resposta abaixo, implemente a função buildFont() que altera o padrão dos tiles 0 a 127, conforme estratégia de montagem da fonte discutida acima.
+2. Compile e rode o programa.
 
-```c
-void buildFont() {
-	// Italic
-	unsigned char temp;
-	for (int i = 0; i < 128; i++) {
-		for (int j = 0; j < 4; j++) {
-			temp = Vpeek(PATTERNTABLE + i * 8 + j);
-			Vpoke(PATTERNTABLE + i * 8 + j, temp >> 1);
-		}
-	}
-}
-```
-4. Chame a rotina buildFont após a mudança de modo da tela:
+### 11.4. Tile de colisão!
+###### *Github Ticket/Branch: 46/TKT0046.*
 
+##### Objetivo: Fazer a cobra olhar sempre para frente (previsão: 5 minutos).
+
+1. **DESAFIO**: Sem olhar a resposta abaixo, selecione o tile correto da cabeça da cobra, em função da direção, em cada movimento.
 ```c
-	Screen(1);
-	Width(32);
-	buildFont();
+			Vpoke (snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
 ```
 
-5. Compile e rode o programa.
-
+2. Compile e rode o programa.
 ### 10.5. Ajustando as cores básicas.
 ###### *Github Ticket/Branch: 39/TKT0039.*
 
