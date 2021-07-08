@@ -68,9 +68,15 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ```c
 #ifdef DEBUG
 void charMap() {
-	for (unsigned char y = 0; y < 16; y++)
+	for (unsigned char y = 0; y < 16; y++) {
+		Vpoke(NAMETABLE + 2 + y,
+			y < 10 ? '0' + y : 'A' - 10 + y);
+		Vpoke(NAMETABLE + 32 * (y + 2),
+			y < 10 ? '0' + y : 'A' - 10 + y);
 		for (unsigned char x = 0; x < 16; x++)
-			Vpoke(NAMETABLE + y * 32 + x, y * 16 + x);
+			Vpoke(NAMETABLE + 66 + y * 32 + x,
+				y * 16 + x);
+	}
 }
 #endif
 ```
@@ -81,8 +87,7 @@ void charMap() {
 #ifdef DEBUG
 	Cls();
 	charMap();
-	Locate(0, 20);
-	InputChar();
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 	Cls();
 #endif
 ```
@@ -91,60 +96,87 @@ void charMap() {
 
 5. Compile e execute o programa em modo RELEASE. O mapa de caracteres foi mostrado?
 
-### 11.2. Implementando suporte a Joysticks.
-###### *Github Ticket/Branch: 37/TKT0037.*
+### 11.2. Desenhando o tile da maçã.
+###### *Github Ticket/Branch: 35/TKT0035.*
 
-##### Objetivo: Permitir que o jogador controle a cobra pelo teclado ou por qualquer uma das portas de joystick (previsão: 30 minutos).
+##### Objetivo: importar o template de tiles para o projeto e substituir o caracter '#' por um desenho de maçã (previsão: 30 minutos).
 
-1. Definindo as mecânica de uso de múltiplos joysticks:
-- Não colocaremos opção de seleção de joysticks. Todos funcionarão durante o jogo, de forma priorizada.
-- Setas terão prioridade sobre o Joystick 1. Ambos terão prioridade sobre o Joystick 2.
-- Os botões dos Joysticks e a barra de espaço terão funcionalidades idênticas, sem diferença de prioridades.
-- Ou seja:
-  - Qualquer botão de joystick apertado ou a barra de espaço pressionada contarão como disparo de gatilho (servirá para mudança de tela).
-  - Se algum comando das setas estiver sendo dado, use esse comando.
-  - Senão, se algum comando no Joystick 1 estiver sendo dado, use esse comando.
-  - Senão, use quaisquer comandos do Joystick 2 (ou nenhum, se não houver).
+1. Lembrando da tabela de padrões do VDP.
+- Mapa de caracteres da implementação de referência do jogo.
 
+![Mapa de Caracteres da Implementação de referência](Workshop_Session-11_PTBR_img1.png "Mapa de Caracteres da Implementação de referência")
 
-2. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *allJoysticks* sem parâmetros que retorna comandos conforme a estratégia estabelecida acima.
+2. Mova o arquivo de template de tiles, já preenchido, para a pasta do projeto.
+
+3. Renomeie o arquivo para tiles.h.
+
+4. Se você usa Visual Studio, adicione-o arquivo ao projeto, sob o filtro *Header Files*.
+
+5. Embora não corramos o risco no nosso projeto, como boa prática, garanta que o arquivo não incorrerá em definições duplicadas caso seja referenciado por múltiplos arquivos fonte do projeto, inserindo na primeira linha:
+```c
+#pragma once
+```
+
+6. **DESAFIO**: Sem olhar a resposta abaixo, referencie o arquivo tiles.h no arquivo principal do nosso programa msxromapp.c.
 
 ```c
-char allJoysticks() {
-	char result;	
-	if (result = JoystickRead(0)) return result;
-	if (result = JoystickRead(1)) return result;
-	return JoystickRead(2);
+#include "screens.h"
+#include "tiles.h"
+```
+
+7. Compile o projeto para garantir que o arquivo tiles.h está ok. Corrija qualquer problema de sintaxe que existir, se existir.
+
+8. Refactoring: migre as definições de códigos de tiles do arquivo msxromapp.c para o início do arquivo tiles.h.
+
+```c
+#pragma once
+
+#define TILE_GRASS		' '
+#define TILE_SNAKETAIL		'o'
+#define TILE_SNAKEHEAD		'*'
+#define TILE_APPLE		'#'
+```
+
+9. Com base no mapa de caracteres de referência, altere a constante *TILE_APPLE* para o valor final. Se quiser, rode o programa para vê-lo funcionando com um caracter diferente representando a maçã.
+
+```c
+#define TILE_APPLE		0x98
+```
+
+10. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *blockToVRAM(VRAMAddr, RAMAddr, blockLength)* para tranferir um bloco de dados da RAM para a VRAM.
+
+```c
+void blockToVRAM(int VRAMAddr, char* RAMAddr, unsigned int blockLength) {
+	VpokeFirst(VRAMAddr);
+	for (; blockLength > 0; blockLength--)
+		VpokeNext(*(RAMAddr++));
 }
-```
-
-3. **DESAFIO**: Similarmente, sem olhar a resposta abaixo crie a função *allTriggers* sem parâmetros que retorna um comando de gatilho se qualquer botão de joystick estiver apertado ou se a barra de espaço estiver apertada.
-
-```c
-char allTriggers() {
-	return TriggerRead(0) ||
-		TriggerRead(1) || TriggerRead(2) ||
-		TriggerRead(3) || TriggerRead(4);
-}
-```
-
-4. Substitua *JoystickRead()* por *allJoysticks()* na atribuição a variável *joy*.
-
-```c
-		while (lastJiffy == Peekw(BIOS_JIFFY)) {
-			joy = allJoysticks();
-```
-
-5. Compile e rode o programa. Como testar?
-
-6. **DESAFIO**: Sem olhar a resposta abaixo, altere os testes de entradas do jogador nas funções *title()* e *gameOver()* para aceitarem comandos de teclas ou gatilhos para trocar de tela:
-
-```c
-	while (allJoysticks()) {}	// waits for key release
-	while (!allJoysticks()) {}	// waits for key press
 ``` 
 
-5. Compile e rode o programa.
+11. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *buildTiles()* e insira nela uma linha para montar o tile da maçã na VRAM usando a função *blockToVRAM*.
+
+```c
+void buildTiles() {
+	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8, tiles_apple, sizeof(tiles_apple));
+}
+``` 
+
+12. Chame a função *buildTiles()* a partir da função *main()*, após inicializar o modo de vídeo, mas antes da chamada à função *charMap()*.
+
+```c
+	buildFont();
+	buildTiles();
+
+#ifdef DEBUG
+	Cls();
+	charMap();
+	Locate(0, 20);
+	InputChar();
+	Cls();
+#endif
+``` 
+
+13. Compile e rode o programa. A maçã apareceu no mapa de caracteres? E no jogo?
 
 ### 10.3. Aumentando a dificuldade.
 ###### *Github Ticket/Branch: 33/TKT0033.*

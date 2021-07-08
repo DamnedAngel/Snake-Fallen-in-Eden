@@ -11,14 +11,10 @@
 #include "MSX/BIOS/msxbios.h"
 #include "msx_fusion.h"
 #include "screens.h"
+#include "tiles.h"
 
 #define NAMETABLE					0x1800
 #define PATTERNTABLE				0x0000
-
-#define TILE_GRASS					' '
-#define TILE_SNAKETAIL				'o'
-#define TILE_SNAKEHEAD				'*'
-#define TILE_APPLE					'#'
 
 bool EoG;
 unsigned int snakeHeadPos;
@@ -84,6 +80,23 @@ void print(char* msg) {
 	return;
 }
 
+#ifdef DEBUG
+void charMap() {
+	for (unsigned char y = 0; y < 16; y++) {
+		Vpoke(NAMETABLE + 2 + y, y < 10 ? '0' + y : 'A' - 10 + y);
+		Vpoke(NAMETABLE + 32 * (y + 2), y < 10 ? '0' + y : 'A' - 10 + y);
+		for (unsigned char x = 0; x < 16; x++)
+			Vpoke(NAMETABLE + 66 + y * 32 + x, y * 16 + x);
+	}
+}
+#endif
+
+void blockToVRAM(int VRAMAddr, char* RAMAddr, unsigned int blockLength) {
+	VpokeFirst(VRAMAddr);
+	for (; blockLength > 0; blockLength--)
+		VpokeNext(*(RAMAddr++));
+}
+
 void buildFont() {
 	// Italic
 	unsigned char temp;
@@ -95,13 +108,9 @@ void buildFont() {
 	}
 }
 
-#ifdef DEBUG
-void charMap() {
-	for (unsigned char y = 0; y < 16; y++)
-		for (unsigned char x = 0; x < 16; x++)
-			Vpoke(NAMETABLE + y * 32 + x, y * 16 + x);
+void buildTiles() {
+	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8, tiles_apple, sizeof(tiles_apple));
 }
-#endif
 
 char allJoysticks() {
 	char result;
@@ -118,7 +127,7 @@ char allTriggers() {
 
 void title() {
 	Cls();
-	print(titleScreen);
+	_print(titleScreen);
 
 	while (allJoysticks() || allTriggers()) {}		// waits until key release
 	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
@@ -135,7 +144,7 @@ void game() {
 	srand(Peekw(BIOS_JIFFY));
 
 	Cls();
-	print(gameScreen);
+	_print(gameScreen);
 	Locate(18, 23);
 	PrintNumber(highscore);
 
@@ -277,7 +286,7 @@ void game() {
 
 void gameOver() {
 	Locate(0, 9);
-	print(gameOverMsg);
+	_print(gameOverMsg);
 
 	while (allJoysticks() || allTriggers()) {}		// waits until key release
 	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
@@ -293,13 +302,14 @@ void main(void) {
 	Screen(1);
 	Width(32);
 	SetColors(12, 3, 1);
+
 	buildFont();
+	buildTiles();
 
 #ifdef DEBUG
 	Cls();
 	charMap();
-	Locate(0, 20);
-	InputChar();
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 	Cls();
 #endif
 
