@@ -291,6 +291,10 @@ void game() {
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
+	
+	if (content < TILE_VINE) {
+		Vpoke(COLORTABLE + 0x12, (tileColors_game[TILE_HEADXPLOD/8] & 0xf0) | (tileColors_game[TILE_GRASS/8] & 0x0f));
+	}
 	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
 	Beep();
 	Poke(BIOS_JIFFY, 0);
@@ -320,6 +324,7 @@ void main(void) {
 	buildTiles();
 
 #ifdef DEBUG
+	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
 	charMap();
 	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 #endif

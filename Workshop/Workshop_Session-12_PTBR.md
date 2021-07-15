@@ -245,7 +245,7 @@ static const char tileColors[] = {
 static const char tileColors_title[] = {
 ```
 
-2. Mova a configuração de cores da função buildTitles para a o início da função title, ajustando o nome da constante:
+2. Refactoring: Mova a configuração de cores da função *buildTitles* para a o início da função *title*, ajustando o nome da constante:
 
 ```c
 void title() {
@@ -253,7 +253,17 @@ void title() {
 	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
 ```
 
-3. **DESAFIO**: Crie uma cópia da constante *tileColors_title*, chamada *tileColors_game*, e defina novas cores para os grupos de padrões dos dígitos e alfabeto. Execute a configuração com base nessa constante no início da função *game*;
+3. Refactoring: Também faça a configuração de cores imediatamente antes de chamar a rotina de exibição de mapas de caracteres, na função *main*:
+
+```c
+#ifdef DEBUG
+	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
+	charMap();
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
+#endif
+```
+
+4. **DESAFIO**: Crie uma cópia da constante *tileColors_title*, chamada *tileColors_game*, e defina novas cores para os grupos de padrões dos dígitos e alfabeto. Execute a configuração com base nessa constante no início da função *game*;
 
 ```c
 static const char tileColors_game[] = {
@@ -297,34 +307,30 @@ void game() {
 	blockToVRAM(COLORTABLE, tileColors_game, sizeof(tileColors_game));
 ```
 
-4. Compile e rode o programa.
+5. Compile e rode o programa.
 
 ### 12.5. Ajuste da cor de fundo na explosão da cabeça, quando da colisão com o próprio rabo.
 ###### *Github Ticket/Branch: 53/TKT0053.*
 
 ##### Objetivo: Cor da fundo da explosão ficar adequada ao terreno (previsão: 5 minutos).
 
-1. **DESAFIO**: Sem olhar a resposta abaixo, selecione um dos tiles da animação de explosão da cabeça quando acontecer uma colisão.
+1. **DESAFIO**: Sem olhar a resposta abaixo, altere as cores do fundo dos tiles da explosão da cabeça para a cor de fundo do jardim.
 
 ```c
+	if (content < TILE_VINE) {
+		Vpoke(COLORTABLE + 0x12, (tileColors_game[TILE_HEADXPLOD/8] & 0xf0) | (tileColors_game[TILE_GRASS/8] & 0x0f));
+	}
 	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
-	Beep();
-	Poke(BIOS_JIFFY, 0);
-	while (Peek(BIOS_JIFFY) < 90) {}
 ```
 
 2. Compile e rode o programa.
 
-
-### 11.6. Finalização da Sessão 10
+### 12.6. Finalização da Sessão 12
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
-1. Lição de casa: colorir o jogo e a tela de abertura (na sessão que vem eu passarei a minha solução, mas seria bacana se cada um tivesse a sua).
-
-2. Discussão geral da apresentação:
+1. Discussão geral da apresentação:
 * Comentários sobre o estado corrente do jogo
-* VDP / Tabela de padrões
-* Arquivos header
+* VDP / Tabela de cores
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
