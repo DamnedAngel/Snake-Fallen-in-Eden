@@ -11,14 +11,10 @@
 #include "MSX/BIOS/msxbios.h"
 #include "msx_fusion.h"
 #include "screens.h"
+#include "tiles.h"
 
 #define NAMETABLE					0x1800
 #define PATTERNTABLE				0x0000
-
-#define TILE_GRASS					' '
-#define TILE_SNAKETAIL				'o'
-#define TILE_SNAKEHEAD				'*'
-#define TILE_APPLE					'#'
 
 bool EoG;
 unsigned int snakeHeadPos;
@@ -84,6 +80,23 @@ void print(char* msg) {
 	return;
 }
 
+#ifdef DEBUG
+void charMap() {
+	for (unsigned char y = 0; y < 16; y++) {
+		Vpoke(NAMETABLE + 2 + y, y < 10 ? '0' + y : 'A' - 10 + y);
+		Vpoke(NAMETABLE + 32 * (y + 2), y < 10 ? '0' + y : 'A' - 10 + y);
+		for (unsigned char x = 0; x < 16; x++)
+			Vpoke(NAMETABLE + 66 + y * 32 + x, y * 16 + x);
+	}
+}
+#endif
+
+void blockToVRAM(int VRAMAddr, char* RAMAddr, unsigned int blockLength) {
+	VpokeFirst(VRAMAddr);
+	for (; blockLength > 0; blockLength--)
+		VpokeNext(*(RAMAddr++));
+}
+
 void buildFont() {
 	// Italic
 	unsigned char temp;
@@ -93,6 +106,15 @@ void buildFont() {
 			Vpoke(PATTERNTABLE + i * 8 + j, temp >> 1);
 		}
 	}
+}
+
+void buildTiles() {
+	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8, tiles_apple, sizeof(tiles_apple));
+	blockToVRAM(PATTERNTABLE + TILE_SNAKEHEAD * 8, tiles_snakeHead, sizeof(tiles_snakeHead));
+	blockToVRAM(PATTERNTABLE + TILE_SNAKETAIL * 8, tiles_snakeTail, sizeof(tiles_snakeTail));
+	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8, tiles_headXplod, sizeof(tiles_headXplod));
+	blockToVRAM(PATTERNTABLE + TILE_VINE * 8, tiles_vine, sizeof(tiles_vine));
+	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8, tiles_grass, sizeof(tiles_grass));
 }
 
 char allJoysticks() {
@@ -110,7 +132,7 @@ char allTriggers() {
 
 void title() {
 	Cls();
-	print(titleScreen);
+	_print(titleScreen);
 
 	while (allJoysticks() || allTriggers()) {}		// waits until key release
 	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
@@ -127,7 +149,7 @@ void game() {
 	srand(Peekw(BIOS_JIFFY));
 
 	Cls();
-	print(gameScreen);
+	_print(gameScreen);
 	Locate(18, 23);
 	PrintNumber(highscore);
 
@@ -228,7 +250,7 @@ void game() {
 				}
 			}
 			else {
-				EoG = (content != ' ');
+				EoG = (content != TILE_GRASS);
 			}
 
 			// Erases last tail segment
@@ -246,7 +268,7 @@ void game() {
 			Vpoke(*snakeHead, TILE_SNAKETAIL);
 
 			// Draws head in new position
-			Vpoke (snakeHeadPos, TILE_SNAKEHEAD);
+			Vpoke (snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
 			snakeHead++;
 			if (snakeHead > &snake[511]) snakeHead = snake;
 			*snakeHead = snakeHeadPos;
@@ -262,6 +284,7 @@ void game() {
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
+	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
 	Beep();
 	Poke(BIOS_JIFFY, 0);
 	while (Peek(BIOS_JIFFY) < 90) {}
@@ -269,7 +292,7 @@ void game() {
 
 void gameOver() {
 	Locate(0, 9);
-	print(gameOverMsg);
+	_print(gameOverMsg);
 
 	while (allJoysticks() || allTriggers()) {}		// waits until key release
 	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
@@ -284,10 +307,17 @@ void main(void) {
 	KeySound(0);
 	Screen(1);
 	Width(32);
-	buildFont();
 	SetColors(12, 3, 1);
 
-		// program's infinite loop
+	buildFont();
+	buildTiles();
+
+#ifdef DEBUG
+	charMap();
+	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
+#endif
+
+	// program's infinite loop
 	while (1) {
 		title();
 		game();

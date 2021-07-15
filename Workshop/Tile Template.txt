@@ -55,7 +55,7 @@ static const char tiles_snakeHead[] = {
 	0bxxxxxxxx,
 };
 
-static const char tiles_snakeBody[] = {
+static const char tiles_snakeTail[] = {
 	// 1 tile
 	0bxxxxxxxx,
 	0bxxxxxxxx,
