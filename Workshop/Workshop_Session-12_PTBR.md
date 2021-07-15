@@ -172,133 +172,119 @@ static const char gameOverMsg[] = \
 "\xa0                              \xa0\0";
 ```
 
-
 3. Compile e rode o programa.
 
-4. Se você usa Visual Studio, adicione-o arquivo ao projeto, sob o filtro *Header Files*.
 
-5. Embora não corramos o risco no nosso projeto, como boa prática, garanta que o arquivo não incorrerá em definições duplicadas caso seja referenciado por múltiplos arquivos fonte do projeto, inserindo na primeira linha:
+### 12.3. Cores.
+###### *Github Ticket/Branch: 51/TKT0051.*
+
+##### Objetivo: Colorir o jogo (previsão: 20 minutos)!
+
+1. Relembrando da tabela de cores do VDP em modo Screen 1.
+
+2. Relembrando as cores dos tiles na implementação de referência: 
+![Mapa de Caracteres da Implementação de referência](Workshop_Session-11_PTBR_img1.png "Mapa de Caracteres da Implementação de referência")
+
+3. Crie a constante COLORTABLE:
 
 ```c
-#pragma once
+#define NAMETABLE			0x1800
+#define PATTERNTABLE			0x0000
+#define COLORTABLE			0X2000
 ```
 
-6. **DESAFIO**: Sem olhar a resposta abaixo, referencie o arquivo tiles.h no arquivo principal do nosso programa msxromapp.c.
+4. **DESAFIO**: Sem olhar a resposta abaixo, crie, no arquivo tiles.h, o array de constantes *tileColors* com o mapa de cores. Use nossa rotina blockToVRAM para transferir os dados para a tabela de cores na VRAM.
 
 ```c
-#include "screens.h"
-#include "tiles.h"
+static const char tileColors[] = {
+	0xc3,			// 0x00 - Graphic Symbols **Unused**
+	0xc3,			// 0x08 - Graphic Symbols **Unused**
+	0xc3,			// 0x10 - Graphic Symbols **Unused**
+	0xc3,			// 0x18 - Graphic Symbols **Unused**
+	0xc3,			// 0x20 - Symbols
+	0xc3,			// 0x28 - Symbols
+	0xc3,			// 0x30 - Numbers
+	0xc3,			// 0x38 - Numbers, Symbols
+	0xc3,			// 0x40 - Uppercase
+	0xc3,			// 0x48 - Uppercase
+	0xc3,			// 0x50 - Uppercase
+	0xc3,			// 0x58 - Uppercase, Symbols
+	0xc3,			// 0x60 - Lowercase
+	0xc3,			// 0x68 - Lowercase
+	0xc3,			// 0x70 - Lowercase
+	0xc3,			// 0x78 - Lowercase, Symbols
+	0xc3,			// 0x80 - Snake Head
+	0x23,			// 0x88 - Snake Body
+	0x80,			// 0x90 - Exploded snake head
+	0x83,			// 0x98 - Apple
+	0xc1,			// 0xa0 - Vine
+	0x23,			// 0xa8 - Grass
+	0xb3,			// 0xb0 - Grass
+	0x00,			// 0xb8 - Graphic Symbols **Unused**
+	0x43,			// 0xc0 - Mini Snake
+	0x43,			// 0xc8 - Mini Snake
+	0x43,			// 0xd0 - Mini Snake
+	0x43,			// 0xd8 - Mini Snake
+	0x43,			// 0xe0 - Mini Snake
+	0x43,			// 0xe8 - Mini Snake
+	0x43,			// 0xf0 - Mini Snake
+	0x43,			// 0xf8 - Mini Snake
+};
 ```
 
-7. Compile o projeto para garantir que o arquivo tiles.h está ok. Corrija qualquer problema de sintaxe que existir, se existir.
+5. Compile e rode o programa.
 
-8. Refactoring: migre as definições de códigos de tiles do arquivo msxromapp.c para o início do arquivo tiles.h.
+### 12.4. Variação de Cores: Placar com fundo preto.
+###### *Github Ticket/Branch: 52/TKT0052.*
+
+##### Objetivo: Alterar as cores do placar (previsão: 10 minutos).
+
+1. Refactoring: Renomeie a constante *tileColors* para *tileColors_title*.
 
 ```c
-#pragma once
-
-#define TILE_GRASS		' '
-#define TILE_SNAKETAIL		'o'
-#define TILE_SNAKEHEAD		'*'
-#define TILE_APPLE		'#'
+static const char tileColors_title[] = {
 ```
 
-9. Com base no mapa de caracteres de referência, altere a constante *TILE_APPLE* para o valor final. Se quiser, rode o programa para vê-lo funcionando com um caracter diferente representando a maçã.
+2. **DESAFIO**: Crie uma cópia da constante *tileColors_title*, chamada *tileColors_game*, e defina novas cores para os grupos de padrões dos dígitos e alfabeto.
 
 ```c
-#define TILE_APPLE		0x98
+static const char tileColors_game[] = {
+	0xc3,			// 0x00 - Graphic Symbols **Unused**
+	0xc3,			// 0x08 - Graphic Symbols **Unused**
+	0xc3,			// 0x10 - Graphic Symbols **Unused**
+	0xc3,			// 0x18 - Graphic Symbols **Unused**
+	0xc3,			// 0x20 - Symbols
+	0xc3,			// 0x28 - Symbols
+	0xa1,			// 0x30 - Numbers
+	0xa1,			// 0x38 - Numbers, Symbols
+	0xa1,			// 0x40 - Uppercase
+	0xa1,			// 0x48 - Uppercase
+	0xa1,			// 0x50 - Uppercase
+	0xa1,			// 0x58 - Uppercase, Symbols
+	0xa1,			// 0x60 - Lowercase
+	0xa1,			// 0x68 - Lowercase
+	0xa1,			// 0x70 - Lowercase
+	0xa1,			// 0x78 - Lowercase, Symbols
+	0xc3,			// 0x80 - Snake Head
+	0x23,			// 0x88 - Snake Body
+	0x80,			// 0x90 - Exploded snake head
+	0x83,			// 0x98 - Apple
+	0xc1,			// 0xa0 - Vine
+	0x23,			// 0xa8 - Grass
+	0xb3,			// 0xb0 - Grass
+	0x00,			// 0xb8 - Graphic Symbols **Unused**
+	0x43,			// 0xc0 - Mini Snake
+	0x43,			// 0xc8 - Mini Snake
+	0x43,			// 0xd0 - Mini Snake
+	0x43,			// 0xd8 - Mini Snake
+	0x43,			// 0xe0 - Mini Snake
+	0x43,			// 0xe8 - Mini Snake
+	0x43,			// 0xf0 - Mini Snake
+	0x43,			// 0xf8 - Mini Snake
+};
 ```
 
-10. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *blockToVRAM(VRAMAddr, RAMAddr, blockLength)* para tranferir um bloco de dados da RAM para a VRAM.
-
-```c
-void blockToVRAM(int VRAMAddr, char* RAMAddr, unsigned int blockLength) {
-	VpokeFirst(VRAMAddr);
-	for (; blockLength > 0; blockLength--)
-		VpokeNext(*(RAMAddr++));
-}
-``` 
-
-11. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *buildTiles()* e insira nela uma linha para montar o tile da maçã na VRAM usando a função *blockToVRAM*.
-
-```c
-void buildTiles() {
-	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8, tiles_apple, sizeof(tiles_apple));
-}
-``` 
-
-12. **DESAFIO**: Chame a função *buildTiles()* a partir da função *main()*, após inicializar o modo de vídeo, mas antes da chamada à função *charMap()*.
-
-```c
-	buildFont();
-	buildTiles();
-
-#ifdef DEBUG
-	charMap();
-	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
-#endif
-``` 
-
-13. Compile e rode o programa. A maçã apareceu no mapa de caracteres? E no jogo?
-
-### 11.3. Montando os outros tiles do jogo.
-###### *Github Ticket/Branch: 45/TKT0045.*
-
-##### Objetivo: Montar os demais tiles do jogo (previsão: 15 minutos).
-
-1. **DESAFIO**: Sem olhar a resposta abaixo, repita os passos 9 e 11 para cada grupo de tiles definido no arquivo tiles.h.
-
-```c
-#define TILE_APPLE		0x98
-#define TILE_SNAKEHEAD		0x80
-#define TILE_SNAKETAIL		0x88
-#define TILE_HEADXPLOD		0x90
-#define TILE_VINE		0xa0
-#define TILE_GRASS		0xa8
-```
-```c
-void buildTiles() {
-	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8,
-		tiles_apple, sizeof(tiles_apple));
-	blockToVRAM(PATTERNTABLE + TILE_SNAKEHEAD * 8,
-		tiles_snakeHead, sizeof(tiles_snakeHead));
-	blockToVRAM(PATTERNTABLE + TILE_SNAKETAIL * 8,
-		tiles_snakeTail, sizeof(tiles_snakeTail));
-	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8,
-		tiles_headXplod, sizeof(tiles_headXplod));
-	blockToVRAM(PATTERNTABLE + TILE_VINE * 8,
-		tiles_vine, sizeof(tiles_vine));
-	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8,
-		tiles_grass, sizeof(tiles_grass));
-}
-```
-
-2. Compile e rode o programa. O mapa de caracteres foi atualizado? O que aconteceu com o jogo? Por quê?
-
-3. Corrija temporariamente o problema, alterando o endereço VRAM dos tiles de grama para o código original, de espaço:
-
-```c
-#define TILE_GRASS		' '
-```
-
-4. Compile e rode o programa. Note a nova posição, temporária, dos tiles de grama. O jogo funcionou? O que está estranho?
-
-### 11.4. Olha pra frente!
-###### *Github Ticket/Branch: 46/TKT0046.*
-
-##### Objetivo: Fazer a cobra olhar sempre para frente (previsão: 5 minutos).
-
-1. **DESAFIO**: Sem olhar a resposta abaixo, selecione o tile correto da cabeça da cobra, em função da direção, em cada movimento.
-
-```c
-			// direction = 1 (UP),    tile = (direction-1)/2) = 0
-			// direction = 3 (RIGHT), tile = (direction-1)/2) = 1
-			// direction = 5 (DOWN),  tile = (direction-1)/2) = 2
-			// direction = 7 (LEFT),  tile = (direction-1)/2) = 3
-			Vpoke (snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
-```
-
-2. Compile e rode o programa.
+5. Compile e rode o programa.
 
 ### 11.5. Tile de colisão.
 ###### *Github Ticket/Branch: 46/TKT0046.*

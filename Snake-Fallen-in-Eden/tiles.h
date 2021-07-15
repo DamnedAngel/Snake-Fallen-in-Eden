@@ -8,6 +8,41 @@
 #define TILE_GRASS					0xa8
 #define TILE_GRASS_EMPTY			0xaf
 
+static const char tileColors[] = {
+	0xC3,			// 0x00 - Graphic Symbols **Unused**
+	0xC3,			// 0x08 - Graphic Symbols **Unused**
+	0xC3,			// 0x10 - Graphic Symbols **Unused**
+	0xC3,			// 0x18 - Graphic Symbols **Unused**
+	0xC3,			// 0x20 - Symbols
+	0xC3,			// 0x28 - Symbols
+	0xC3,			// 0x30 - Numbers
+	0xC3,			// 0x38 - Numbers, Symbols
+	0xC3,			// 0x40 - Uppercase
+	0xC3,			// 0x48 - Uppercase
+	0xC3,			// 0x50 - Uppercase
+	0xC3,			// 0x58 - Uppercase, Symbols
+	0xC3,			// 0x60 - Lowercase
+	0xC3,			// 0x68 - Lowercase
+	0xC3,			// 0x70 - Lowercase
+	0xC3,			// 0x78 - Lowercase, Symbols
+	0xC3,			// 0x80 - Snake Head
+	0x23,			// 0x88 - Snake Body
+	0x80,			// 0x90 - Exploded snake head
+	0x83,			// 0x98 - Apple
+	0xC1,			// 0xa0 - Vine
+	0x23,			// 0xa8 - Grass
+	0xB3,			// 0xb0 - Grass
+	0x00,			// 0xb8 - Graphic Symbols **Unused**
+	0x43,			// 0xc0 - Mini Snake
+	0x43,			// 0xc8 - Mini Snake
+	0x43,			// 0xd0 - Mini Snake
+	0x43,			// 0xd8 - Mini Snake
+	0x43,			// 0xe0 - Mini Snake
+	0x43,			// 0xe8 - Mini Snake
+	0x43,			// 0xf0 - Mini Snake
+	0x43,			// 0xf8 - Mini Snake
+}; 
+
 static const char tiles_apple[] = {
 	// 1 tile
 	0b00101100,
@@ -307,3 +342,4 @@ static const char tiles_grass[] = {
 	0b00000000,
 	0b00000000,
 };
+
