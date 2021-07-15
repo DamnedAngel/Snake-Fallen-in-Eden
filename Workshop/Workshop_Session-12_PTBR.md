@@ -48,53 +48,96 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 # Sessão 12: Gráficos, parte 2!
 
-### 12.1. Construindo um mapa de caracteres em modo debug.
+### 12.1. Consertando o intervalo de código de caracteres usados para os tiles da grama.
 ###### *Github Ticket/Branch: 43/TKT0043.*
 
-##### Objetivo: Ter uma ferramenta para visualizar e acompanhar a criação dos gráficos do jogo (previsão: 15 minutos).
+##### Objetivo: Retornr ao plano de mapa de caracteres original (previsão: 15 minutos).
 
-1. Relembrando os perfis de compilação DEBUG e RELEASE.
-- Diretivas de compilação.
-- Linha de comando para compilação do projeto.
-- A variável *DEBUG* nos arquivos TargetConfig_*.txt.
-- A diretiva DEBUG em targetconfig.s e targetconfig.h.
-- O *#include targetconfig.h* no arquivo msxromapp.c.
-- *#ifdef* e *#endif*. 
+1. Relembrando os problemas do caracter de grama, que travava o jogo na geração da maçã, e a solução temporária adotada.
 
-2. Compile o projeto tanto em modo DEBUG quanto em modo RELEASE e garanta que ambos os perfis estão funcionando, testando o executável gerado no emulador.
+2. Compile o projeto em modo DEBUG, execute o jogo e observe a posição atual dos tiles de grama no mapa de caracteres, cobrindo os caracteres de espaço, ponto de exclamação e outros.
 
-3. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão sobre diretivas de compilação, implemente a função *charMap()* que mostra um mapa com os 256 caracteres (tiles/padrões) da screen 1 e a chame da função *main()* após a inicialização de vídeo. Tanto a função quanto a chamada a ela só deverão ser inclusas no executável quando o projeto for compilado em modo DEBUG.
+3. Retorne o código para condição original (com a trava), ajustando o código da constante *TILE_GRASS*:
+
+4. Compile o projeto em modo DEBUG, execute o jogo e observe a nova posição dos tiles de grama no mapa de caracteres, liberando os caracteres de espaço, ponto de exclamação e outros.
 
 ```c
-#ifdef DEBUG
-void charMap() {
-	for (unsigned char y = 0; y < 16; y++) {
-		Vpoke(NAMETABLE + 2 + y,
-			y < 10 ? '0' + y : 'A' - 10 + y);
-		Vpoke(NAMETABLE + 32 * (y + 2),
-			y < 10 ? '0' + y : 'A' - 10 + y);
-		for (unsigned char x = 0; x < 16; x++)
-			Vpoke(NAMETABLE + 66 + y * 32 + x,
-				y * 16 + x);
-	}
-}
-#endif
+#define TILE_GRASS					0xa8
+```
+
+5. Crie a constante TILE_GRASS_EMPTY referenciando o último dos 8 tiles de grama.
+
+```c
+#define TILE_GRASS_EMPTY				0xaf
+```
+
+6. Substitua todos os espaços do jardim nas constantes *titleScreen* e *gameScreen* (arquivo screens.h) pelo código 0xaf. Na *titleScreen*, para evitar a junção da constante hexadecimal *0xaf* com textos que podem iniciar com uma sequência válida de dígitos hexadecimais (**\xafDa**mned Angel, por exemplo), mantenha um espaço comum separando as palavras da grama:*\xaf Damned Angel's \xaf*:
+
+```c
+static const char titleScreen[] = \
+"+------------------------------+"\
+"|\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+"|\xaf\xaf Damned Angel's \xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+	(... 18 linhas ...)
+"|\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+"+------------------------------+"\
+" Score 0     High 0     Eden 1 \0";
 ```
 ```c
-	SetColors(12, 3, 1);
-	buildFont();
-
-#ifdef DEBUG
-	charMap();
-	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
-#endif
+static const char gameScreen[] = \
+"+------------------------------+"\
+"|\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+	(... 19 linhas ...)
+"|\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+"+------------------------------+"\
+" Score 0     High 0     Eden 1 \0";
 ```
 
-4. Compile e execute o programa em modo DEBUG. O mapa de caracteres foi mostrado?
+7. Compile, rode o programa e note o que houve com as telas do jogo. O que acontece com a jogo? E o que está acontecendo com a cabeça da cobra? Por que não notamos o problema com a cabeça da cobra antes?
 
-5. Compile e execute o programa em modo RELEASE. O mapa de caracteres foi mostrado?
+8. **DESAFIO**: Corrija o tile da cabeça da cobra:
 
-### 11.2. Desenhando o tile da maçã.
+```c
+	// initialize snake
+
+	// ...
+
+	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+```
+
+9. Compile, rode o programa e verifique se o problema foi corrigido.
+
+10. **DESAFIO**: Corrija o problema do travamento do jogo.
+
+```c
+	// initialize snake
+
+	// ...
+
+	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+```
+
+11. Compile, rode o programa e verifique se o problema foi corrigido. E agora, o que houve?
+
+12. **DESAFIO**: Corrija o problema encontrado no item 11 acima.
+
+```c
+				EoG = (content != TILE_GRASS_EMPTY);
+```
+
+13. Compile, rode o programa e verifique se o problema foi corrigido. E dessa vez, o que houve?
+
+14. **DESAFIO**: Corrija o problema encontrado no item 13 acima.
+
+```c
+			// Erases last tail segment
+			if (growth == 0) {
+				Vpoke(*snakeTail, TILE_GRASS_EMPTY);
+```
+
+15. Compile, rode o programa e verifique se o problema foi corrigido. E agora, como ficou?
+
+### 12.2. A vinha.
 ###### *Github Ticket/Branch: 35/TKT0035.*
 
 ##### Objetivo: importar o template de tiles para o projeto e substituir o caracter '#' por um desenho de maçã (previsão: 45 minutos).
