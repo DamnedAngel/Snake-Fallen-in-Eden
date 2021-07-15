@@ -5,7 +5,8 @@
 #define TILE_SNAKETAIL				0x88
 #define TILE_HEADXPLOD				0x90
 #define TILE_VINE					0xa0
-#define TILE_GRASS					' '
+#define TILE_GRASS					0xa8
+#define TILE_GRASS_EMPTY			0xaf
 
 static const char tiles_apple[] = {
 	// 1 tile

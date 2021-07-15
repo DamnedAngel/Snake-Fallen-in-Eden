@@ -141,7 +141,7 @@ void title() {
 void dropApple() {
 	do {
 		applePos = NAMETABLE + 32 + rand() % (21 * 32);
-	} while (Vpeek(applePos) != TILE_GRASS);
+	} while (Vpeek(applePos) != TILE_GRASS_EMPTY);
 	Vpoke(applePos, TILE_APPLE);
 }
 
@@ -168,7 +168,7 @@ void game() {
 	snake[0] = snakeHeadPos - 1;
 	snake[1] = snakeHeadPos;
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD);
+	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
 
 	// initialize difficulty
 	waitFrames = 15;
@@ -250,12 +250,12 @@ void game() {
 				}
 			}
 			else {
-				EoG = (content != TILE_GRASS);
+				EoG = (content != TILE_GRASS_EMPTY);
 			}
 
 			// Erases last tail segment
 			if (growth == 0) {
-				Vpoke(*snakeTail, TILE_GRASS);
+				Vpoke(*snakeTail, TILE_GRASS_EMPTY);
 				snakeTail++;
 				if (snakeTail > &snake[511])
 					snakeTail = snake;
