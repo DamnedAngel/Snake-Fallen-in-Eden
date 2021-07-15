@@ -116,9 +116,6 @@ void buildTiles() {
 	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8, tiles_headXplod, sizeof(tiles_headXplod));
 	blockToVRAM(PATTERNTABLE + TILE_VINE * 8, tiles_vine, sizeof(tiles_vine));
 	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8, tiles_grass, sizeof(tiles_grass));
-
-	// Set colors
-	blockToVRAM(COLORTABLE, tileColors, sizeof(tileColors));
 }
 
 char allJoysticks() {
@@ -135,6 +132,9 @@ char allTriggers() {
 }
 
 void title() {
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
+
 	Cls();
 	_print(titleScreen);
 
@@ -150,6 +150,9 @@ void dropApple() {
 }
 
 void game() {
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors_game, sizeof(tileColors_game));
+
 	srand(Peekw(BIOS_JIFFY));
 
 	Cls();

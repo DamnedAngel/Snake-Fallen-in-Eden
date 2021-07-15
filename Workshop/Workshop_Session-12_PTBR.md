@@ -245,7 +245,15 @@ static const char tileColors[] = {
 static const char tileColors_title[] = {
 ```
 
-2. **DESAFIO**: Crie uma cópia da constante *tileColors_title*, chamada *tileColors_game*, e defina novas cores para os grupos de padrões dos dígitos e alfabeto.
+2. Mova a configuração de cores da função buildTitles para a o início da função title, ajustando o nome da constante:
+
+```c
+void title() {
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
+```
+
+3. **DESAFIO**: Crie uma cópia da constante *tileColors_title*, chamada *tileColors_game*, e defina novas cores para os grupos de padrões dos dígitos e alfabeto. Execute a configuração com base nessa constante no início da função *game*;
 
 ```c
 static const char tileColors_game[] = {
@@ -253,8 +261,8 @@ static const char tileColors_game[] = {
 	0xc3,			// 0x08 - Graphic Symbols **Unused**
 	0xc3,			// 0x10 - Graphic Symbols **Unused**
 	0xc3,			// 0x18 - Graphic Symbols **Unused**
-	0xc3,			// 0x20 - Symbols
-	0xc3,			// 0x28 - Symbols
+	0xa1,			// 0x20 - Symbols
+	0xa1,			// 0x28 - Symbols
 	0xa1,			// 0x30 - Numbers
 	0xa1,			// 0x38 - Numbers, Symbols
 	0xa1,			// 0x40 - Uppercase
@@ -283,13 +291,18 @@ static const char tileColors_game[] = {
 	0x43,			// 0xf8 - Mini Snake
 };
 ```
+```c
+void game() {
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors_game, sizeof(tileColors_game));
+```
 
-5. Compile e rode o programa.
+4. Compile e rode o programa.
 
-### 11.5. Tile de colisão.
-###### *Github Ticket/Branch: 46/TKT0046.*
+### 12.5. Ajuste da cor de fundo na explosão da cabeça, quando da colisão com o próprio rabo.
+###### *Github Ticket/Branch: 53/TKT0053.*
 
-##### Objetivo: Mostrar um tile de explosão da cabeça no evento da colisão (previsão: 5 minutos).
+##### Objetivo: Cor da fundo da explosão ficar adequada ao terreno (previsão: 5 minutos).
 
 1. **DESAFIO**: Sem olhar a resposta abaixo, selecione um dos tiles da animação de explosão da cabeça quando acontecer uma colisão.
 
