@@ -15,6 +15,7 @@
 
 #define NAMETABLE					0x1800
 #define PATTERNTABLE				0x0000
+#define COLORTABLE					0X2000
 
 bool EoG;
 unsigned int snakeHeadPos;
@@ -115,6 +116,9 @@ void buildTiles() {
 	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8, tiles_headXplod, sizeof(tiles_headXplod));
 	blockToVRAM(PATTERNTABLE + TILE_VINE * 8, tiles_vine, sizeof(tiles_vine));
 	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8, tiles_grass, sizeof(tiles_grass));
+
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors, sizeof(tileColors));
 }
 
 char allJoysticks() {
