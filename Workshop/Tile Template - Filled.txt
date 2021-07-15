@@ -54,7 +54,7 @@ static const char tiles_snakeHead[] = {
 	0b00111000,
 };
 
-static const char tiles_snakeBody[] = {
+static const char tiles_snakeTail[] = {
 	// 1 tile
 	0b00111100,
 	0b01111110,
@@ -191,7 +191,7 @@ static const char tiles_vine[] = {
 	0b01101011,
 	0b00111101,
 	0b00100000,
-	0b11000000
+	0b11000000,
 
 	// vine top-right
 	0b00000010,

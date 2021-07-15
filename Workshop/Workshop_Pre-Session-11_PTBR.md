@@ -66,28 +66,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 3. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão sobre diretivas de compilação, implemente a função *charMap()* que mostra um mapa com os 256 caracteres (tiles/padrões) da screen 1 e a chame da função *main()* após a inicialização de vídeo. Tanto a função quanto a chamada a ela só deverão ser inclusas no executável quando o projeto for compilado em modo DEBUG.
 
 ```c
-#ifdef DEBUG
-void charMap() {
-	for (unsigned char y = 0; y < 16; y++) {
-		Vpoke(NAMETABLE + 2 + y,
-			y < 10 ? '0' + y : 'A' - 10 + y);
-		Vpoke(NAMETABLE + 32 * (y + 2),
-			y < 10 ? '0' + y : 'A' - 10 + y);
-		for (unsigned char x = 0; x < 16; x++)
-			Vpoke(NAMETABLE + 66 + y * 32 + x,
-				y * 16 + x);
-	}
-}
-#endif
-```
-```c
-	SetColors(12, 3, 1);
-	buildFont();
-
-#ifdef DEBUG
-	charMap();
-	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
-#endif
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 4. Compile e execute o programa em modo DEBUG. O mapa de caracteres foi mostrado?
@@ -111,7 +90,6 @@ void charMap() {
 4. Se você usa Visual Studio, adicione-o arquivo ao projeto, sob o filtro *Header Files*.
 
 5. Embora não corramos o risco no nosso projeto, como boa prática, garanta que o arquivo não incorrerá em definições duplicadas caso seja referenciado por múltiplos arquivos fonte do projeto, inserindo na primeira linha:
-
 ```c
 #pragma once
 ```
@@ -119,8 +97,7 @@ void charMap() {
 6. **DESAFIO**: Sem olhar a resposta abaixo, referencie o arquivo tiles.h no arquivo principal do nosso programa msxromapp.c.
 
 ```c
-#include "screens.h"
-#include "tiles.h"
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 7. Compile o projeto para garantir que o arquivo tiles.h está ok. Corrija qualquer problema de sintaxe que existir, se existir.
@@ -145,31 +122,19 @@ void charMap() {
 10. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *blockToVRAM(VRAMAddr, RAMAddr, blockLength)* para tranferir um bloco de dados da RAM para a VRAM.
 
 ```c
-void blockToVRAM(int VRAMAddr, char* RAMAddr, unsigned int blockLength) {
-	VpokeFirst(VRAMAddr);
-	for (; blockLength > 0; blockLength--)
-		VpokeNext(*(RAMAddr++));
-}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ``` 
 
 11. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *buildTiles()* e insira nela uma linha para montar o tile da maçã na VRAM usando a função *blockToVRAM*.
 
 ```c
-void buildTiles() {
-	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8, tiles_apple, sizeof(tiles_apple));
-}
-``` 
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
+```
 
 12. **DESAFIO**: Chame a função *buildTiles()* a partir da função *main()*, após inicializar o modo de vídeo, mas antes da chamada à função *charMap()*.
 
 ```c
-	buildFont();
-	buildTiles();
-
-#ifdef DEBUG
-	charMap();
-	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
-#endif
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ``` 
 
 13. Compile e rode o programa. A maçã apareceu no mapa de caracteres? E no jogo?
@@ -182,28 +147,7 @@ void buildTiles() {
 1. **DESAFIO**: Sem olhar a resposta abaixo, repita os passos 9 e 11 para cada grupo de tiles definido no arquivo tiles.h.
 
 ```c
-#define TILE_APPLE		0x98
-#define TILE_SNAKEHEAD		0x80
-#define TILE_SNAKETAIL		0x88
-#define TILE_HEADXPLOD		0x90
-#define TILE_VINE		0xa0
-#define TILE_GRASS		0xa8
-```
-```c
-void buildTiles() {
-	blockToVRAM(PATTERNTABLE + TILE_APPLE * 8,
-		tiles_apple, sizeof(tiles_apple));
-	blockToVRAM(PATTERNTABLE + TILE_SNAKEHEAD * 8,
-		tiles_snakeHead, sizeof(tiles_snakeHead));
-	blockToVRAM(PATTERNTABLE + TILE_SNAKETAIL * 8,
-		tiles_snakeTail, sizeof(tiles_snakeTail));
-	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8,
-		tiles_headXplod, sizeof(tiles_headXplod));
-	blockToVRAM(PATTERNTABLE + TILE_VINE * 8,
-		tiles_vine, sizeof(tiles_vine));
-	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8,
-		tiles_grass, sizeof(tiles_grass));
-}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 2. Compile e rode o programa. O mapa de caracteres foi atualizado? O que aconteceu com o jogo? Por quê?
@@ -224,11 +168,7 @@ void buildTiles() {
 1. **DESAFIO**: Sem olhar a resposta abaixo, selecione o tile correto da cabeça da cobra, em função da direção, em cada movimento.
 
 ```c
-			// direction = 1 (UP),    tile = (direction-1)/2) = 0
-			// direction = 3 (RIGHT), tile = (direction-1)/2) = 1
-			// direction = 5 (DOWN),  tile = (direction-1)/2) = 2
-			// direction = 7 (LEFT),  tile = (direction-1)/2) = 3
-			Vpoke (snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 2. Compile e rode o programa.
@@ -241,10 +181,7 @@ void buildTiles() {
 1. **DESAFIO**: Sem olhar a resposta abaixo, selecione um dos tiles da animação de explosão da cabeça quando acontecer uma colisão.
 
 ```c
-	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
-	Beep();
-	Poke(BIOS_JIFFY, 0);
-	while (Peek(BIOS_JIFFY) < 90) {}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 2. Compile e rode o programa.

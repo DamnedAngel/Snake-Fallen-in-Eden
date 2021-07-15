@@ -284,6 +284,7 @@ void game() {
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
+	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
 	Beep();
 	Poke(BIOS_JIFFY, 0);
 	while (Peek(BIOS_JIFFY) < 90) {}
@@ -312,10 +313,8 @@ void main(void) {
 	buildTiles();
 
 #ifdef DEBUG
-	Cls();
 	charMap();
 	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
-	Cls();
 #endif
 
 	// program's infinite loop
