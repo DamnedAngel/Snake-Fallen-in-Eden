@@ -49,9 +49,9 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 # Sessão 12: Gráficos, parte 2!
 
 ### 12.1. Consertando o intervalo de código de caracteres usados para os tiles da grama.
-###### *Github Ticket/Branch: 43/TKT0043.*
+###### *Github Ticket/Branch: 49/TKT0049.*
 
-##### Objetivo: Retornr ao plano de mapa de caracteres original (previsão: 15 minutos).
+##### Objetivo: Retornr ao plano de mapa de caracteres original (previsão: 30 minutos).
 
 1. Relembrando os problemas do caracter de grama, que travava o jogo na geração da maçã, e a solução temporária adotada.
 
@@ -76,19 +76,19 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ```c
 static const char titleScreen[] = \
 "+------------------------------+"\
-"|\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+"|\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1|"\
 "|\xaf\xaf Damned Angel's \xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
 	(... 18 linhas ...)
-"|\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+"|\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1|"\
 "+------------------------------+"\
 " Score 0     High 0     Eden 1 \0";
 ```
 ```c
 static const char gameScreen[] = \
 "+------------------------------+"\
-"|\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+"|\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1|"\
 	(... 19 linhas ...)
-"|\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
+"|\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1|"\
 "+------------------------------+"\
 " Score 0     High 0     Eden 1 \0";
 ```
@@ -138,18 +138,42 @@ static const char gameScreen[] = \
 15. Compile, rode o programa e verifique se o problema foi corrigido. E agora, como ficou?
 
 ### 12.2. A vinha.
-###### *Github Ticket/Branch: 35/TKT0035.*
+###### *Github Ticket/Branch: 50/TKT0050.*
 
-##### Objetivo: importar o template de tiles para o projeto e substituir o caracter '#' por um desenho de maçã (previsão: 45 minutos).
+##### Objetivo: Implementar o desenho das vinhas (previsão: 15 minutos).
 
-1. Lembrando da tabela de padrões do VDP.
-- Mapa de caracteres da implementação de referência do jogo.
+1. Identifique o código hexadecimal de cada um dos 6 tiles da vinha.
 
-![Mapa de Caracteres da Implementação de referência](Workshop_Session-11_PTBR_img1.png "Mapa de Caracteres da Implementação de referência")
+2. **DESAFIO**: Usando os códigos dos tiles da vinha identificado no item anterior, substitua as bordas do jardim nas constantes *titleScreen*, *gameScreen* e *gameOverMsg*.
 
-2. Mova o arquivo de template de tiles, já preenchido, para a pasta do projeto.
+```c
+static const char titleScreen[] = \
+"\xa2\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa4"\
+"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
+"\xa0\xaf\xaf Damned Angel's \xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xa0"\
+	(... 18 linhas ...)
+"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
+"\xa3\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa5"\
+" Score 0     High 0     Eden 1 \0";
+```
+```c
+static const char gameScreen[] = \
+"\xa2\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa4"\
+"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
+	(... 19 linhas ...)
+"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
+"\xa3\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa5"\
+" Score 0     High 0     Eden 1 \0";
+```
+```c
+static const char gameOverMsg[] = \
+"\xa0                              \xa0"\
+"\xa0          Game  Over          \xa0"\
+"\xa0                              \xa0\0";
+```
 
-3. Renomeie o arquivo para tiles.h.
+
+3. Compile e rode o programa.
 
 4. Se você usa Visual Studio, adicione-o arquivo ao projeto, sob o filtro *Header Files*.
 
