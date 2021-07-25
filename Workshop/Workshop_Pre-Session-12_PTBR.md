@@ -98,11 +98,7 @@ static const char gameScreen[] = \
 8. **DESAFIO**: Corrija o tile da cabeça da cobra:
 
 ```c
-	// initialize snake
-
-	// ...
-
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 9. Compile, rode o programa e verifique se o problema foi corrigido.
@@ -110,11 +106,7 @@ static const char gameScreen[] = \
 10. **DESAFIO**: Corrija o problema do travamento do jogo.
 
 ```c
-	// initialize snake
-
-	// ...
-
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 11. Compile, rode o programa e verifique se o problema foi corrigido. E agora, o que houve?
@@ -122,7 +114,7 @@ static const char gameScreen[] = \
 12. **DESAFIO**: Corrija o problema encontrado no item 11 acima.
 
 ```c
-				EoG = (content != TILE_GRASS_EMPTY);
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 13. Compile, rode o programa e verifique se o problema foi corrigido. E dessa vez, o que houve?
@@ -130,9 +122,7 @@ static const char gameScreen[] = \
 14. **DESAFIO**: Corrija o problema encontrado no item 13 acima.
 
 ```c
-			// Erases last tail segment
-			if (growth == 0) {
-				Vpoke(*snakeTail, TILE_GRASS_EMPTY);
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 15. Compile, rode o programa e verifique se o problema foi corrigido. E agora, como ficou?
@@ -147,29 +137,7 @@ static const char gameScreen[] = \
 2. **DESAFIO**: Usando os códigos dos tiles da vinha identificado no item anterior, substitua as bordas do jardim nas constantes *titleScreen*, *gameScreen* e *gameOverMsg*.
 
 ```c
-static const char titleScreen[] = \
-"\xa2\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa4"\
-"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
-"\xa0\xaf\xaf Damned Angel's \xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xa0"\
-	(... 18 linhas ...)
-"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
-"\xa3\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa5"\
-" Score 0     High 0     Eden 1 \0";
-```
-```c
-static const char gameScreen[] = \
-"\xa2\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa4"\
-"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
-	(... 19 linhas ...)
-"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
-"\xa3\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa5"\
-" Score 0     High 0     Eden 1 \0";
-```
-```c
-static const char gameOverMsg[] = \
-"\xa0                              \xa0"\
-"\xa0          Game  Over          \xa0"\
-"\xa0                              \xa0\0";
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 3. Compile e rode o programa.
@@ -196,40 +164,7 @@ static const char gameOverMsg[] = \
 4. **DESAFIO**: Sem olhar a resposta abaixo, crie, no arquivo tiles.h, o array de constantes *tileColors* com o mapa de cores. Use nossa rotina blockToVRAM para transferir os dados para a tabela de cores na VRAM.
 
 ```c
-static const char tileColors[] = {
-	0xc3,			// 0x00 - Graphic Symbols **Unused**
-	0xc3,			// 0x08 - Graphic Symbols **Unused**
-	0xc3,			// 0x10 - Graphic Symbols **Unused**
-	0xc3,			// 0x18 - Graphic Symbols **Unused**
-	0xc3,			// 0x20 - Symbols
-	0xc3,			// 0x28 - Symbols
-	0xc3,			// 0x30 - Numbers
-	0xc3,			// 0x38 - Numbers, Symbols
-	0xc3,			// 0x40 - Uppercase
-	0xc3,			// 0x48 - Uppercase
-	0xc3,			// 0x50 - Uppercase
-	0xc3,			// 0x58 - Uppercase, Symbols
-	0xc3,			// 0x60 - Lowercase
-	0xc3,			// 0x68 - Lowercase
-	0xc3,			// 0x70 - Lowercase
-	0xc3,			// 0x78 - Lowercase, Symbols
-	0xc3,			// 0x80 - Snake Head
-	0x23,			// 0x88 - Snake Body
-	0x80,			// 0x90 - Exploded snake head
-	0x83,			// 0x98 - Apple
-	0xc1,			// 0xa0 - Vine
-	0x23,			// 0xa8 - Grass
-	0xb3,			// 0xb0 - Grass
-	0x00,			// 0xb8 - Graphic Symbols **Unused**
-	0x43,			// 0xc0 - Mini Snake
-	0x43,			// 0xc8 - Mini Snake
-	0x43,			// 0xd0 - Mini Snake
-	0x43,			// 0xd8 - Mini Snake
-	0x43,			// 0xe0 - Mini Snake
-	0x43,			// 0xe8 - Mini Snake
-	0x43,			// 0xf0 - Mini Snake
-	0x43,			// 0xf8 - Mini Snake
-};
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 5. Compile e rode o programa.
@@ -266,45 +201,7 @@ void title() {
 4. **DESAFIO**: Crie uma cópia da constante *tileColors_title*, chamada *tileColors_game*, e defina novas cores para os grupos de padrões dos dígitos e alfabeto. Execute a configuração com base nessa constante no início da função *game*;
 
 ```c
-static const char tileColors_game[] = {
-	0xc3,			// 0x00 - Graphic Symbols **Unused**
-	0xc3,			// 0x08 - Graphic Symbols **Unused**
-	0xc3,			// 0x10 - Graphic Symbols **Unused**
-	0xc3,			// 0x18 - Graphic Symbols **Unused**
-	0xa1,			// 0x20 - Symbols
-	0xa1,			// 0x28 - Symbols
-	0xa1,			// 0x30 - Numbers
-	0xa1,			// 0x38 - Numbers, Symbols
-	0xa1,			// 0x40 - Uppercase
-	0xa1,			// 0x48 - Uppercase
-	0xa1,			// 0x50 - Uppercase
-	0xa1,			// 0x58 - Uppercase, Symbols
-	0xa1,			// 0x60 - Lowercase
-	0xa1,			// 0x68 - Lowercase
-	0xa1,			// 0x70 - Lowercase
-	0xa1,			// 0x78 - Lowercase, Symbols
-	0xc3,			// 0x80 - Snake Head
-	0x23,			// 0x88 - Snake Body
-	0x80,			// 0x90 - Exploded snake head
-	0x83,			// 0x98 - Apple
-	0xc1,			// 0xa0 - Vine
-	0x23,			// 0xa8 - Grass
-	0xb3,			// 0xb0 - Grass
-	0x00,			// 0xb8 - Graphic Symbols **Unused**
-	0x43,			// 0xc0 - Mini Snake
-	0x43,			// 0xc8 - Mini Snake
-	0x43,			// 0xd0 - Mini Snake
-	0x43,			// 0xd8 - Mini Snake
-	0x43,			// 0xe0 - Mini Snake
-	0x43,			// 0xe8 - Mini Snake
-	0x43,			// 0xf0 - Mini Snake
-	0x43,			// 0xf8 - Mini Snake
-};
-```
-```c
-void game() {
-	// Set colors
-	blockToVRAM(COLORTABLE, tileColors_game, sizeof(tileColors_game));
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 5. Compile e rode o programa.
@@ -317,10 +214,7 @@ void game() {
 1. **DESAFIO**: Sem olhar a resposta abaixo, altere as cores do fundo dos tiles da explosão da cabeça para a cor de fundo do jardim.
 
 ```c
-	if (content < TILE_VINE) {
-		Vpoke(COLORTABLE + 0x12, (tileColors_game[TILE_HEADXPLOD/8] & 0xf0) | (tileColors_game[TILE_GRASS/8] & 0x0f));
-	}
-	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 2. Compile e rode o programa.
