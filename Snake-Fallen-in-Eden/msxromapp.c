@@ -15,6 +15,7 @@
 
 #define NAMETABLE					0x1800
 #define PATTERNTABLE				0x0000
+#define COLORTABLE					0X2000
 
 bool EoG;
 unsigned int snakeHeadPos;
@@ -131,6 +132,9 @@ char allTriggers() {
 }
 
 void title() {
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
+
 	Cls();
 	_print(titleScreen);
 
@@ -141,11 +145,14 @@ void title() {
 void dropApple() {
 	do {
 		applePos = NAMETABLE + 32 + rand() % (21 * 32);
-	} while (Vpeek(applePos) != TILE_GRASS);
+	} while (Vpeek(applePos) != TILE_GRASS_EMPTY);
 	Vpoke(applePos, TILE_APPLE);
 }
 
 void game() {
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors_game, sizeof(tileColors_game));
+
 	srand(Peekw(BIOS_JIFFY));
 
 	Cls();
@@ -168,7 +175,7 @@ void game() {
 	snake[0] = snakeHeadPos - 1;
 	snake[1] = snakeHeadPos;
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD);
+	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
 
 	// initialize difficulty
 	waitFrames = 15;
@@ -250,12 +257,12 @@ void game() {
 				}
 			}
 			else {
-				EoG = (content != TILE_GRASS);
+				EoG = (content != TILE_GRASS_EMPTY);
 			}
 
 			// Erases last tail segment
 			if (growth == 0) {
-				Vpoke(*snakeTail, TILE_GRASS);
+				Vpoke(*snakeTail, TILE_GRASS_EMPTY);
 				snakeTail++;
 				if (snakeTail > &snake[511])
 					snakeTail = snake;
@@ -284,6 +291,10 @@ void game() {
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
+	
+	if (content < TILE_VINE) {
+		Vpoke(COLORTABLE + 0x12, (tileColors_game[TILE_HEADXPLOD/8] & 0xf0) | (tileColors_game[TILE_GRASS/8] & 0x0f));
+	}
 	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
 	Beep();
 	Poke(BIOS_JIFFY, 0);
@@ -313,6 +324,7 @@ void main(void) {
 	buildTiles();
 
 #ifdef DEBUG
+	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
 	charMap();
 	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
 #endif
