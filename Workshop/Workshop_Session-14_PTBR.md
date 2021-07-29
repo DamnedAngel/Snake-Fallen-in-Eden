@@ -297,61 +297,72 @@ unsigned char appleEatenFrame;
 					appleEatenFrame = 16;
 ```
 
-3. Refactoring: Também faça a configuração de cores imediatamente antes de chamar a rotina de exibição de mapas de caracteres, na função *main*:
+3. **DESAFIO**: Monte a rotina do efeito, diminuindo o volume do canal a cada frame:
 
 ```c
-#ifdef DEBUG
-	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
-	charMap();
-	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
-#endif
+		// here we will add animations and sound effects routine 
+		{
+			// Apple eaten effect
+			if (appleEaten) {
+				PSGwrite(9, 15 - appleEatenFrame);
+				appleEaten = ++appleEatenFrame < 16;
+			}
 ```
 
-4. **DESAFIO**: Crie uma cópia da constante *tileColors_title*, chamada *tileColors_game*, e defina novas cores para os grupos de padrões dos dígitos e alfabeto. Execute a configuração com base nessa constante no início da função *game*;
+4. Compile e rode o programa.
+
+### 14.5. O som da progressão de édens.
+###### *Github Ticket/Branch: 58/TKT0058.*
+
+##### Objetivo: Fornecer informação sonora do evento de mudança de éden (previsão: 10 minutos).
+
+1. Definindo regras do efeito sonoro de transição de éden.
+- Na mudança de eden, um efeito sonoro de um segundo sera emitido, alternando tons entre frames pares e frames ímpares:
+	- No frame ímpar, um valor aleatório entre 0 e 255 será colocado no registro 4 do PSG.
+	- No frame par, um valor decrescente de 60 a 30 será colocado no registro 4 do PSG.
+
+2. Crie a variável *edenUpSound* para armazenar o valor a ser colocado no rigistro 4 do PSG:
+```c
+unsigned char edenUpSound;
+```
+
+3. No evento de mudança de nível, inicialize a variável *edenUpSound*, e ajuste o volume do canal C para o máximo:
+```c
+			// Controls eden progression
+			if (!(--waitMoves)) {
+				// Next Eden
+				edenUp = true;
+				edenUpFrame = 0;
+				edenUpSound = 60;
+				PSGwrite(10, 15);
+```
+
+3. **DESAFIO**: Altere a rotina do efeito de progressão de éden, produzindo os tons conforme regras definidas no item 1 acima:
 
 ```c
-static const char tileColors_game[] = {
-	0xc3,			// 0x00 - Graphic Symbols **Unused**
-	0xc3,			// 0x08 - Graphic Symbols **Unused**
-	0xc3,			// 0x10 - Graphic Symbols **Unused**
-	0xc3,			// 0x18 - Graphic Symbols **Unused**
-	0xa1,			// 0x20 - Symbols
-	0xa1,			// 0x28 - Symbols
-	0xa1,			// 0x30 - Numbers
-	0xa1,			// 0x38 - Numbers, Symbols
-	0xa1,			// 0x40 - Uppercase
-	0xa1,			// 0x48 - Uppercase
-	0xa1,			// 0x50 - Uppercase
-	0xa1,			// 0x58 - Uppercase, Symbols
-	0xa1,			// 0x60 - Lowercase
-	0xa1,			// 0x68 - Lowercase
-	0xa1,			// 0x70 - Lowercase
-	0xa1,			// 0x78 - Lowercase, Symbols
-	0xc3,			// 0x80 - Snake Head
-	0x23,			// 0x88 - Snake Body
-	0x80,			// 0x90 - Exploded snake head
-	0x83,			// 0x98 - Apple
-	0xc1,			// 0xa0 - Vine
-	0x23,			// 0xa8 - Grass
-	0xb3,			// 0xb0 - Grass
-	0x00,			// 0xb8 - Graphic Symbols **Unused**
-	0x43,			// 0xc0 - Mini Snake
-	0x43,			// 0xc8 - Mini Snake
-	0x43,			// 0xd0 - Mini Snake
-	0x43,			// 0xd8 - Mini Snake
-	0x43,			// 0xe0 - Mini Snake
-	0x43,			// 0xe8 - Mini Snake
-	0x43,			// 0xf0 - Mini Snake
-	0x43,			// 0xf8 - Mini Snake
-};
-```
-```c
-void game() {
-	// Set colors
-	blockToVRAM(COLORTABLE, tileColors_game, sizeof(tileColors_game));
+		// Eden Up effect
+		if (edenUp) {
+			if (++edenUpFrame & 1) {
+				// random color & sound
+				PSGwrite(4, rand());
+				Vpoke(COLORTABLE + TILE_SNAKETAIL / 8,
+					(rand() & 0xf0) + 3);
+			} else {
+				// next color & effect up sound
+				PSGwrite(4, edenUpSound--);
+				Vpoke(COLORTABLE + TILE_SNAKETAIL / 8
+					tailColors[((eden - 1) % sizeof(tailColors))]);
+			}
+			if (!(edenUp = edenUpFrame < 60)) {
+				PSGwrite(10, 0);
+			};
+		}
 ```
 
-5. Compile e rode o programa.
+4. Compile e rode o programa.
+
+5. Experimente os efeitos sonoros habilitanto apenas os ajustes dos registros em frames pares e ímpares isoladamente.
+
 
 ### 12.5. Ajuste da cor de fundo na explosão da cabeça, quando da colisão com o próprio rabo.
 ###### *Github Ticket/Branch: 53/TKT0053.*
