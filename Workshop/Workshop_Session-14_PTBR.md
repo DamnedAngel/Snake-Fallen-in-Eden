@@ -163,7 +163,7 @@ unsigned char collisionFrame;
     - 15: branco (contraste excessivo).
 - Na mudança de eden, o rabo cobra piscará por um segundo, tendo, nos frames pares, a próxima cor que assumirá e nos frames ímpares uma cor aleatória enrte 0 e 15.
 
-2. **DESAFIO**: Crie, no arquivo *tiles.h*, um array de cores possíveis para a cobra assumir chamado *tailColors*, excluindo as cores inválidas estabelecidas no item 1 acima.
+2. **DESAFIO**: Sem olhar o código abaixo crie, no arquivo *tiles.h*, um array de cores possíveis para a cobra assumir chamado *tailColors*, excluindo as cores inválidas estabelecidas no item 1 acima.
 
 ```c
 static const char tailColors[] = {
@@ -201,7 +201,7 @@ unsigned char edenUpFrame;
 
 5. Discussão: O que podemos usar como índice do vetor de cores?
 
-6. **DESAFIO**: Monte a rotina do efeito, trocando o cor a cada frame, conforme as regras do item 1 acima. No último frame, atribua *false* à *edenUp*:
+6. **DESAFIO**: Sem olhar o código abaixo, monte a rotina do efeito, trocando o cor a cada frame, conforme as regras do item 1 acima. No último frame, atribua *false* à *edenUp*:
 ```c
 	// here we will add animations and sound effects routine 
 	{
@@ -231,9 +231,9 @@ http://www.msxtop.msxall.com/Docs/MSXTopSecret2Continuo.pdf
 
 
 2. Definindo a estratégia de sons do jogo.
-- PSG A: Movimento da cobra, envoltória 4.
-- PSG B: comer maçã, volume controlado pelo jogo.
-- PSG C: Level up, volume controlado pelo jogo.
+- PSG A: Movimento da cobra, ruído, envoltória 4.
+- PSG B: comer maçã, tom, volume controlado pelo jogo.
+- PSG C: Level up, tom, volume controlado pelo jogo.
 - PSG A, B e C: Explosão, envoltória 0.
 
 3. Crie o arquivo *sounds.h* e nele crie o vetor constante de inicialização do PSG *gameSound* para o jogo:
@@ -264,9 +264,10 @@ static const char gameSound[] = {
 	}
 ```
 
-6. No final da movimentação da cobra, reconfigure a envoltória, disparando um novo efeito sonoro:
-
+6. Após desenhar a cabeçca da cobra, econfigure a envoltória, disparando um novo efeito sonoro:
 ```c
+			// Draws head in new position
+			Vpoke(snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
 			PSGwrite(13, 4);
 ```
 
@@ -297,7 +298,7 @@ unsigned char appleEatenFrame;
 					appleEatenFrame = 16;
 ```
 
-3. **DESAFIO**: Monte a rotina do efeito, diminuindo o volume do canal a cada frame:
+3. **DESAFIO**: Sem olhar o código abaixo, monte a rotina do efeito, diminuindo o volume do canal a cada frame:
 
 ```c
 		// here we will add animations and sound effects routine 
@@ -337,7 +338,7 @@ unsigned char edenUpSound;
 				PSGwrite(10, 15);
 ```
 
-3. **DESAFIO**: Altere a rotina do efeito de progressão de éden, produzindo os tons conforme regras definidas no item 1 acima:
+3. **DESAFIO**: Sem olhar o código abaixo, altere a rotina do efeito de progressão de éden, produzindo os tons conforme regras definidas no item 1 acima:
 
 ```c
 		// Eden Up effect
@@ -363,29 +364,41 @@ unsigned char edenUpSound;
 
 5. Experimente os efeitos sonoros habilitanto apenas os ajustes dos registros em frames pares e ímpares isoladamente.
 
+### 14.6. O som da explosão da cabeça da cobra.
+###### *Github Ticket/Branch: 34/TKT0034.*
 
-### 12.5. Ajuste da cor de fundo na explosão da cabeça, quando da colisão com o próprio rabo.
-###### *Github Ticket/Branch: 53/TKT0053.*
+##### Objetivo: Fornecer informação sonora da colisão da cobra.
 
-##### Objetivo: Cor da fundo da explosão ficar adequada ao terreno (previsão: 5 minutos).
-
-1. **DESAFIO**: Sem olhar a resposta abaixo, altere as cores do fundo dos tiles da explosão da cabeça para a cor de fundo do jardim.
-
+1. insira no arquivo *sounds.h* o vetor constante *xplodSound* com configuração do PSG para som da explosão da cabeça da cobra:
 ```c
-	if (content < TILE_VINE) {
-		Vpoke(COLORTABLE + 0x12, (tileColors_game[TILE_HEADXPLOD/8] & 0xf0) | (tileColors_game[TILE_GRASS/8] & 0x0f));
-	}
-	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
+static const char xplodSound[] = {
+	255,	31,				// Channel A Freq		
+	100,	20,				// Channel B Freq		
+	255,	1,				// Channel C Freq		
+	31,					// Noise Freq			
+	128,					// Mixing				
+	16,	16,	16,			// Channels volume
+	10,	20,				// Envelope freq
+	0					// Envelope
+};
 ```
 
-2. Compile e rode o programa.
+2. **DESAFIO**: Sem olhar o código abaixo, insira bloco de código para executar o som de explosão da cabeça:
+```c
+			for (unsigned char i = 0; i < sizeof(xplodSound); i++) {
+				PSGwrite(i, xplodSound[i]);
+			};
+```
 
-### 12.6. Finalização da Sessão 12
+3. Compile e rode o programa.
+
+### 14.6. Finalização da Sessão 14
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-* Comentários sobre o estado corrente do jogo
-* VDP / Tabela de cores
+* Animação
+* Sons
+* Estado do jogo
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---

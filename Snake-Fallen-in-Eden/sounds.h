@@ -9,3 +9,14 @@ static const char gameSound[] = {
 	16,		0,		0,		// Channels volume
 	100,	4,				// Envelope freq
 };
+
+static const char xplodSound[] = {
+	255,	31,				// Channel A Freq		
+	100,	20,				// Channel B Freq		
+	255,	1,				// Channel C Freq		
+	31,						// Noise Freq			
+	128,					// Mixing				
+	16,		16,		16,		// Channels volume
+	10,		20,				// Envelope freq
+	0						// Envelope
+};

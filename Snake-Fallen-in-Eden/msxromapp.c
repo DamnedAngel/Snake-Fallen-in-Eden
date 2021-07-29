@@ -275,7 +275,12 @@ void game() {
 						(tileColors_game[TILE_GRASS / 8] & 0x0f));
 				}
 				Vpoke(snakeHeadPos, TILE_HEADXPLOD);
-				Beep();
+
+		
+				for (unsigned char i = 0; i < sizeof(xplodSound); i++) {
+					PSGwrite(i, xplodSound[i]);
+				};
+
 			} else {
 				if (content == TILE_APPLE) {
 					dropApple();
@@ -297,6 +302,7 @@ void game() {
 
 				// Draws head in new position
 				Vpoke(snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
+				PSGwrite(13, 4);
 			}
 
 			// Erases last tail segment
@@ -317,8 +323,6 @@ void game() {
 			snakeHead++;
 			if (snakeHead > &snake[511]) snakeHead = snake;
 			*snakeHead = snakeHeadPos;
-
-			PSGwrite(13, 4);
 
 			lastDirection = direction;		// saves last direction after moving
 			Pokew(BIOS_JIFFY, 0);
