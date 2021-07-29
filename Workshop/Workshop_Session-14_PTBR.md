@@ -136,7 +136,7 @@ unsigned char collisionFrame;
 ```c
 		// here we will add animations and sound effects routine 
 		{
-			// Process collision
+			// Collision animation
 			if (collision && (Peekw(BIOS_JIFFY) >= 6)) {
 				Vpoke(snakeHeadPos, ++collisionFrame);
 				EoG = (collisionFrame == TILE_HEADXPLOD + 7);
@@ -147,42 +147,78 @@ unsigned char collisionFrame;
 
 8. Compile e execute o projeto. Teste a colisão com a vinha e com o rabo da cobra.
 
-### 12.2. A vinha.
-###### *Github Ticket/Branch: 50/TKT0050.*
+### 14.2. Efeito visual na mudança de éden.
+###### *Github Ticket/Branch: 41/TKT0041.*
 
-##### Objetivo: Implementar o desenho das vinhas (previsão: 15 minutos).
+##### Objetivo: Promover identificação visual a cada éden e a cada mudança de éden (previsão: 20 minutos).
 
-1. Identifique o código hexadecimal de cada um dos 6 tiles da vinha.
+1. Regras para identificação visual de édens e transições.
+- Em cada éden o rabo da cobra terá cor diferente dos édens anteriores, usando ordenadamente as cores do MSX1, até essas se esgotarem. Nesse ponto, o ciclo recomeçará.  
+- Algumas cores não deverão ser utilizadas, para evitar baixo contraste com outros elementos do jogo, e pra evitar contraste excessivo, a saber:
+	- 0: cor da borda (preto, contraste excessivo);
+    - 1: preto (contraste excessivo);
+    - 3: verde claro (grama);
+    - 8: vermelho (maçã);
+    - 11: amarelo (baixo contraste com a grama);
+    - 15: branco (contraste excessivo).
+- Na mudança de eden, o rabo cobra piscará por um segundo, tendo, nos frames pares, a próxima cor que assumirá e nos frames ímpares uma cor aleatória enrte 0 e 15.
 
-2. **DESAFIO**: Usando os códigos dos tiles da vinha identificado no item anterior, substitua as bordas do jardim nas constantes *titleScreen*, *gameScreen* e *gameOverMsg*.
+2. **DESAFIO**: Crie, no arquivo *tiles.h*, um array de cores possíveis para a cobra assumir chamado *tailColors*, excluindo as cores inválidas estabelecidas no item 1 acima.
 
 ```c
-static const char titleScreen[] = \
-"\xa2\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa4"\
-"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
-"\xa0\xaf\xaf Damned Angel's \xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xa0"\
-	(... 18 linhas ...)
-"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
-"\xa3\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa5"\
-" Score 0     High 0     Eden 1 \0";
-```
-```c
-static const char gameScreen[] = \
-"\xa2\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa4"\
-"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
-	(... 19 linhas ...)
-"\xa0\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa0"\
-"\xa3\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa5"\
-" Score 0     High 0     Eden 1 \0";
-```
-```c
-static const char gameOverMsg[] = \
-"\xa0                              \xa0"\
-"\xa0          Game  Over          \xa0"\
-"\xa0                              \xa0\0";
+static const char tailColors[] = {
+	0x23,
+	0x43,
+	0x53,
+	0x63,
+	0x73,
+	0x93,
+	0xa3,
+	0xc3,
+	0xd3,
+	0xe3,
+};
 ```
 
-3. Compile e rode o programa.
+3. Crie a variável booleana *edenUp* para guardar o estado de mudança de éden e a variável *edenUpFrame*, para armazenar o frame da mudança. Inicialize *edenUp* na função *game()*:
+```c
+bool edenUp;
+
+unsigned char edenUpFrame;
+```
+```c
+	// Initialize game variables
+	edenUp = false;
+```
+
+4. No evento de mudança de éden, ligue a flag edenUp e inicialize a contagem de frames:
+```c
+			if (!(--waitMoves)) {
+				// Next Eden
+				edenUp = true;
+				edenUpFrame = 0;
+```
+
+5. Discussão: O que podemos usar como índice do vetor de cores?
+
+6. **DESAFIO**: Monte a rotina do efeito, trocando o cor a cada frame, conforme as regras do item 1 acima. No último frame, atribua *false* à *edenUp*:
+```c
+	// here we will add animations and sound effects routine 
+	{
+		// Eden Up effect
+		if (edenUp) {
+			if (++edenUpFrame & 1) {
+				// random color
+				Vpoke(COLORTABLE + TILE_SNAKETAIL / 8,
+					(rand() & 0xf0) + 3);
+			} else {
+				// next color
+				Vpoke(COLORTABLE + TILE_SNAKETAIL / 8,
+					tailColors[((eden - 1) % sizeof(tailColors))]);
+			}
+			edenUp = edenUpFrame < 60;
+		}
+```
 
 
 ### 12.3. Cores.
