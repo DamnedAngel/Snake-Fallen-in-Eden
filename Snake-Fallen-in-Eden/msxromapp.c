@@ -19,8 +19,10 @@
 
 bool EoG;
 bool collision;
+bool edenUp;
 
 unsigned char collisionFrame;
+unsigned char edenUpFrame;
 
 unsigned int snakeHeadPos;
 unsigned char direction, lastDirection;
@@ -39,8 +41,6 @@ unsigned int score;
 unsigned int highscore = 0;
 
 unsigned char waitFrames, waitMoves, eden;
-
-unsigned char collisionFrame;
 
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
@@ -167,6 +167,7 @@ void game() {
 	PrintNumber(highscore);
 
 	// Initialize game variables
+	edenUp = false;
 	EoG = false;
 	collision = false;
 	collisionFrame = TILE_HEADXPLOD;
@@ -227,6 +228,9 @@ void game() {
 			// Controls eden progression
 			if (!(--waitMoves)) {
 				// Next Eden
+				edenUp = true;
+				edenUpFrame = 0;
+
 				Locate(29, 23);
 				PrintNumber(++eden);
 				waitFrames--;
@@ -305,7 +309,19 @@ void game() {
 
 		// here we will add animations and sound effects routine 
 		{
-			// Process collision
+			// Eden Up effect
+			if (edenUp) {
+				if (++edenUpFrame & 1) {
+					// random color
+					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8, (rand() & 0xf0) + 3);
+				} else {
+					// next color
+					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8, tailColors[((eden - 1) % sizeof(tailColors))]);
+				}
+				edenUp = edenUpFrame < 60;
+			}
+
+			// Collision animation
 			if (collision && (Peekw(BIOS_JIFFY) >= 6)) {
 				Vpoke(snakeHeadPos, ++collisionFrame);
 				EoG = (collisionFrame == TILE_HEADXPLOD + 7);
