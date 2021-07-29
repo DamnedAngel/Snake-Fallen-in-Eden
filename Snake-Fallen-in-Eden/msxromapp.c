@@ -302,6 +302,7 @@ void game() {
 
 				// Draws head in new position
 				Vpoke(snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
+				PSGwrite(13, 4);
 			}
 
 			// Erases last tail segment
@@ -322,8 +323,6 @@ void game() {
 			snakeHead++;
 			if (snakeHead > &snake[511]) snakeHead = snake;
 			*snakeHead = snakeHeadPos;
-
-			PSGwrite(13, 4);
 
 			lastDirection = direction;		// saves last direction after moving
 			Pokew(BIOS_JIFFY, 0);

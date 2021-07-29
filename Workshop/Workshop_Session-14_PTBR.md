@@ -264,9 +264,10 @@ static const char gameSound[] = {
 	}
 ```
 
-6. No final da movimentação da cobra, reconfigure a envoltória, disparando um novo efeito sonoro:
-
+6. Após desenhar a cabeçca da cobra, econfigure a envoltória, disparando um novo efeito sonoro:
 ```c
+			// Draws head in new position
+			Vpoke(snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
 			PSGwrite(13, 4);
 ```
 
