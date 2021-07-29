@@ -53,7 +53,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ##### Objetivo: Ilustrar a explosão da cabeça, reforçando a colisão (previsão: 30 minutos).
 
-1. Crie a variável booleana *collision* para guardar o estado de colisão a variável *collisionFrame*, para armazenar o frame da animação. Inicialize as duas na função *game()*:
+1. Crie a variável booleana *collision* para guardar o estado de colisão e a variável *collisionFrame*, para armazenar o frame da animação. Inicialize as duas na função *game()*:
 ```c
 bool EoG;
 bool collision;
@@ -273,22 +273,28 @@ static const char gameSound[] = {
 7. Compile e rode o programa.
 
 ### 14.4. O som de comer maçãs.
-###### *Github Ticket/Branch: 52/TKT0052.*
+###### *Github Ticket/Branch: 57/TKT0057.*
 
-##### Objetivo: Alterar as cores do placar (previsão: 10 minutos).
+##### Objetivo: Fornecer informação sonora do evento de comer maçã (previsão: 10 minutos).
 
-1. Refactoring: Renomeie a constante *tileColors* para *tileColors_title*.
-
+1. Crie a variável booleana *appleEaten* e a variável *appleEatenFrame*, para contar os frames do som. Inicialize *appleEaten* na função *game()*:
 ```c
-static const char tileColors_title[] = {
+bool appleEaten;
+
+unsigned char appleEatenFrame;
+```
+```c
+	// Initialize game variables
+	appleEaten = false;
 ```
 
-2. Refactoring: Mova a configuração de cores da função *buildTitles* para a o início da função *title*, ajustando o nome da constante:
-
+2. No evento de comer a maçã, ligue a flag appleEaten e inicialize a contagem de frames:
 ```c
-void title() {
-	// Set colors
-	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
+				if (content == TILE_APPLE) {
+					dropApple();
+
+					appleEaten = true;
+					appleEatenFrame = 16;
 ```
 
 3. Refactoring: Também faça a configuração de cores imediatamente antes de chamar a rotina de exibição de mapas de caracteres, na função *main*:

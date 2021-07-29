@@ -21,9 +21,11 @@
 bool EoG;
 bool collision;
 bool edenUp;
+bool appleEaten;
 
 unsigned char collisionFrame;
 unsigned char edenUpFrame;
+unsigned char appleEatenFrame;
 
 unsigned int snakeHeadPos;
 unsigned char direction, lastDirection;
@@ -185,7 +187,7 @@ void game() {
 	snake[0] = snakeHeadPos - 1;
 	snake[1] = snakeHeadPos;
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+	Vpoke(snakeHeadPos, (unsigned char) (TILE_SNAKEHEAD + 1));
 
 	// initialize difficulty
 	waitFrames = 15;
@@ -274,6 +276,10 @@ void game() {
 			} else {
 				if (content == TILE_APPLE) {
 					dropApple();
+
+					appleEaten = true;
+					appleEatenFrame = 0;
+
 					bonus = (rand() & 7) + 1;
 					growth += bonus;
 					score += bonus;
@@ -317,6 +323,12 @@ void game() {
 
 		// here we will add animations and sound effects routine 
 		{
+			// Apple eaten effect
+			if (appleEaten) {
+				PSGwrite(9, 15 - appleEatenFrame);
+				appleEaten = ++appleEatenFrame < 16;
+			}
+
 			// Eden Up effect
 			if (edenUp) {
 				if (++edenUpFrame & 1) {
