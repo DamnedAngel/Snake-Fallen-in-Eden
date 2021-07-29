@@ -18,6 +18,10 @@
 #define COLORTABLE					0X2000
 
 bool EoG;
+bool collision;
+
+unsigned char collisionFrame;
+
 unsigned int snakeHeadPos;
 unsigned char direction, lastDirection;
 unsigned char joy;
@@ -35,6 +39,8 @@ unsigned int score;
 unsigned int highscore = 0;
 
 unsigned char waitFrames, waitMoves, eden;
+
+unsigned char collisionFrame;
 
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
@@ -161,12 +167,14 @@ void game() {
 	PrintNumber(highscore);
 
 	// Initialize game variables
-	score = 0; 
+	EoG = false;
+	collision = false;
+	collisionFrame = TILE_HEADXPLOD;
+	score = 0;
 	growth = 0;
 	snakeHeadPos = NAMETABLE + 10 * 32 + 11;
 	direction = RIGHT;
 	lastDirection = 0;	// initially, none
-	EoG = false;
 	Pokew(BIOS_JIFFY, 0);
 
 	// initialize snake
@@ -214,10 +222,10 @@ void game() {
 */
 		}
 		// from this point on, 1 pass per frame
-		if (Peekw(BIOS_JIFFY) >= waitFrames) {
+		if ((Peekw(BIOS_JIFFY) >= waitFrames) && (!collision)) {
 
 			// Controls eden progression
-			if (! (--waitMoves)) {
+			if (!(--waitMoves)) {
 				// Next Eden
 				Locate(29, 23);
 				PrintNumber(++eden);
@@ -228,13 +236,13 @@ void game() {
 			// move snake
 			switch (direction) {
 			case UP:
-				snakeHeadPos-=32;
+				snakeHeadPos -= 32;
 				break;
 			case RIGHT:
 				snakeHeadPos++;
 				break;
 			case DOWN:
-				snakeHeadPos+=32;
+				snakeHeadPos += 32;
 				break;
 			case LEFT:
 				snakeHeadPos--;
@@ -243,21 +251,33 @@ void game() {
 
 			content = Vpeek(snakeHeadPos);
 
-			if (content == TILE_APPLE) {
-				dropApple();
-				bonus = (rand() & 7) + 1;
-				growth += bonus;
-				score += bonus;
-				Locate(7, 23);
-				PrintNumber(score);
-				if (score > highscore) {
-					highscore = score;
-					Locate(18, 23);
-					PrintNumber(highscore);
+			collision = (content != TILE_GRASS_EMPTY) && (content != TILE_APPLE);
+			if (collision) {
+				// Collision start
+				if (content < TILE_VINE) {
+					Vpoke(COLORTABLE + 0x12,
+						(tileColors_game[TILE_HEADXPLOD / 8] & 0xf0) |
+						(tileColors_game[TILE_GRASS / 8] & 0x0f));
 				}
-			}
-			else {
-				EoG = (content != TILE_GRASS_EMPTY);
+				Vpoke(snakeHeadPos, TILE_HEADXPLOD);
+				Beep();
+			} else {
+				if (content == TILE_APPLE) {
+					dropApple();
+					bonus = (rand() & 7) + 1;
+					growth += bonus;
+					score += bonus;
+					Locate(7, 23);
+					PrintNumber(score);
+					if (score > highscore) {
+						highscore = score;
+						Locate(18, 23);
+						PrintNumber(highscore);
+					}
+				}
+
+				// Draws head in new position
+				Vpoke(snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
 			}
 
 			// Erases last tail segment
@@ -274,8 +294,7 @@ void game() {
 			// Replaces head with tail segment
 			Vpoke(*snakeHead, TILE_SNAKETAIL);
 
-			// Draws head in new position
-			Vpoke (snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
+			// update buffer
 			snakeHead++;
 			if (snakeHead > &snake[511]) snakeHead = snake;
 			*snakeHead = snakeHeadPos;
@@ -284,19 +303,19 @@ void game() {
 			Pokew(BIOS_JIFFY, 0);
 		}
 
-		// here we will add the sound effects routine
+		// here we will add animations and sound effects routine 
 		{
+			// Process collision
+			if (collision && (Peekw(BIOS_JIFFY) >= 6)) {
+				Vpoke(snakeHeadPos, ++collisionFrame);
+				EoG = (collisionFrame == TILE_HEADXPLOD + 7);
+				Pokew(BIOS_JIFFY, 0);
+			}
 		}
 
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
-	
-	if (content < TILE_VINE) {
-		Vpoke(COLORTABLE + 0x12, (tileColors_game[TILE_HEADXPLOD/8] & 0xf0) | (tileColors_game[TILE_GRASS/8] & 0x0f));
-	}
-	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
-	Beep();
 	Poke(BIOS_JIFFY, 0);
 	while (Peek(BIOS_JIFFY) < 90) {}
 }

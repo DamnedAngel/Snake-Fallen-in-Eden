@@ -49,93 +49,103 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 # Sessão 14: Animação e Sons.
 
 ### 14.1. Animando a explosão da cabeça da cobra.
-###### *Github Ticket/Branch: 49/TKT0049.*
+###### *Github Ticket/Branch: 55/TKT0055.*
 
-##### Objetivo: Retornr ao plano de mapa de caracteres original (previsão: 30 minutos).
+##### Objetivo: Ilustrar a explosão da cabeça, reforçando a colisão (previsão: 30 minutos).
 
-1. Relembrando os problemas do caracter de grama, que travava o jogo na geração da maçã, e a solução temporária adotada.
-
-2. Compile o projeto em modo DEBUG, execute o jogo e observe a posição atual dos tiles de grama no mapa de caracteres, cobrindo os caracteres de espaço, ponto de exclamação e outros.
-
-3. Retorne o código para condição original (com a trava), ajustando o código da constante *TILE_GRASS*:
-
-4. Compile o projeto em modo DEBUG, execute o jogo e observe a nova posição dos tiles de grama no mapa de caracteres, liberando os caracteres de espaço, ponto de exclamação e outros.
-
+1. Crie a variável booleana *collision* para guardar o estado de colisão a variável *collisionFrame*, para armazenar o frame da animação. Inicialize as duas na função *game()*:
 ```c
-#define TILE_GRASS					0xa8
-```
+bool EoG;
+bool collision;
 
-5. Crie a constante TILE_GRASS_EMPTY referenciando o último dos 8 tiles de grama.
-
-```c
-#define TILE_GRASS_EMPTY				0xaf
-```
-
-6. Substitua todos os espaços do jardim nas constantes *titleScreen* e *gameScreen* (arquivo screens.h) pelo código 0xaf. Na *titleScreen*, para evitar a junção da constante hexadecimal *0xaf* com textos que podem iniciar com uma sequência válida de dígitos hexadecimais (**\xafDa**mned Angel, por exemplo), mantenha um espaço comum separando as palavras da grama:*\xaf Damned Angel's \xaf*:
-
-```c
-static const char titleScreen[] = \
-"+------------------------------+"\
-"|\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1|"\
-"|\xaf\xaf Damned Angel's \xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf\xaf|"\
-	(... 18 linhas ...)
-"|\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1|"\
-"+------------------------------+"\
-" Score 0     High 0     Eden 1 \0";
+unsigned char collisionFrame;
 ```
 ```c
-static const char gameScreen[] = \
-"+------------------------------+"\
-"|\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1|"\
-	(... 19 linhas ...)
-"|\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1 ... \xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1\xa1|"\
-"+------------------------------+"\
-" Score 0     High 0     Eden 1 \0";
+	// Initialize game variables
+	EoG = false;
+	collision = false;
+	collisionFrame = TILE_HEADXPLOD;
 ```
 
-7. Compile, rode o programa e note o que houve com as telas do jogo. O que acontece com a jogo? E o que está acontecendo com a cabeça da cobra? Por que não notamos o problema com a cabeça da cobra antes?
-
-8. **DESAFIO**: Corrija o tile da cabeça da cobra:
-
+2. Refactoring: Teste a colisão imediatamente depois da atribuição à variável content:
 ```c
-	// initialize snake
+		EoG = (content != TILE_GRASS_EMPTY) && (content != TILE_APPLE);
+		if (EoG) {
+			// Collision start
+		}
 
-	// ...
-
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+		if (content == TILE_APPLE) {
+			//...
+		}
 ```
 
-9. Compile, rode o programa e verifique se o problema foi corrigido.
-
-10. **DESAFIO**: Corrija o problema do travamento do jogo.
-
+3. Substitua a variável *EoG* pela *collision* na detecção de colisão:
 ```c
-	// initialize snake
-
-	// ...
-
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+		collision = (content != TILE_GRASS_EMPTY) && (content != TILE_APPLE);
+		if (collision) {
+			// Collision start
 ```
 
-11. Compile, rode o programa e verifique se o problema foi corrigido. E agora, o que houve?
-
-12. **DESAFIO**: Corrija o problema encontrado no item 11 acima.
-
+4. Refactoring: Mova os blocos de comer a maçã e do desenho da cabeça da cobra para o *else* do *if* da colisão (pois não queremos executá-los quando a cobra colidir). Mantenha as demais atualizações fora do *else* (ainda queremos executá-las no momento que a cobra colidir):
 ```c
-				EoG = (content != TILE_GRASS_EMPTY);
+		if (collision) {
+			// Collision start
+		} else {
+			if (content == TILE_APPLE) {
+			// ...
+			}
+
+			// Draws head in new position
+			Vpoke(snakeHeadPos,
+				TILE_SNAKEHEAD + (direction - 1) / 2);
+		}
+
+		// Erases last tail segment
+		// ...
+
+		// Replaces head with tail segment
+		Vpoke(*snakeHead, TILE_SNAKETAIL);
+
+		// update buffer
+		snakeHead++;
+		if (snakeHead > &snake[511]) snakeHead = snake;
+		*snakeHead = snakeHeadPos;
 ```
 
-13. Compile, rode o programa e verifique se o problema foi corrigido. E dessa vez, o que houve?
-
-14. **DESAFIO**: Corrija o problema encontrado no item 13 acima.
-
+5. Evite o movimento da cobra quando o jogo entra no estado de colisão, adicionando uma condição na entrada do bloco de movimento:
 ```c
-			// Erases last tail segment
-			if (growth == 0) {
-				Vpoke(*snakeTail, TILE_GRASS_EMPTY);
+		// from this point on, 1 pass per frame
+		if ((Peekw(BIOS_JIFFY) >= waitFrames) && (! collision)) {
 ```
 
-15. Compile, rode o programa e verifique se o problema foi corrigido. E agora, como ficou?
+6. Mova o código de ajuste da cor de fundo da explosão e desenho do tile da explosão do fim da função *game()* para junto da detecção de colisão. Tenha certeza da usar o primeiro tile da sequência de explosão:
+```c
+		if (collision) {
+			// Collision start
+			if (content < TILE_VINE) {
+				Vpoke(COLORTABLE + 0x12,
+					(tileColors_game[TILE_HEADXPLOD / 8] & 0xf0) |
+					(tileColors_game[TILE_GRASS / 8] & 0x0f));
+			}
+			Vpoke(snakeHeadPos, TILE_HEADXPLOD);
+			Beep();
+		} else {
+```
+
+7. Monte a rotina de animação, trocando o tile a cada 6 frames. No último frame, atribua *true* à *EoG*:
+```c
+		// here we will add animations and sound effects routine 
+		{
+			// Process collision
+			if (collision && (Peekw(BIOS_JIFFY) >= 6)) {
+				Vpoke(snakeHeadPos, ++collisionFrame);
+				EoG = (collisionFrame == TILE_HEADXPLOD + 7);
+				Pokew(BIOS_JIFFY, 0);
+			}
+		}
+```
+
+8. Compile e execute o projeto. Teste a colisão com a vinha e com o rabo da cobra.
 
 ### 12.2. A vinha.
 ###### *Github Ticket/Branch: 50/TKT0050.*
