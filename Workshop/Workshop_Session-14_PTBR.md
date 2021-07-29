@@ -221,66 +221,58 @@ unsigned char edenUpFrame;
 ```
 
 
-### 12.3. Cores.
-###### *Github Ticket/Branch: 51/TKT0051.*
+### 14.3. O som do arrastar da cobra.
+###### *Github Ticket/Branch: 56/TKT0056.*
 
-##### Objetivo: Colorir o jogo (previsão: 20 minutos)!
+##### Objetivo: Fornecer informação sonora do movimento da cobra (previsão: 20 minutos).
 
-1. Relembrando da tabela de cores do VDP em modo Screen 1.
+1. Lembrando os registros do PSG:
+http://www.msxtop.msxall.com/Docs/MSXTopSecret2Continuo.pdf
 
-2. Relembrando as cores dos tiles na implementação de referência: 
-![Mapa de Caracteres da Implementação de referência](Workshop_Session-11_PTBR_img1.png "Mapa de Caracteres da Implementação de referência")
 
-3. Crie a constante COLORTABLE:
+2. Definindo a estratégia de sons do jogo.
+- PSG A: Movimento da cobra, envoltória 4.
+- PSG B: comer maçã, volume controlado pelo jogo.
+- PSG C: Level up, volume controlado pelo jogo.
+- PSG A, B e C: Explosão, envoltória 0.
 
+3. Crie o arquivo *sounds.h* e nele crie o vetor constante de inicialização do PSG *gameSound* para o jogo:
 ```c
-#define NAMETABLE			0x1800
-#define PATTERNTABLE			0x0000
-#define COLORTABLE			0X2000
-```
+#pragma once
 
-4. **DESAFIO**: Sem olhar a resposta abaixo, crie, no arquivo tiles.h, o array de constantes *tileColors* com o mapa de cores. Use nossa rotina blockToVRAM para transferir os dados para a tabela de cores na VRAM.
-
-```c
-static const char tileColors[] = {
-	0xc3,			// 0x00 - Graphic Symbols **Unused**
-	0xc3,			// 0x08 - Graphic Symbols **Unused**
-	0xc3,			// 0x10 - Graphic Symbols **Unused**
-	0xc3,			// 0x18 - Graphic Symbols **Unused**
-	0xc3,			// 0x20 - Symbols
-	0xc3,			// 0x28 - Symbols
-	0xc3,			// 0x30 - Numbers
-	0xc3,			// 0x38 - Numbers, Symbols
-	0xc3,			// 0x40 - Uppercase
-	0xc3,			// 0x48 - Uppercase
-	0xc3,			// 0x50 - Uppercase
-	0xc3,			// 0x58 - Uppercase, Symbols
-	0xc3,			// 0x60 - Lowercase
-	0xc3,			// 0x68 - Lowercase
-	0xc3,			// 0x70 - Lowercase
-	0xc3,			// 0x78 - Lowercase, Symbols
-	0xc3,			// 0x80 - Snake Head
-	0x23,			// 0x88 - Snake Body
-	0x80,			// 0x90 - Exploded snake head
-	0x83,			// 0x98 - Apple
-	0xc1,			// 0xa0 - Vine
-	0x23,			// 0xa8 - Grass
-	0xb3,			// 0xb0 - Grass
-	0x00,			// 0xb8 - Graphic Symbols **Unused**
-	0x43,			// 0xc0 - Mini Snake
-	0x43,			// 0xc8 - Mini Snake
-	0x43,			// 0xd0 - Mini Snake
-	0x43,			// 0xd8 - Mini Snake
-	0x43,			// 0xe0 - Mini Snake
-	0x43,			// 0xe8 - Mini Snake
-	0x43,			// 0xf0 - Mini Snake
-	0x43,			// 0xf8 - Mini Snake
+static const char gameSound[] = {
+	0,	0,		// Channel A Freq	none; movement
+	255,	0,		// Channel B Freq	eat apple
+	40,	0,		// Channel C Freq	level up
+	31,			// Noise Freq		(Movement noise)
+	49,			// Mixing		A: noise, B: tone, C: Tone
+	16,	0,	0,	// Channels volume
+	100,	4,		// Envelope freq
 };
 ```
 
-5. Compile e rode o programa.
+4. Inclua o header *sounds.h* no nosso programa principal:
+```c
+#include "sounds.h"
+```
 
-### 12.4. Variação de Cores: Placar com fundo preto.
+5. Inicialize o PSG na função *game()*:
+```c
+	// initialize sound
+	for (unsigned char i = 0; i < sizeof(gameSound); i++) {
+		PSGwrite(i, gameSound[i]);
+	}
+```
+
+6. No final da movimentação da cobra, reconfigure a envoltória, disparando um novo efeito sonoro:
+
+```c
+			PSGwrite(13, 4);
+```
+
+7. Compile e rode o programa.
+
+### 14.4. O som de comer maçãs.
 ###### *Github Ticket/Branch: 52/TKT0052.*
 
 ##### Objetivo: Alterar as cores do placar (previsão: 10 minutos).

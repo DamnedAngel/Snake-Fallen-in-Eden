@@ -54,6 +54,9 @@
     <ClInclude Include="tiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sounds.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MSX\BIOS\msxbios.s">

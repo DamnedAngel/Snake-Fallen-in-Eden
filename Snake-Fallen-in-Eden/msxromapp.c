@@ -12,6 +12,7 @@
 #include "msx_fusion.h"
 #include "screens.h"
 #include "tiles.h"
+#include "sounds.h"
 
 #define NAMETABLE					0x1800
 #define PATTERNTABLE				0x0000
@@ -191,6 +192,11 @@ void game() {
 	waitMoves = 100;
 	eden = 1;
 
+	// initialize sound
+	for (unsigned char i = 0; i < sizeof(gameSound); i++) {
+		PSGwrite(i, gameSound[i]);
+	}
+
 	// Drop first apple
 	dropApple();
 
@@ -302,6 +308,8 @@ void game() {
 			snakeHead++;
 			if (snakeHead > &snake[511]) snakeHead = snake;
 			*snakeHead = snakeHeadPos;
+
+			PSGwrite(13, 4);
 
 			lastDirection = direction;		// saves last direction after moving
 			Pokew(BIOS_JIFFY, 0);
