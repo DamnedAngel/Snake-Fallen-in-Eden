@@ -231,9 +231,9 @@ http://www.msxtop.msxall.com/Docs/MSXTopSecret2Continuo.pdf
 
 
 2. Definindo a estratégia de sons do jogo.
-- PSG A: Movimento da cobra, envoltória 4.
-- PSG B: comer maçã, volume controlado pelo jogo.
-- PSG C: Level up, volume controlado pelo jogo.
+- PSG A: Movimento da cobra, ruído, envoltória 4.
+- PSG B: comer maçã, tom, volume controlado pelo jogo.
+- PSG C: Level up, tom, volume controlado pelo jogo.
 - PSG A, B e C: Explosão, envoltória 0.
 
 3. Crie o arquivo *sounds.h* e nele crie o vetor constante de inicialização do PSG *gameSound* para o jogo:
