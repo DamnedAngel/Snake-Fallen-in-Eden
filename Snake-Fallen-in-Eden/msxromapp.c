@@ -25,6 +25,7 @@ bool appleEaten;
 
 unsigned char collisionFrame;
 unsigned char edenUpFrame;
+unsigned char edenUpSound; 
 unsigned char appleEatenFrame;
 
 unsigned int snakeHeadPos;
@@ -238,6 +239,8 @@ void game() {
 				// Next Eden
 				edenUp = true;
 				edenUpFrame = 0;
+				edenUpSound = 60;
+				PSGwrite(10, 15);
 
 				Locate(29, 23);
 				PrintNumber(++eden);
@@ -332,13 +335,17 @@ void game() {
 			// Eden Up effect
 			if (edenUp) {
 				if (++edenUpFrame & 1) {
-					// random color
+					// random color & sound
+					PSGwrite(4, rand());
 					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8, (rand() & 0xf0) + 3);
 				} else {
-					// next color
+					// next color & effect up sound
+					PSGwrite(4, edenUpSound--);
 					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8, tailColors[((eden - 1) % sizeof(tailColors))]);
 				}
-				edenUp = edenUpFrame < 60;
+				if (!(edenUp = edenUpFrame < 60)) {
+					PSGwrite(10, 0);
+				};
 			}
 
 			// Collision animation
