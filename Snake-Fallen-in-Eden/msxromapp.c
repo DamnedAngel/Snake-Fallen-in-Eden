@@ -275,7 +275,12 @@ void game() {
 						(tileColors_game[TILE_GRASS / 8] & 0x0f));
 				}
 				Vpoke(snakeHeadPos, TILE_HEADXPLOD);
-				Beep();
+
+		
+				for (unsigned char i = 0; i < sizeof(xplodSound); i++) {
+					PSGwrite(i, xplodSound[i]);
+				};
+
 			} else {
 				if (content == TILE_APPLE) {
 					dropApple();
