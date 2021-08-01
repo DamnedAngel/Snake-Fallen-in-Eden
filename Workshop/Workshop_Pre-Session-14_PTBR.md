@@ -165,20 +165,8 @@ unsigned char collisionFrame;
 - Na mudança de eden, o rabo cobra piscará por um segundo, tendo, nos frames pares, a próxima cor que assumirá e nos frames ímpares uma cor aleatória enrte 0 e 15.
 
 2. **DESAFIO**: Sem olhar o código abaixo crie, no arquivo *tiles.h*, um array de cores possíveis para a cobra assumir chamado *tailColors*, excluindo as cores inválidas estabelecidas no item 1 acima.
-
 ```c
-static const char tailColors[] = {
-	0x23,
-	0x43,
-	0x53,
-	0x63,
-	0x73,
-	0x93,
-	0xa3,
-	0xc3,
-	0xd3,
-	0xe3,
-};
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 3. Crie a variável booleana *edenUp* para guardar o estado de mudança de éden e a variável *edenUpFrame*, para armazenar o frame da mudança. Inicialize *edenUp* na função *game()*:
@@ -204,21 +192,7 @@ unsigned char edenUpFrame;
 
 6. **DESAFIO**: Sem olhar o código abaixo, monte a rotina do efeito, trocando o cor a cada frame, conforme as regras do item 1 acima. No último frame, atribua *false* à *edenUp*:
 ```c
-	// here we will add animations and sound effects routine 
-	{
-		// Eden Up effect
-		if (edenUp) {
-			if (++edenUpFrame & 1) {
-				// random color
-				Vpoke(COLORTABLE + TILE_SNAKETAIL / 8,
-					(rand() & 0xf0) + 3);
-			} else {
-				// next color
-				Vpoke(COLORTABLE + TILE_SNAKETAIL / 8,
-				  tailColors[((eden - 1) % sizeof(tailColors))]);
-			}
-			edenUp = edenUpFrame < 60;
-		}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 
@@ -300,15 +274,8 @@ unsigned char appleEatenFrame;
 ```
 
 3. **DESAFIO**: Sem olhar o código abaixo, monte a rotina do efeito, diminuindo o volume do canal a cada frame:
-
 ```c
-		// here we will add animations and sound effects routine 
-		{
-			// Apple eaten effect
-			if (appleEaten) {
-				PSGwrite(9, 15 - appleEatenFrame);
-				appleEaten = ++appleEatenFrame < 16;
-			}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 4. Compile e rode o programa.
@@ -340,25 +307,8 @@ unsigned char edenUpSound;
 ```
 
 3. **DESAFIO**: Sem olhar o código abaixo, altere a rotina do efeito de progressão de éden, produzindo os tons conforme regras definidas no item 1 acima:
-
 ```c
-		// Eden Up effect
-		if (edenUp) {
-			if (++edenUpFrame & 1) {
-				// random color & sound
-				PSGwrite(4, rand());
-				Vpoke(COLORTABLE + TILE_SNAKETAIL / 8,
-					(rand() & 0xf0) + 3);
-			} else {
-				// next color & effect up sound
-				PSGwrite(4, edenUpSound--);
-				Vpoke(COLORTABLE + TILE_SNAKETAIL / 8
-					tailColors[((eden - 1) % sizeof(tailColors))]);
-			}
-			if (!(edenUp = edenUpFrame < 60)) {
-				PSGwrite(10, 0);
-			};
-		}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 4. Compile e rode o programa.
@@ -386,9 +336,7 @@ static const char xplodSound[] = {
 
 2. **DESAFIO**: Sem olhar o código abaixo, insira bloco de código para executar o som de explosão da cabeça:
 ```c
-			for (unsigned char i = 0; i < sizeof(xplodSound); i++) {
-				PSGwrite(i, xplodSound[i]);
-			};
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 3. Compile e rode o programa.
