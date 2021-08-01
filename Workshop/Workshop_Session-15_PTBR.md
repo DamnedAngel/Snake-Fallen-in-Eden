@@ -3,7 +3,7 @@
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 14: XXX
+Vídeo da sessão 15: XXX
 
 Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
 
@@ -219,11 +219,10 @@ static const char xplodSound[] = {
 
 3. Compile e rode o programa.
 
-### 15.5. Finalização da Sessão 14
+### 15.5. Finalização da Sessão 15
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-* Animação
 * Sons
 * Estado do jogo
 * Dinâmica geral do workshop: feedbacks e ideias.
