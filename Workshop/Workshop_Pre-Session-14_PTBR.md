@@ -1,5 +1,5 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 14: Animação e Sons.
+# Sessão 14: Animações e efeitos visuais.
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
@@ -46,7 +46,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ---
 
-# Sessão 14: Animação e Sons.
+# Sessão 14: Animações e efeitos visuais.
 
 ### 14.1. Animando a explosão da cabeça da cobra.
 ###### *Github Ticket/Branch: 55/TKT0055.*
@@ -72,10 +72,10 @@ unsigned char collisionFrame;
 		EoG = (content != TILE_GRASS_EMPTY) && (content != TILE_APPLE);
 		if (EoG) {
 			// Collision start
-		}
-
-		if (content == TILE_APPLE) {
-			//...
+		} else {
+			if (content == TILE_APPLE) {
+				//...
+			}
 		}
 ```
 
@@ -93,12 +93,12 @@ unsigned char collisionFrame;
 			// Collision start
 		} else {
 			if (content == TILE_APPLE) {
-			// ...
+				// ...
 			}
 
 			// Draws head in new position
 			Vpoke(snakeHeadPos,
-				TILE_SNAKEHEAD + (direction - 1) / 2);
+			TILE_SNAKEHEAD + (direction - 1) / 2);
 		}
 
 		// Erases last tail segment
@@ -156,7 +156,7 @@ unsigned char collisionFrame;
 1. Regras para identificação visual de édens e transições.
 - Em cada éden o rabo da cobra terá cor diferente dos édens anteriores, usando ordenadamente as cores do MSX1, até essas se esgotarem. Nesse ponto, o ciclo recomeçará.  
 - Algumas cores não deverão ser utilizadas, para evitar baixo contraste com outros elementos do jogo, e pra evitar contraste excessivo, a saber:
-	- 0: cor da borda (preto, contraste excessivo);
+    - 0: cor da borda (preto, contraste excessivo);
     - 1: preto (contraste excessivo);
     - 3: verde claro (grama);
     - 8: vermelho (maçã);
@@ -195,158 +195,12 @@ unsigned char edenUpFrame;
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
-
-### 14.3. O som do arrastar da cobra.
-###### *Github Ticket/Branch: 56/TKT0056.*
-
-##### Objetivo: Fornecer informação sonora do movimento da cobra (previsão: 20 minutos).
-
-1. Lembrando os registros do PSG:
-http://www.msxtop.msxall.com/Docs/MSXTopSecret2Continuo.pdf
-
-
-2. Definindo a estratégia de sons do jogo.
-- PSG A: Movimento da cobra, ruído, envoltória 4.
-- PSG B: comer maçã, tom, volume controlado pelo jogo.
-- PSG C: Level up, tom, volume controlado pelo jogo.
-- PSG A, B e C: Explosão, envoltória 0.
-
-3. Crie o arquivo *sounds.h* e nele crie o vetor constante de inicialização do PSG *gameSound* para o jogo:
-```c
-#pragma once
-
-static const char gameSound[] = {
-	0,	0,		// Channel A Freq	none; movement
-	255,	0,		// Channel B Freq	eat apple
-	40,	0,		// Channel C Freq	level up
-	31,			// Noise Freq		(Movement noise)
-	49,			// Mixing		A: noise, B: tone, C: Tone
-	16,	0,	0,	// Channels volume
-	100,	4,		// Envelope freq
-};
-```
-
-4. Inclua o header *sounds.h* no nosso programa principal:
-```c
-#include "sounds.h"
-```
-
-5. Inicialize o PSG na função *game()*:
-```c
-	// initialize sound
-	for (unsigned char i = 0; i < sizeof(gameSound); i++) {
-		PSGwrite(i, gameSound[i]);
-	}
-```
-
-6. Após desenhar a cabeçca da cobra, econfigure a envoltória, disparando um novo efeito sonoro:
-```c
-			// Draws head in new position
-			Vpoke(snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
-			PSGwrite(13, 4);
-```
-
-7. Compile e rode o programa.
-
-### 14.4. O som de comer maçãs.
-###### *Github Ticket/Branch: 57/TKT0057.*
-
-##### Objetivo: Fornecer informação sonora do evento de comer maçã (previsão: 10 minutos).
-
-1. Crie a variável booleana *appleEaten* e a variável *appleEatenFrame*, para contar os frames do som. Inicialize *appleEaten* na função *game()*:
-```c
-bool appleEaten;
-
-unsigned char appleEatenFrame;
-```
-```c
-	// Initialize game variables
-	appleEaten = false;
-```
-
-2. No evento de comer a maçã, ligue a flag appleEaten e inicialize a contagem de frames:
-```c
-				if (content == TILE_APPLE) {
-					dropApple();
-
-					appleEaten = true;
-					appleEatenFrame = 16;
-```
-
-3. **DESAFIO**: Sem olhar o código abaixo, monte a rotina do efeito, diminuindo o volume do canal a cada frame:
-```c
-*** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
-
-4. Compile e rode o programa.
-
-### 14.5. O som da progressão de édens.
-###### *Github Ticket/Branch: 58/TKT0058.*
-
-##### Objetivo: Fornecer informação sonora do evento de mudança de éden (previsão: 10 minutos).
-
-1. Definindo regras do efeito sonoro de transição de éden.
-- Na mudança de eden, um efeito sonoro de um segundo sera emitido, alternando tons entre frames pares e frames ímpares:
-	- No frame ímpar, um valor aleatório entre 0 e 255 será colocado no registro 4 do PSG.
-	- No frame par, um valor decrescente de 60 a 30 será colocado no registro 4 do PSG.
-
-2. Crie a variável *edenUpSound* para armazenar o valor a ser colocado no rigistro 4 do PSG:
-```c
-unsigned char edenUpSound;
-```
-
-3. No evento de mudança de nível, inicialize a variável *edenUpSound*, e ajuste o volume do canal C para o máximo:
-```c
-			// Controls eden progression
-			if (!(--waitMoves)) {
-				// Next Eden
-				edenUp = true;
-				edenUpFrame = 0;
-				edenUpSound = 60;
-				PSGwrite(10, 15);
-```
-
-3. **DESAFIO**: Sem olhar o código abaixo, altere a rotina do efeito de progressão de éden, produzindo os tons conforme regras definidas no item 1 acima:
-```c
-*** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
-
-4. Compile e rode o programa.
-
-5. Experimente os efeitos sonoros habilitanto apenas os ajustes dos registros em frames pares e ímpares isoladamente.
-
-### 14.6. O som da explosão da cabeça da cobra.
-###### *Github Ticket/Branch: 34/TKT0034.*
-
-##### Objetivo: Fornecer informação sonora da colisão da cobra.
-
-1. insira no arquivo *sounds.h* o vetor constante *xplodSound* com configuração do PSG para som da explosão da cabeça da cobra:
-```c
-static const char xplodSound[] = {
-	255,	31,				// Channel A Freq		
-	100,	20,				// Channel B Freq		
-	255,	1,				// Channel C Freq		
-	31,					// Noise Freq			
-	128,					// Mixing				
-	16,	16,	16,			// Channels volume
-	10,	20,				// Envelope freq
-	0					// Envelope
-};
-```
-
-2. **DESAFIO**: Sem olhar o código abaixo, insira bloco de código para executar o som de explosão da cabeça:
-```c
-*** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
-
-3. Compile e rode o programa.
-
-### 14.6. Finalização da Sessão 14
+### 14.3. Finalização da Sessão 14
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-* Animação
-* Sons
+* Animações
+* Efeitos visuais
 * Estado do jogo
 * Dinâmica geral do workshop: feedbacks e ideias.
 
