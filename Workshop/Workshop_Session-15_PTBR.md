@@ -54,7 +54,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ##### Objetivo: Fornecer informação sonora do movimento da cobra (previsão: 20 minutos).
 
 1. Lembrando os registros do PSG:
-http://www.msxtop.msxall.com/Docs/MSXTopSecret2Continuo.pdf
+http://www.msxtop.msxall.com/Portugues/Projeto_msx_top_secret.htm
 
 
 2. Definindo a estratégia de sons do jogo.
@@ -130,10 +130,10 @@ unsigned char appleEatenFrame;
 ```c
 		// here we will add animations and sound effects routine 
 		{
-			// Apple eaten effect
+			// Apple eaten sound effect
 			if (appleEaten) {
-				PSGwrite(9, 15 - appleEatenFrame);
-				appleEaten = ++appleEatenFrame < 16;
+				PSGwrite(9, --appleEatenFrame);
+				appleEaten = appleEatenFrame > 0;
 			}
 ```
 
@@ -145,11 +145,11 @@ unsigned char appleEatenFrame;
 ##### Objetivo: Fornecer informação sonora do evento de mudança de éden (previsão: 10 minutos).
 
 1. Definindo regras do efeito sonoro de transição de éden.
-- Na mudança de eden, um efeito sonoro de um segundo sera emitido, alternando tons entre frames pares e frames ímpares:
+- Na mudança de éden, um efeito sonoro de um segundo sera emitido, alternando tons entre frames pares e frames ímpares:
 	- No frame ímpar, um valor aleatório entre 0 e 255 será colocado no registro 4 do PSG.
 	- No frame par, um valor decrescente de 60 a 30 será colocado no registro 4 do PSG.
 
-2. Crie a variável *edenUpSound* para armazenar o valor a ser colocado no rigistro 4 do PSG:
+2. Crie a variável *edenUpSound* para armazenar o valor a ser colocado no registro 4 do PSG:
 ```c
 unsigned char edenUpSound;
 ```
@@ -196,7 +196,7 @@ unsigned char edenUpSound;
 
 ##### Objetivo: Fornecer informação sonora da colisão da cobra.
 
-1. insira no arquivo *sounds.h* o vetor constante *xplodSound* com configuração do PSG para som da explosão da cabeça da cobra:
+1. Insira no arquivo *sounds.h* o vetor constante *xplodSound* com configuração do PSG para som da explosão da cabeça da cobra:
 ```c
 static const char xplodSound[] = {
 	255,	31,				// Channel A Freq		
