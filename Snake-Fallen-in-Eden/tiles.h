@@ -78,6 +78,19 @@ static const char tileColors_game[] = {
 	0x43,			// 0xf8 - Mini Snake
 };
 
+static const char tailColors[] = {
+	0x23,
+	0x43,
+	0x53,
+	0x63,
+	0x73,
+	0x93,
+	0xa3,
+	0xc3,
+	0xd3,
+	0xe3,
+};
+
 static const char tiles_apple[] = {
 	// 1 tile
 	0b00101100,

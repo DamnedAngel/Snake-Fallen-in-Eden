@@ -12,12 +12,22 @@
 #include "msx_fusion.h"
 #include "screens.h"
 #include "tiles.h"
+#include "sounds.h"
 
 #define NAMETABLE					0x1800
 #define PATTERNTABLE				0x0000
 #define COLORTABLE					0X2000
 
 bool EoG;
+bool collision;
+bool edenUp;
+bool appleEaten;
+
+unsigned char collisionFrame;
+unsigned char edenUpFrame;
+unsigned char edenUpSound; 
+unsigned char appleEatenFrame;
+
 unsigned int snakeHeadPos;
 unsigned char direction, lastDirection;
 unsigned char joy;
@@ -161,12 +171,15 @@ void game() {
 	PrintNumber(highscore);
 
 	// Initialize game variables
-	score = 0; 
+	edenUp = false;
+	EoG = false;
+	collision = false;
+	collisionFrame = TILE_HEADXPLOD;
+	score = 0;
 	growth = 0;
 	snakeHeadPos = NAMETABLE + 10 * 32 + 11;
 	direction = RIGHT;
 	lastDirection = 0;	// initially, none
-	EoG = false;
 	Pokew(BIOS_JIFFY, 0);
 
 	// initialize snake
@@ -175,12 +188,17 @@ void game() {
 	snake[0] = snakeHeadPos - 1;
 	snake[1] = snakeHeadPos;
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+	Vpoke(snakeHeadPos, (unsigned char) (TILE_SNAKEHEAD + 1));
 
 	// initialize difficulty
 	waitFrames = 15;
 	waitMoves = 100;
 	eden = 1;
+
+	// initialize sound
+	for (unsigned char i = 0; i < sizeof(gameSound); i++) {
+		PSGwrite(i, gameSound[i]);
+	}
 
 	// Drop first apple
 	dropApple();
@@ -214,11 +232,16 @@ void game() {
 */
 		}
 		// from this point on, 1 pass per frame
-		if (Peekw(BIOS_JIFFY) >= waitFrames) {
+		if ((Peekw(BIOS_JIFFY) >= waitFrames) && (!collision)) {
 
 			// Controls eden progression
-			if (! (--waitMoves)) {
+			if (!(--waitMoves)) {
 				// Next Eden
+				edenUp = true;
+				edenUpFrame = 0;
+				edenUpSound = 60;
+				PSGwrite(10, 15);
+
 				Locate(29, 23);
 				PrintNumber(++eden);
 				waitFrames--;
@@ -228,13 +251,13 @@ void game() {
 			// move snake
 			switch (direction) {
 			case UP:
-				snakeHeadPos-=32;
+				snakeHeadPos -= 32;
 				break;
 			case RIGHT:
 				snakeHeadPos++;
 				break;
 			case DOWN:
-				snakeHeadPos+=32;
+				snakeHeadPos += 32;
 				break;
 			case LEFT:
 				snakeHeadPos--;
@@ -243,21 +266,43 @@ void game() {
 
 			content = Vpeek(snakeHeadPos);
 
-			if (content == TILE_APPLE) {
-				dropApple();
-				bonus = (rand() & 7) + 1;
-				growth += bonus;
-				score += bonus;
-				Locate(7, 23);
-				PrintNumber(score);
-				if (score > highscore) {
-					highscore = score;
-					Locate(18, 23);
-					PrintNumber(highscore);
+			collision = (content != TILE_GRASS_EMPTY) && (content != TILE_APPLE);
+			if (collision) {
+				// Collision start
+				if (content < TILE_VINE) {
+					Vpoke(COLORTABLE + 0x12,
+						(tileColors_game[TILE_HEADXPLOD / 8] & 0xf0) |
+						(tileColors_game[TILE_GRASS / 8] & 0x0f));
 				}
-			}
-			else {
-				EoG = (content != TILE_GRASS_EMPTY);
+				Vpoke(snakeHeadPos, TILE_HEADXPLOD);
+
+		
+				for (unsigned char i = 0; i < sizeof(xplodSound); i++) {
+					PSGwrite(i, xplodSound[i]);
+				};
+
+			} else {
+				if (content == TILE_APPLE) {
+					dropApple();
+
+					appleEaten = true;
+					appleEatenFrame = 0;
+
+					bonus = (rand() & 7) + 1;
+					growth += bonus;
+					score += bonus;
+					Locate(7, 23);
+					PrintNumber(score);
+					if (score > highscore) {
+						highscore = score;
+						Locate(18, 23);
+						PrintNumber(highscore);
+					}
+				}
+
+				// Draws head in new position
+				Vpoke(snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
+				PSGwrite(13, 4);
 			}
 
 			// Erases last tail segment
@@ -274,8 +319,7 @@ void game() {
 			// Replaces head with tail segment
 			Vpoke(*snakeHead, TILE_SNAKETAIL);
 
-			// Draws head in new position
-			Vpoke (snakeHeadPos, TILE_SNAKEHEAD + (direction - 1) / 2);
+			// update buffer
 			snakeHead++;
 			if (snakeHead > &snake[511]) snakeHead = snake;
 			*snakeHead = snakeHeadPos;
@@ -284,19 +328,41 @@ void game() {
 			Pokew(BIOS_JIFFY, 0);
 		}
 
-		// here we will add the sound effects routine
+		// here we will add animations and sound effects routine 
 		{
+			// Apple eaten effect
+			if (appleEaten) {
+				PSGwrite(9, 15 - appleEatenFrame);
+				appleEaten = ++appleEatenFrame < 16;
+			}
+
+			// Eden Up effect
+			if (edenUp) {
+				if (++edenUpFrame & 1) {
+					// random color & sound
+					PSGwrite(4, rand());
+					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8, (rand() & 0xf0) + 3);
+				} else {
+					// next color & effect up sound
+					PSGwrite(4, edenUpSound--);
+					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8, tailColors[((eden - 1) % sizeof(tailColors))]);
+				}
+				if (!(edenUp = edenUpFrame < 60)) {
+					PSGwrite(10, 0);
+				};
+			}
+
+			// Collision animation
+			if (collision && (Peekw(BIOS_JIFFY) >= 6)) {
+				Vpoke(snakeHeadPos, ++collisionFrame);
+				EoG = (collisionFrame == TILE_HEADXPLOD + 7);
+				Pokew(BIOS_JIFFY, 0);
+			}
 		}
 
 		lastJiffy = Peekw(BIOS_JIFFY);
 	}
 
-	
-	if (content < TILE_VINE) {
-		Vpoke(COLORTABLE + 0x12, (tileColors_game[TILE_HEADXPLOD/8] & 0xf0) | (tileColors_game[TILE_GRASS/8] & 0x0f));
-	}
-	Vpoke(snakeHeadPos, TILE_HEADXPLOD + 3);
-	Beep();
 	Poke(BIOS_JIFFY, 0);
 	while (Peek(BIOS_JIFFY) < 90) {}
 }

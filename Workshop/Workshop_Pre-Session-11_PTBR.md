@@ -3,7 +3,7 @@
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 11: XXX
+Vídeo da sessão 11: https://youtu.be/neETp73sswk
 
 Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
 
@@ -38,7 +38,7 @@ VS: Visual Studio 2019
 Esse documento é dividido em sessões de workshop, e as sessões são divididas em tópicos de estudo.
 
 Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3 formatos:
-* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em XXX)
+* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em https://youtu.be/neETp73sswk)
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
@@ -64,7 +64,6 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 2. Compile o projeto tanto em modo DEBUG quanto em modo RELEASE e garanta que ambos os perfis estão funcionando, testando o executável gerado no emulador.
 
 3. **DESAFIO**: Sem olhar a resposta abaixo e com base na discussão sobre diretivas de compilação, implemente a função *charMap()* que mostra um mapa com os 256 caracteres (tiles/padrões) da screen 1 e a chame da função *main()* após a inicialização de vídeo. Tanto a função quanto a chamada a ela só deverão ser inclusas no executável quando o projeto for compilado em modo DEBUG.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -90,12 +89,12 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 4. Se você usa Visual Studio, adicione-o arquivo ao projeto, sob o filtro *Header Files*.
 
 5. Embora não corramos o risco no nosso projeto, como boa prática, garanta que o arquivo não incorrerá em definições duplicadas caso seja referenciado por múltiplos arquivos fonte do projeto, inserindo na primeira linha:
+
 ```c
 #pragma once
 ```
 
 6. **DESAFIO**: Sem olhar a resposta abaixo, referencie o arquivo tiles.h no arquivo principal do nosso programa msxromapp.c.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -120,22 +119,19 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ```
 
 10. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *blockToVRAM(VRAMAddr, RAMAddr, blockLength)* para tranferir um bloco de dados da RAM para a VRAM.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
-``` 
+```
 
 11. **DESAFIO**: Sem olhar a resposta abaixo, crie a função *buildTiles()* e insira nela uma linha para montar o tile da maçã na VRAM usando a função *blockToVRAM*.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 12. **DESAFIO**: Chame a função *buildTiles()* a partir da função *main()*, após inicializar o modo de vídeo, mas antes da chamada à função *charMap()*.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
-``` 
+```
 
 13. Compile e rode o programa. A maçã apareceu no mapa de caracteres? E no jogo?
 
@@ -145,7 +141,6 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ##### Objetivo: Montar os demais tiles do jogo (previsão: 15 minutos).
 
 1. **DESAFIO**: Sem olhar a resposta abaixo, repita os passos 9 e 11 para cada grupo de tiles definido no arquivo tiles.h.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -166,7 +161,6 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ##### Objetivo: Fazer a cobra olhar sempre para frente (previsão: 5 minutos).
 
 1. **DESAFIO**: Sem olhar a resposta abaixo, selecione o tile correto da cabeça da cobra, em função da direção, em cada movimento.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -179,7 +173,6 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ##### Objetivo: Mostrar um tile de explosão da cabeça no evento da colisão (previsão: 5 minutos).
 
 1. **DESAFIO**: Sem olhar a resposta abaixo, selecione um dos tiles da animação de explosão da cabeça quando acontecer uma colisão.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
