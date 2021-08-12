@@ -58,21 +58,18 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 2. Compile o projeto em modo DEBUG, execute o jogo e observe a posição atual dos tiles de grama no mapa de caracteres, cobrindo os caracteres de espaço, ponto de exclamação e outros.
 
 3. Retorne o código para condição original (com a trava), ajustando o código da constante *TILE_GRASS*:
-
-4. Compile o projeto em modo DEBUG, execute o jogo e observe a nova posição dos tiles de grama no mapa de caracteres, liberando os caracteres de espaço, ponto de exclamação e outros.
-
 ```c
 #define TILE_GRASS					0xa8
 ```
 
-5. Crie a constante TILE_GRASS_EMPTY referenciando o último dos 8 tiles de grama.
+4. Compile o projeto em modo DEBUG, execute o jogo e observe a nova posição dos tiles de grama no mapa de caracteres, liberando os caracteres de espaço, ponto de exclamação e outros.
 
+5. Crie a constante TILE_GRASS_EMPTY referenciando o último dos 8 tiles de grama.
 ```c
 #define TILE_GRASS_EMPTY				0xaf
 ```
 
 6. Substitua todos os espaços do jardim nas constantes *titleScreen* e *gameScreen* (arquivo screens.h) pelo código 0xaf. Na *titleScreen*, para evitar a junção da constante hexadecimal *0xaf* com textos que podem iniciar com uma sequência válida de dígitos hexadecimais (**\xafDa**mned Angel, por exemplo), mantenha um espaço comum separando as palavras da grama:*\xaf Damned Angel's \xaf*:
-
 ```c
 static const char titleScreen[] = \
 "+------------------------------+"\
@@ -96,7 +93,6 @@ static const char gameScreen[] = \
 7. Compile, rode o programa e note o que houve com as telas do jogo. O que acontece com a jogo? E o que está acontecendo com a cabeça da cobra? Por que não notamos o problema com a cabeça da cobra antes?
 
 8. **DESAFIO**: Corrija o tile da cabeça da cobra:
-
 ```c
 	// initialize snake
 
