@@ -97,6 +97,7 @@
     <ClInclude Include="MSX\BIOS\msxbios.h" />
     <ClInclude Include="screens.h" />
     <ClInclude Include="sounds.h" />
+    <ClInclude Include="sprites.h" />
     <ClInclude Include="targetconfig.h" />
     <ClInclude Include="tiles.h" />
   </ItemGroup>

@@ -83,11 +83,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 7. **DESAFIO**: Crie diretivas constantes para referência às tabelas de padrões e atributos de sprites do VDP, de forma similar às de referência às tabelas de nomes, padrões e cores.
 ```c
-#define NAMETABLE		0x1800
-#define PATTERNTABLE		0x0000
-#define COLORTABLE		0x2000
-#define SPRITEPATTERNTABLE	0x3800
-#define SPRITEATTRIBUTETABLE	0x1b00
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 8. Definindo o comportamento do indicador de bônus por comer a maçã:
@@ -118,67 +114,20 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 12. **DESAFIO**: Sem olhar o código abaixo e com base em tudo o que você aprendeu nos itens acima, crie a função *buildSprites()* para configurar a tabela de padrão de sprites.
 ```c
-void buildSprites() {
-	SpriteReset();
-	Sprite8();
-	SpriteSmall();
-
-	// Alternative 1: Fusion-C Style
-	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	}
-}
-```
-```c
-	buildFont();
-	buildTiles();
-	buildSprites();
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 12. **DESAFIO**: Mostre o bônus quando uma maçã é comida, fazendo a animação conforme definido no item 7 acima.
 ```c
-unsigned char appleEatenFrame;
-unsigned char appleEatenBonusX;
-unsigned char appleEatenBonusY;
-``` 
-```c
-	appleEaten = true;
-	appleEatenFrame = 0;
-	appleEatenBonusX = 8 * (snakeHeadPos % 32);
-	appleEatenBonusY = 8 * (snakeHeadPos / 32) - 4;
-``` 
-```c
-	// Apple eaten effect
-	if (appleEaten) {
-		if (appleEatenFrame < 16) 
-			PSGwrite(9, 15 - appleEatenFrame);
-		if (!(appleEatenFrame & 3)) {
-			PutSprite(0, bonus, appleEatenBonusX, appleEatenBonusY--, 4);
-		}
-		if(!(appleEaten = ++appleEatenFrame < 90)) {
-			PutSprite(0, 0, 0, 192, 0);
-		}
-	}
-``` 
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
+```
 
 13. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
 
 14. **DESAFIO**: Adicione o sprite do Bevel por baixo do sprite do bonus. Utilize os defines/constantes de cores nos *PutSprite()*.
 ```c
-	// Apple eaten effect
-	if (appleEaten) {
-		if (appleEatenFrame < 16) 
-			PSGwrite(9, 15 - appleEatenFrame);
-		if (!(appleEatenFrame & 3)) {
-			PutSprite(0, bonus, appleEatenBonusX, --appleEatenBonusY, BONUS_COLOR);
-			PutSprite(1, 9, appleEatenBonusX, appleEatenBonusY, BONUSBEVEL_COLOR);
-		}
-		if(!(appleEaten = ++appleEatenFrame < 90)) {
-			PutSprite(0, 0, 0, 192, 0);
-			PutSprite(1, 0, 0, 192, 0);
-		}
-	}
-``` 
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
+```
 
 15. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito. Teste cores diferentes.
 
@@ -186,16 +135,12 @@ unsigned char appleEatenBonusY;
 
 17. **DESAFIO**: Corrija o problema identificado.
 ```c
-		<mova a collision animation para
-		antes do efeito de comer maçã>
-``` 
-```c
-		if(!(appleEaten = (++appleEatenFrame < 90) & (!EoG))) {
-``` 
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
+```
 
 18. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
 
-19. Compile e execute o jogo no Hotbit. O que houve? Você Reconhece os desenhos?
+19. Compile e execute o jogo no Hotbit. O que houve? Você reconhece os desenhos?
 
 20. Explorando o problema de escrita no registro 14 do VDP.
 - Endereçamento da VRAM.
@@ -213,26 +158,12 @@ void buildSprites() {
 	}
 ```
 
-22. Compile e execute o jogo em no Hotbit. Discuta os resultados.
+22. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema?
 
 23. **DESAFIO**: Implemente *BuildSprites()* com uma única chamada à *SetSpritePattern()*:
 ```c
-void buildSprites() {
-	SpriteReset();
-	Sprite8();
-	SpriteSmall();
-
-	/*
-	// Alternative 1: Fusion-C Style
-	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	}
-	*/
-
-	// Alternative 2
-	SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
-}
-``` 
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
+```
 
 24. Compile e execute o jogo no Turbo-R. O que houve?
 
@@ -244,25 +175,7 @@ void buildSprites() {
 
 27. **DESAFIO**: Corrija o problema encontrado, Implementando *BuildSprites()* com *blockToRAM()*:
 ```c
-void buildSprites() {
-	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
-	SpriteReset();
-	Sprite8();
-	SpriteSmall();
-
-	*/
-	// Alternative 1: BASIC Style
-	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	}
-	*/
-
-	// Alternative 2
-	//SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
-
-	// Alternative 3
-	blockToVRAM(SPRITEPATTERNTABLE, sprite_patterns, sizeof(sprite_patterns));
-}
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
 ### 16.5. Finalização da Sessão 15
