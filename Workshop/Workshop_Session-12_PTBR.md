@@ -95,7 +95,7 @@ static const char gameScreen[] = \
 
 7. Compile, rode o programa e note o que houve com as telas do jogo. O que acontece com a jogo? E o que está acontecendo com a cabeça da cobra? Por que não notamos o problema com a cabeça da cobra antes?
 
-8. **DESAFIO**: Corrija o tile da cabeça da cobra:
+8. **DESAFIO**: Sem olhar na resposta abaixo, corrija o tile da cabeça da cobra:
 
 ```c
 	// initialize snake
@@ -107,14 +107,13 @@ static const char gameScreen[] = \
 
 9. Compile, rode o programa e verifique se o problema foi corrigido.
 
-10. **DESAFIO**: Corrija o problema do travamento do jogo.
+10. **DESAFIO**: Sem olhar na resposta abaixo, corrija o problema do travamento do jogo.
 
 ```c
-	// initialize snake
-
-	// ...
-
-	Vpoke(snakeHeadPos, TILE_SNAKEHEAD + 1);
+void dropApple() {
+	do {
+		applePos = NAMETABLE + 32 + rand() % (21 * 32);
+	} while (Vpeek(applePos) != TILE_GRASS_EMPTY);
 ```
 
 11. Compile, rode o programa e verifique se o problema foi corrigido. E agora, o que houve?
