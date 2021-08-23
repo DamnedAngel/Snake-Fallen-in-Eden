@@ -51,7 +51,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ### 12.1. Consertando o intervalo de código de caracteres usados para os tiles da grama.
 ###### *Github Ticket/Branch: 49/TKT0049.*
 
-##### Objetivo: Retornr ao plano de mapa de caracteres original (previsão: 30 minutos).
+##### Objetivo: Retornar ao plano de mapa de caracteres original (previsão: 30 minutos).
 
 1. Relembrando os problemas do caracter de grama, que travava o jogo na geração da maçã, e a solução temporária adotada.
 
