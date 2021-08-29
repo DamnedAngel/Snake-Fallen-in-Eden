@@ -1,5 +1,5 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 12: Gráficos, parte 2!
+# Sessão 12: Mais tiles... e cores!
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
@@ -46,7 +46,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ---
 
-# Sessão 12: Gráficos, parte 2!
+# Sessão 12: Mais tiles... e cores!
 
 ### 12.1. Consertando o intervalo de código de caracteres usados para os tiles da grama.
 ###### *Github Ticket/Branch: 49/TKT0049.*
@@ -58,21 +58,18 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 2. Compile o projeto em modo DEBUG, execute o jogo e observe a posição atual dos tiles de grama no mapa de caracteres, cobrindo os caracteres de espaço, ponto de exclamação e outros.
 
 3. Retorne o código para condição original (com a trava), ajustando o código da constante *TILE_GRASS*:
-
-4. Compile o projeto em modo DEBUG, execute o jogo e observe a nova posição dos tiles de grama no mapa de caracteres, liberando os caracteres de espaço, ponto de exclamação e outros.
-
 ```c
 #define TILE_GRASS					0xa8
 ```
 
-5. Crie a constante TILE_GRASS_EMPTY referenciando o último dos 8 tiles de grama.
+4. Compile o projeto em modo DEBUG, execute o jogo e observe a nova posição dos tiles de grama no mapa de caracteres, liberando os caracteres de espaço, ponto de exclamação e outros.
 
+5. Crie a constante TILE_GRASS_EMPTY referenciando o último dos 8 tiles de grama.
 ```c
 #define TILE_GRASS_EMPTY				0xaf
 ```
 
 6. Substitua todos os espaços do jardim nas constantes *titleScreen* e *gameScreen* (arquivo screens.h) pelo código 0xaf. Na *titleScreen*, para evitar a junção da constante hexadecimal *0xaf* com textos que podem iniciar com uma sequência válida de dígitos hexadecimais (**\xafDa**mned Angel, por exemplo), mantenha um espaço comum separando as palavras da grama:*\xaf Damned Angel's \xaf*:
-
 ```c
 static const char titleScreen[] = \
 "+------------------------------+"\
@@ -96,15 +93,14 @@ static const char gameScreen[] = \
 7. Compile, rode o programa e note o que houve com as telas do jogo. O que acontece com a jogo? E o que está acontecendo com a cabeça da cobra? Por que não notamos o problema com a cabeça da cobra antes?
 
 8. **DESAFIO**: Corrija o tile da cabeça da cobra:
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
 
+
 9. Compile, rode o programa e verifique se o problema foi corrigido.
 
 10. **DESAFIO**: Corrija o problema do travamento do jogo.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -112,7 +108,6 @@ static const char gameScreen[] = \
 11. Compile, rode o programa e verifique se o problema foi corrigido. E agora, o que houve?
 
 12. **DESAFIO**: Corrija o problema encontrado no item 11 acima.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -120,7 +115,6 @@ static const char gameScreen[] = \
 13. Compile, rode o programa e verifique se o problema foi corrigido. E dessa vez, o que houve?
 
 14. **DESAFIO**: Corrija o problema encontrado no item 13 acima.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -135,7 +129,6 @@ static const char gameScreen[] = \
 1. Identifique o código hexadecimal de cada um dos 6 tiles da vinha.
 
 2. **DESAFIO**: Usando os códigos dos tiles da vinha identificado no item anterior, substitua as bordas do jardim nas constantes *titleScreen*, *gameScreen* e *gameOverMsg*.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -162,7 +155,6 @@ static const char gameScreen[] = \
 ```
 
 4. **DESAFIO**: Sem olhar a resposta abaixo, crie, no arquivo tiles.h, o array de constantes *tileColors* com o mapa de cores. Use nossa rotina blockToVRAM para transferir os dados para a tabela de cores na VRAM.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -199,7 +191,6 @@ void title() {
 ```
 
 4. **DESAFIO**: Crie uma cópia da constante *tileColors_title*, chamada *tileColors_game*, e defina novas cores para os grupos de padrões dos dígitos e alfabeto. Execute a configuração com base nessa constante no início da função *game*;
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
@@ -212,7 +203,6 @@ void title() {
 ##### Objetivo: Cor da fundo da explosão ficar adequada ao terreno (previsão: 5 minutos).
 
 1. **DESAFIO**: Sem olhar a resposta abaixo, altere as cores do fundo dos tiles da explosão da cabeça para a cor de fundo do jardim.
-
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
 ```
