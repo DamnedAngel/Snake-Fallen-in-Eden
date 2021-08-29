@@ -1,5 +1,5 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 12: Gráficos, parte 2!
+# Sessão 12: Mais tiles... e cores!
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
@@ -46,7 +46,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ---
 
-# Sessão 12: Gráficos, parte 2!
+# Sessão 12: Mais tiles... e cores!
 
 ### 12.1. Consertando o intervalo de código de caracteres usados para os tiles da grama.
 ###### *Github Ticket/Branch: 49/TKT0049.*
