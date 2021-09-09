@@ -141,7 +141,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 18. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
 
 19. Compile e execute o jogo no Hotbit. O que houve? Você reconhece os desenhos?
-
+ 
 20. Explorando o problema de escrita no registro 14 do VDP.
 - Endereçamento da VRAM.
 - Implementação do Vpeek + VpeekFirst + VDPwriteNi.
@@ -158,27 +158,10 @@ void buildSprites() {
 	}
 ```
 
-22. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema?
+22. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 17.
 
-23. **DESAFIO**: Implemente *BuildSprites()* com uma única chamada à *SetSpritePattern()*:
-```c
-*** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
 
-24. Compile e execute o jogo no Turbo-R. O que houve?
-
-25. Execute o jogo no Hotbit. O que houve?
-
-26. Explorando o problema de Velocidade de transferência no MSX1.
-- Implementação do SetSpritePattern + Outports + OTIR.
-- Consequência no VDP do MSX1.
-
-27. **DESAFIO**: Corrija o problema encontrado, Implementando *BuildSprites()* com *blockToRAM()*:
-```c
-*** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
-
-### 16.5. Finalização da Sessão 15
+### 16.2. Finalização da Sessão 16
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:

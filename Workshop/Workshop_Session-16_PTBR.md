@@ -213,59 +213,10 @@ void buildSprites() {
 	}
 ```
 
-22. Compile e execute o jogo em no Hotbit. Discuta os resultados.
+22. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 17.
 
-23. **DESAFIO**: Implemente *BuildSprites()* com uma única chamada à *SetSpritePattern()*:
-```c
-void buildSprites() {
-	SpriteReset();
-	Sprite8();
-	SpriteSmall();
 
-	/*
-	// Alternative 1: Fusion-C Style
-	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	}
-	*/
-
-	// Alternative 2
-	SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
-}
-``` 
-
-24. Compile e execute o jogo no Turbo-R. O que houve?
-
-25. Execute o jogo no Hotbit. O que houve?
-
-26. Explorando o problema de Velocidade de transferência no MSX1.
-- Implementação do SetSpritePattern + Outports + OTIR.
-- Consequência no VDP do MSX1.
-
-27. **DESAFIO**: Corrija o problema encontrado, Implementando *BuildSprites()* com *blockToRAM()*:
-```c
-void buildSprites() {
-	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
-	SpriteReset();
-	Sprite8();
-	SpriteSmall();
-
-	*/
-	// Alternative 1: BASIC Style
-	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	}
-	*/
-
-	// Alternative 2
-	//SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
-
-	// Alternative 3
-	blockToVRAM(SPRITEPATTERNTABLE, sprite_patterns, sizeof(sprite_patterns));
-}
-```
-
-### 16.5. Finalização da Sessão 15
+### 16.2. Finalização da Sessão 16
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
@@ -274,5 +225,3 @@ void buildSprites() {
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
-
-**Happy MSX'ing.**
