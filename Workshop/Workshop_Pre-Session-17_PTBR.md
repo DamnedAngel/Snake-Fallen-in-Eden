@@ -48,10 +48,10 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 # Sessão 17: Sprites!
 
-### 17.1. Mostrar bônus por comer maçãs.
+### 17.1. Correção de bugs da Fusion-C.
 ###### *Github Ticket/Branch: 61/TKT0061.*
 
-##### Objetivo: Fornecer informação sonora do movimento da cobra e entender os vários bugs que a Fusion-C tem em relação a sprites (previsão: 90 minutos).
+##### Objetivo: implementar montagem de sprites de forma correta e compatível com quaisquer VDPs do MSX (previsão: 90 minutos).
 
 1. **DESAFIO**: Implemente *BuildSprites()* com uma única chamada à *SetSpritePattern()*:
 ```c
