@@ -10,13 +10,18 @@
 #include "targetconfig.h"
 #include "MSX/BIOS/msxbios.h"
 #include "msx_fusion.h"
+#include "vdp_sprites.h"
 #include "screens.h"
 #include "tiles.h"
+#include "sprites.h"
 #include "sounds.h"
 
 #define NAMETABLE					0x1800
 #define PATTERNTABLE				0x0000
-#define COLORTABLE					0X2000
+#define COLORTABLE					0x2000
+#define SPRITEPATTERNTABLE			0x3800
+#define SPRITEATTRIBUTETABLE		0x1b00
+
 
 bool EoG;
 bool collision;
@@ -27,6 +32,8 @@ unsigned char collisionFrame;
 unsigned char edenUpFrame;
 unsigned char edenUpSound; 
 unsigned char appleEatenFrame;
+unsigned char appleEatenBonusX;
+unsigned char appleEatenBonusY;
 
 unsigned int snakeHeadPos;
 unsigned char direction, lastDirection;
@@ -91,6 +98,19 @@ void print(char* msg) {
 	return;
 }
 
+/*
+unsigned char MSX1Vpeek(unsigned int address) {
+	unsigned char value = Vpeek(address);
+	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
+	return value;
+}
+
+void MSX1Vpoke(unsigned int address, unsigned char data) {
+	Vpoke(address, data);
+	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
+}
+*/
+
 #ifdef DEBUG
 void charMap() {
 	for (unsigned char y = 0; y < 16; y++) {
@@ -126,6 +146,24 @@ void buildTiles() {
 	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8, tiles_headXplod, sizeof(tiles_headXplod));
 	blockToVRAM(PATTERNTABLE + TILE_VINE * 8, tiles_vine, sizeof(tiles_vine));
 	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8, tiles_grass, sizeof(tiles_grass));
+}
+
+void buildSprites() {
+	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
+	SpriteReset();
+	Sprite8();
+	SpriteSmall();
+
+	// Alternative 1: Fusion-C Style
+	//for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
+	//	SetSpritePattern(i, sprite_patterns + (i * 8), 8);
+	//}
+
+	// Alternative 2: Raw Stype
+	blockToVRAM(SPRITEPATTERNTABLE, sprite_patterns, sizeof(sprite_patterns));
+
+	// Alternative 3: Mixed Style
+	//SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
 }
 
 char allJoysticks() {
@@ -287,6 +325,8 @@ void game() {
 
 					appleEaten = true;
 					appleEatenFrame = 0;
+					appleEatenBonusX = 8 * (snakeHeadPos % 32);
+					appleEatenBonusY = 8 * (snakeHeadPos / 32) - 4;
 
 					bonus = (rand() & 7) + 1;
 					growth += bonus;
@@ -330,10 +370,25 @@ void game() {
 
 		// here we will add animations and sound effects routine 
 		{
+			// Collision animation
+			if (collision && (Peekw(BIOS_JIFFY) >= 6)) {
+				Vpoke(snakeHeadPos, ++collisionFrame);
+				EoG = (collisionFrame == TILE_HEADXPLOD + 7);
+				Pokew(BIOS_JIFFY, 0);
+			}
+
 			// Apple eaten effect
 			if (appleEaten) {
-				PSGwrite(9, 15 - appleEatenFrame);
-				appleEaten = ++appleEatenFrame < 16;
+				if (appleEatenFrame < 16) 
+					PSGwrite(9, 15 - appleEatenFrame);
+				if (!(appleEatenFrame & 3)) {
+					PutSprite(0, bonus, appleEatenBonusX, --appleEatenBonusY, BONUS_COLOR);
+					PutSprite(1, 9, appleEatenBonusX, appleEatenBonusY, BONUSBEVEL_COLOR);
+				}
+				if(!(appleEaten = (++appleEatenFrame < 90) & (!EoG))) {
+					PutSprite(0, 0, 0, 192, 0);
+					PutSprite(1, 0, 0, 192, 0);
+				}
 			}
 
 			// Eden Up effect
@@ -351,16 +406,10 @@ void game() {
 					PSGwrite(10, 0);
 				};
 			}
-
-			// Collision animation
-			if (collision && (Peekw(BIOS_JIFFY) >= 6)) {
-				Vpoke(snakeHeadPos, ++collisionFrame);
-				EoG = (collisionFrame == TILE_HEADXPLOD + 7);
-				Pokew(BIOS_JIFFY, 0);
-			}
 		}
 
 		lastJiffy = Peekw(BIOS_JIFFY);
+		VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
 	}
 
 	Poke(BIOS_JIFFY, 0);
@@ -388,6 +437,7 @@ void main(void) {
 
 	buildFont();
 	buildTiles();
+	buildSprites();
 
 #ifdef DEBUG
 	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
