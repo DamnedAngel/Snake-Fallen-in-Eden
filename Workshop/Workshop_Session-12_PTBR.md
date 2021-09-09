@@ -1,9 +1,9 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 12: Gráficos, parte 2!
+# Sessão 12: Mais tiles... e cores!
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 12: XXX
+Vídeo da sessão 12: https://youtu.be/T39eQAAOXHw
 
 Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
 
@@ -38,7 +38,7 @@ VS: Visual Studio 2019
 Esse documento é dividido em sessões de workshop, e as sessões são divididas em tópicos de estudo.
 
 Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3 formatos:
-* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em XXX)
+* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em https://youtu.be/T39eQAAOXHw)
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
@@ -46,7 +46,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ---
 
-# Sessão 12: Gráficos, parte 2!
+# Sessão 12: Mais tiles... e cores!
 
 ### 12.1. Consertando o intervalo de código de caracteres usados para os tiles da grama.
 ###### *Github Ticket/Branch: 49/TKT0049.*
@@ -58,21 +58,18 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 2. Compile o projeto em modo DEBUG, execute o jogo e observe a posição atual dos tiles de grama no mapa de caracteres, cobrindo os caracteres de espaço, ponto de exclamação e outros.
 
 3. Retorne o código para condição original (com a trava), ajustando o código da constante *TILE_GRASS*:
-
-4. Compile o projeto em modo DEBUG, execute o jogo e observe a nova posição dos tiles de grama no mapa de caracteres, liberando os caracteres de espaço, ponto de exclamação e outros.
-
 ```c
 #define TILE_GRASS					0xa8
 ```
 
-5. Crie a constante TILE_GRASS_EMPTY referenciando o último dos 8 tiles de grama.
+4. Compile o projeto em modo DEBUG, execute o jogo e observe a nova posição dos tiles de grama no mapa de caracteres, liberando os caracteres de espaço, ponto de exclamação e outros.
 
+5. Crie a constante TILE_GRASS_EMPTY referenciando o último dos 8 tiles de grama.
 ```c
 #define TILE_GRASS_EMPTY				0xaf
 ```
 
 6. Substitua todos os espaços do jardim nas constantes *titleScreen* e *gameScreen* (arquivo screens.h) pelo código 0xaf. Na *titleScreen*, para evitar a junção da constante hexadecimal *0xaf* com textos que podem iniciar com uma sequência válida de dígitos hexadecimais (**\xafDa**mned Angel, por exemplo), mantenha um espaço comum separando as palavras da grama:*\xaf Damned Angel's \xaf*:
-
 ```c
 static const char titleScreen[] = \
 "+------------------------------+"\
@@ -96,7 +93,6 @@ static const char gameScreen[] = \
 7. Compile, rode o programa e note o que houve com as telas do jogo. O que acontece com a jogo? E o que está acontecendo com a cabeça da cobra? Por que não notamos o problema com a cabeça da cobra antes?
 
 8. **DESAFIO**: Corrija o tile da cabeça da cobra:
-
 ```c
 	// initialize snake
 
