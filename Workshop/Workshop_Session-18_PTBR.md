@@ -51,177 +51,211 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 ### 18.1. Montando o éden com relva.
 ###### *Github Ticket/Branch: 61/TKT0061.*
 
-##### Objetivo: Fornecer informação sonora do movimento da cobra e entender os vários bugs que a Fusion-C tem em relação a sprites (previsão: 90 minutos).
+##### Objetivo: incluir um arquivo assembler puro no projeto e desenvolver uma rotina de montagem do éden com relva, compatível com chamadas em C (previsão: 90 minutos).
 
-1. A Fusion-C tem muitos problemas com sprites no MSX1. Configurem, inicialmente, o emulador para trabalhar com o Turbo-R (Panasonic FS-A1GT). Depois resolveremos os problemas para que tudo funcione no MSX1.
+1. Adicione o arquivo *eden.s* no projeto. Para quem usa o Visual Studio, adicione o arquivo sob o filtro *ASM Source Files*. Para outros ambientes, apenas crie o arquivo no filesystem e abra no seu editor.
 
-2. Entendendo o sistema de sprites do VDP do MSX1:
-- Suporte para 32 sprites;
-- Dois tamanhos de sprite:
-  - Tamanho 0: 8x8 pixels; 8 bytes;
-  - Tamanho 1: 16x16 pixels; 32 bytes.
-- **Tabela de padrões de sprites:**
-  - 2048 bytes;
-  - 256 padrões 8x8 ou 64 padrões 16x16.
-- **Tabela de atributos de sprites:**
-  - 32 entradas x 4 bytes = 128 bytes:
-    - Byte 0: Coordenada X;
-    - Byte 1: Coordenada Y;
-    - Byte 2: Nome do sprite (referência ao padrão);
-    - Byte 3: Cor + Early clock.
-
-3. Faça download do arquivo *sprites.h* na pasta com o código fonte do seu projeto. Inspecione o arquivo para descobrir seu conteúdo.
-
-4. Se você usa Visual Studio, adicione-o arquivo ao projeto, sob o filtro *Header Files*.
-
-5. Referencie o arquivo *sprites.h* no arquivo principal do nosso programa *msxromapp.c*.
+2. No final do arquivo de configuração Application Sources.txt, adicione referência para *eden.s*:
 ```c
-#include "sprites.h"
+;----------------------------------------------------------
+;	Additional source files
+;	Add below additional source files for your application
+;	using relative paths from the project folder
+;yourSourceCodeHere.s
+;yourSourceCodeHere.c
+eden.s
 ```
 
-6. Compile o projeto para garantir que o arquivo *sprites.h* está ok. Corrija qualquer problema de sintaxe que existir, se existir.
+3. Compile o projeto e certifique-se que o processo de build está incluindo o arquivo novo.
 
-7. **DESAFIO**: Crie diretivas constantes para referência às tabelas de padrões e atributos de sprites do VDP, de forma similar às de referência às tabelas de nomes, padrões e cores.
+4. Crie o cabeçalho do arquivo *eden.s* e da rotina *_buildEden*:
 ```c
-#define NAMETABLE		0x1800
-#define PATTERNTABLE		0x0000
-#define COLORTABLE		0x2000
-#define SPRITEPATTERNTABLE	0x3800
-#define SPRITEATTRIBUTETABLE	0x1b00
+; ----------------------------
+; Lib to create the eden
+; ----------------------------
+
+; ----------------------------------------------------------
+;	buildEden (int VRAMAddr, char* RAMAddr, unsigned int blockLength)
+;
+_buildEden::
 ```
 
-8. Definindo o comportamento do indicador de bônus por comer a maçã:
-- O bônus por comer a maçã deverá aparecer por 90 frames (1,5 segundos);
-- O valor deve aparer levemente acima da posição da maçã comida;
-- Durante os 90 frames, o número deverá se mover 1 pixel para cima a cada 4 frames.
-
-9. Refactoring: por claridade do código, altere o código para *appleEatenFrame* iniciar em 0 e contar até 90 (1,5 segundos). Lembre de limitar o controle do volume do PSG apenas até o frame 15.
+5. Copie a rotina *blockToVRAM* do arquivo *msxromapp.c". Vamos utilizá-la como base para a *buildEden*:
 ```c
-				if (content == TILE_APPLE) {
-					dropApple();
+; ----------------------------------------------------------
+;	buildEden (int VRAMAddr, char* RAMAddr, unsigned int blockLength)
+;
+_buildEden::
+	ld		hl,		#2
+	add		hl,		sp
 
-					appleEaten = true;
-					appleEatenFrame = 0;
-```
-```c
-			// Apple eaten effect
-			if (appleEaten) {
-				if (appleEatenFrame < 16) 
-					PSGwrite(9, 15 - appleEatenFrame);
-				appleEaten = ++appleEatenFrame < 90;
-			}
-```
+	ld		a,		(hl)
+	out		(#0x99),a
+	inc		hl
+	ld		a,		(hl)
+;	and		#0x3f
+	or		#0x40
+	out		(#0x99),a
 
-10. Compile e rode o programa, garantindo que o jogo continua com comportamento igual ao anterior.
+	inc		hl
+	ld		e,		(hl)
+	inc		hl
+	ld		d,		(hl)
 
-11. Abra o arquivo da Fusion-C *vdp_sprites.h*. Inspecione seu conteúdo.
+	inc		hl
+	inc		hl
+	ld		b,		(hl)
+	ld		c,		#0x98
+	push		bc
+	dec		hl
+	ld		b,		(hl)
+	ld		l,		e
+	ld		h,		d
+	
+label1:
+	outi
+	jr		nz,		label1
 
-12. **DESAFIO**: Sem olhar o código abaixo e com base em tudo o que você aprendeu nos itens acima, crie a função *buildSprites()* para configurar a tabela de padrão de sprites.
-```c
-void buildSprites() {
-	SpriteReset();
-	Sprite8();
-	SpriteSmall();
+	pop		bc
+	xor		a		; = ld a, 0
+	cp		b
+	ret		z
 
-	// Alternative 1: Fusion-C Style
-	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	}
-}
-```
-```c
-	buildFont();
-	buildTiles();
-	buildSprites();
-```
-
-12. **DESAFIO**: Mostre o bônus quando uma maçã é comida, fazendo a animação conforme definido no item 7 acima.
-```c
-unsigned char appleEatenFrame;
-unsigned char appleEatenBonusX;
-unsigned char appleEatenBonusY;
-``` 
-```c
-	appleEaten = true;
-	appleEatenFrame = 0;
-	appleEatenBonusX = 8 * (snakeHeadPos % 32);
-	appleEatenBonusY = 8 * (snakeHeadPos / 32) - 4;
-``` 
-```c
-	// Apple eaten effect
-	if (appleEaten) {
-		if (appleEatenFrame < 16) 
-			PSGwrite(9, 15 - appleEatenFrame);
-		if (!(appleEatenFrame & 3)) {
-			PutSprite(0, bonus, appleEatenBonusX, appleEatenBonusY--, 4);
-		}
-		if(!(appleEaten = ++appleEatenFrame < 90)) {
-			PutSprite(0, 0, 0, 192, 0);
-		}
-	}
-``` 
-
-13. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
-
-14. **DESAFIO**: Adicione o sprite do Bevel por baixo do sprite do bonus. Utilize os defines/constantes de cores nos *PutSprite()*.
-```c
-	// Apple eaten effect
-	if (appleEaten) {
-		if (appleEatenFrame < 16) 
-			PSGwrite(9, 15 - appleEatenFrame);
-		if (!(appleEatenFrame & 3)) {
-			PutSprite(0, bonus, appleEatenBonusX, --appleEatenBonusY, BONUS_COLOR);
-			PutSprite(1, 9, appleEatenBonusX, appleEatenBonusY, BONUSBEVEL_COLOR);
-		}
-		if(!(appleEaten = ++appleEatenFrame < 90)) {
-			PutSprite(0, 0, 0, 192, 0);
-			PutSprite(1, 0, 0, 192, 0);
-		}
-	}
-``` 
-
-15. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito. Teste cores diferentes.
-
-16. Discussão: você consegue encontrar um pequeno problema na implementação?
-
-17. **DESAFIO**: Corrija o problema identificado.
-```c
-		<mova a collision animation para
-		antes do efeito de comer maçã>
-``` 
-```c
-		if(!(appleEaten = (++appleEatenFrame < 90) & (!EoG))) {
-``` 
-
-18. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
-
-19. Compile e execute o jogo no Hotbit. O que houve? Você Reconhece os desenhos?
-
-20. Explorando o problema de escrita no registro 14 do VDP.
-- Endereçamento da VRAM.
-- Implementação do Vpeek + VpeekFirst + VDPwriteNi.
-- Consequência no VDP do MSX1.
-
-21. Corrija o problema encontrado, consertando o endereço da tabela de padrões de sprite:
-```c
-void buildSprites() {
-	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
-```
-```c
-		lastJiffy = Peekw(BIOS_JIFFY);
-		VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
-	}
+	dec		b
+	push		bc
+	ld		b,		#255
+	jr		label1
 ```
 
-22. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 17.
+6. Relembrando a *blockToVRAM*: uma leitura da rotina.
+
+7. Substitua, na função *title*, a chamada à *_print* por uma chamada à *buildEden*:
+```c
+void title() {
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
+
+	// Build screen
+	buildEden (NAMETABLE, titleScreen, sizeof(titleScreen));
+```
+
+8. Compile o programa. O que houve? Como resolver?
+
+9. Entendendo A palavra-chave *extern*.
+
+10. Adicione a declaração da função externa *buildEden*:
+```c
+extern void buildEden(int VRAMAddr, char* RAMAddr, unsigned int blockLength);
+```
+
+11. Compile e execute o programa. O que você notou?
+
+12. Substitua, na função *game*, a chamada à *_print* por uma chamada à *buildEden*:
+```c
+	// Set colors
+	blockToVRAM(COLORTABLE, tileColors_game, sizeof(tileColors_game));
+
+	srand(Peekw(BIOS_JIFFY));
+
+	// Build screen
+	buildEden(NAMETABLE, gameScreen, sizeof(gameScreen));
+```
+
+13. Compile e execute o programa. Novamente, o que você notou?
+
+14. Ajuste a rotina para colocar relvas aleatoriamente quando achar o caracter 0xaf:
+```c
+_buildEden::
+	ld		hl,		#2
+	add		hl,		sp
+
+	ld		a,		(hl)
+	out		(#0x99),a
+	inc		hl
+	ld		a,		(hl)
+;	and		#0x3f
+	or		#0x40
+	out		(#0x99),a
+
+	inc		hl
+	ld		e,		(hl)
+	inc		hl
+	ld		d,		(hl)
+
+	inc		hl
+	inc		hl
+	ld		b,		(hl)
+;	ld		c,		#0x98
+	push		bc
+	dec		hl
+	ld		b,		(hl)
+	ld		l,		e
+	ld		h,		d
+	
+_newChar:
+	ld		a,		(hl)
+	inc		hl
+	cp		#0xaf
+	jr nz,		outToVRAM
+	ld		a,		r
+	rlca
+	ld		r,		a
+	and		#0x0f ;16 tiles
+	add		#0xa8 ;TILE_GRASS
+
+outToVRAM:
+	out		(#0x98), a
+	djnz		_newChar
+
+	pop		bc
+	xor		a		; = ld a, 0
+	cp		b
+	ret		z
+
+	dec		b
+	push		bc
+	ld		b,		#255
+	jr		_newChar
+```
+
+15. Compile e execute o programa. O que houve?
+
+16. Adicione tiles das relvas mais claras na função buildTiles():
+```c
+	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8, tiles_grass, sizeof(tiles_grass));
+	blockToVRAM(PATTERNTABLE + (TILE_GRASS + 8) * 8, tiles_grass, sizeof(tiles_grass));
+```
+
+17. Compile e execute o programa. O que houve?
+
+18. Conserte a detecção de colisão:
+```c
+	collision = (content < TILE_GRASS)
+		&& (content != TILE_APPLE);
+```
+
+19. Compile e execute o programa. E agora, o que houve?
+
+20. Crie novas relvas no caminhar da cobra:
+```c
+	// Erases last tail segment
+	if (growth == 0) {
+		Vpoke (*snakeTail, 
+		TILE_GRASS + (rand() & 0x0f));
+```
+
+21. Compile e execute o programa.
 
 
-### 16.2. Finalização da Sessão 16
+... e com isso, finalizamos nosse jogo!
+
+### 18.2. Finalização da Sessão 18
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
-* Sprites
-* Estado do jogo
-* Dinâmica geral do workshop: feedbacks e ideias.
+* O jogo completo.
+* Assembler.
+* o Z80.
+* Arquivos em assembler puro.
 
 ---

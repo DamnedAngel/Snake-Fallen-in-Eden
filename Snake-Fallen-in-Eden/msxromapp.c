@@ -53,6 +53,8 @@ unsigned int highscore = 0;
 
 unsigned char waitFrames, waitMoves, eden;
 
+extern void buildEden(int VRAMAddr, char* RAMAddr, unsigned int blockLength);
+
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
 //	This is only for the demo app.
@@ -146,6 +148,7 @@ void buildTiles() {
 	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8, tiles_headXplod, sizeof(tiles_headXplod));
 	blockToVRAM(PATTERNTABLE + TILE_VINE * 8, tiles_vine, sizeof(tiles_vine));
 	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8, tiles_grass, sizeof(tiles_grass));
+	blockToVRAM(PATTERNTABLE + (TILE_GRASS + 8) * 8, tiles_grass, sizeof(tiles_grass));
 }
 
 void buildSprites() {
@@ -183,8 +186,8 @@ void title() {
 	// Set colors
 	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
 
-	Cls();
-	_print(titleScreen);
+	// Build screen
+	buildEden (NAMETABLE, titleScreen, sizeof(titleScreen));
 
 	while (allJoysticks() || allTriggers()) {}		// waits until key release
 	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
@@ -203,8 +206,9 @@ void game() {
 
 	srand(Peekw(BIOS_JIFFY));
 
-	Cls();
-	_print(gameScreen);
+	// Build screen
+	buildEden(NAMETABLE, gameScreen, sizeof(gameScreen));
+
 	Locate(18, 23);
 	PrintNumber(highscore);
 
@@ -304,7 +308,7 @@ void game() {
 
 			content = Vpeek(snakeHeadPos);
 
-			collision = (content != TILE_GRASS_EMPTY) && (content != TILE_APPLE);
+			collision = (content < TILE_GRASS) && (content != TILE_APPLE);
 			if (collision) {
 				// Collision start
 				if (content < TILE_VINE) {
@@ -347,7 +351,7 @@ void game() {
 
 			// Erases last tail segment
 			if (growth == 0) {
-				Vpoke(*snakeTail, TILE_GRASS_EMPTY);
+				Vpoke(*snakeTail, TILE_GRASS + (rand() & 0x0f));
 				snakeTail++;
 				if (snakeTail > &snake[511])
 					snakeTail = snake;

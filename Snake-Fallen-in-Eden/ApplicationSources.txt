@@ -23,6 +23,6 @@ msxromapp.c
 ;	Additional source files
 ;	Add below additional source files for your application
 ;	using relative paths from the project folder
-
 ;yourSourceCodeHere.s
 ;yourSourceCodeHere.c
+eden.s
