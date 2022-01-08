@@ -162,7 +162,7 @@ unsigned char collisionFrame;
     - 8: vermelho (maçã);
     - 11: amarelo (baixo contraste com a grama);
     - 15: branco (contraste excessivo).
-- Na mudança de eden, o rabo cobra piscará por um segundo, tendo, nos frames pares, a próxima cor que assumirá e nos frames ímpares uma cor aleatória enrte 0 e 15.
+- Na mudança de eden, o rabo cobra piscará por um segundo, tendo, nos frames pares, a próxima cor que assumirá e nos frames ímpares uma cor aleatória entre 0 e 15.
 
 2. **DESAFIO**: Sem olhar o código abaixo crie, no arquivo *tiles.h*, um array de cores possíveis para a cobra assumir chamado *tailColors*, excluindo as cores inválidas estabelecidas no item 1 acima.
 
@@ -220,6 +220,8 @@ unsigned char edenUpFrame;
 			edenUp = edenUpFrame < 60;
 		}
 ```
+
+7. Compile e execute o projeto. Teste o efeito de mudança de éden.
 
 ### 14.3. Finalização da Sessão 14
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
