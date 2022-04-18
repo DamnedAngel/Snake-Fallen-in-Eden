@@ -135,7 +135,7 @@ void buildSprites() {
 	buildSprites();
 ```
 
-12. **DESAFIO**: Mostre o bônus quando uma maçã é comida, fazendo a animação conforme definido no item 7 acima.
+13. **DESAFIO**: Mostre o bônus quando uma maçã é comida, fazendo a animação conforme definido no item 7 acima.
 ```c
 unsigned char appleEatenFrame;
 unsigned char appleEatenBonusX;
@@ -161,9 +161,9 @@ unsigned char appleEatenBonusY;
 	}
 ``` 
 
-13. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
+14. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
 
-14. **DESAFIO**: Adicione o sprite do Bevel por baixo do sprite do bonus. Utilize os defines/constantes de cores nos *PutSprite()*.
+15. **DESAFIO**: Adicione o sprite do Bevel por baixo do sprite do bonus. Utilize os defines/constantes de cores nos *PutSprite()*.
 ```c
 	// Apple eaten effect
 	if (appleEaten) {
@@ -180,11 +180,11 @@ unsigned char appleEatenBonusY;
 	}
 ``` 
 
-15. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito. Teste cores diferentes.
+16. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito. Teste cores diferentes.
 
-16. Discussão: você consegue encontrar um pequeno problema na implementação?
+17. Discussão: você consegue encontrar um pequeno problema na implementação?
 
-17. **DESAFIO**: Corrija o problema identificado.
+18. **DESAFIO**: Corrija o problema identificado.
 ```c
 		<mova a collision animation para
 		antes do efeito de comer maçã>
@@ -193,16 +193,16 @@ unsigned char appleEatenBonusY;
 		if(!(appleEaten = (++appleEatenFrame < 90) & (!EoG))) {
 ``` 
 
-18. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
+19. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
 
-19. Compile e execute o jogo no Hotbit. O que houve? Você Reconhece os desenhos?
+20. Compile e execute o jogo no Hotbit. O que houve? Você Reconhece os desenhos?
 
-20. Explorando o problema de escrita no registro 14 do VDP.
+21. Explorando o problema de escrita no registro 14 do VDP.
 - Endereçamento da VRAM.
 - Implementação do Vpeek + VpeekFirst + VDPwriteNi.
 - Consequência no VDP do MSX1.
 
-21. Corrija o problema encontrado, consertando o endereço da tabela de padrões de sprite:
+22. Corrija o problema encontrado, consertando o endereço da tabela de padrões de sprite:
 ```c
 void buildSprites() {
 	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
@@ -213,7 +213,7 @@ void buildSprites() {
 	}
 ```
 
-22. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 17.
+23. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 17.
 
 
 ### 16.2. Finalização da Sessão 16
