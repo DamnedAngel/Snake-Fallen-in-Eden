@@ -135,7 +135,7 @@ void buildSprites() {
 	buildSprites();
 ```
 
-13. **DESAFIO**: Mostre o bônus quando uma maçã é comida, fazendo a animação conforme definido no item 7 acima.
+13. **DESAFIO**: Mostre o bônus quando uma maçã é comida, fazendo a animação conforme definido no item 8 acima.
 ```c
 unsigned char appleEatenFrame;
 unsigned char appleEatenBonusX;
