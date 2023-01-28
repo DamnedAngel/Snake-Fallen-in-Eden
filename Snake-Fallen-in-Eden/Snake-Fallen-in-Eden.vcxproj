@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="applicationsettings.s" />
+    <None Include="eden.s" />
     <None Include="Make\make.bat" />
     <None Include="Make\make.sh" />
     <None Include="Make\symbol.py" />
