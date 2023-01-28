@@ -48,6 +48,31 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 # Sessão 17: Sprites!
 
+### 16.1. Resolver o problema de padrões de sprites errados no MSX1.
+###### *Github Ticket/Branch: 61/TKT0061 (continuação).*
+
+##### Objetivo: Resolver o problema de padrões de sprites errados no MSX1 (previsão: 90 minutos).
+
+1. Compile o projeto como estava no final da sessão anterior e execute (no Turbo-R!!!) o jogo para ver o efeito correto.
+
+2. Agora execute o jogo no Hotbit. O que houve? Você Reconhece os desenhos?
+
+3. Explorando o problema de escrita no registro 14 do VDP.
+- Endereçamento da VRAM.
+- Implementação do Vpeek + VpeekFirst + VDPwriteNi.
+- Consequência no VDP do MSX1.
+
+4. Corrija o problema encontrado, consertando o endereço da tabela de padrões de sprite:
+```c
+void buildSprites() {
+	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
+```
+```c
+		lastJiffy = Peekw(BIOS_JIFFY);
+		VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
+	}
+```
+
 ### 17.1. Correção de bugs da Fusion-C.
 ###### *Github Ticket/Branch: 61/TKT0061.*
 
