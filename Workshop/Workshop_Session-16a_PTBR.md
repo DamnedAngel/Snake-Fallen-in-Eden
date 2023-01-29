@@ -83,10 +83,10 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 7. **DESAFIO**: Crie diretivas constantes para referência às tabelas de padrões e atributos de sprites do VDP, de forma similar às de referência às tabelas de nomes, padrões e cores.
 ```c
-#define NAMETABLE		0x1800
-#define PATTERNTABLE		0x0000
-#define COLORTABLE		0x2000
-#define SPRITEPATTERNTABLE	0x3800
+#define NAMETABLE				0x1800
+#define PATTERNTABLE			0x0000
+#define COLORTABLE				0x2000
+#define SPRITEPATTERNTABLE		0x3800
 #define SPRITEATTRIBUTETABLE	0x1b00
 ```
 
@@ -191,8 +191,7 @@ unsigned char appleEatenBonusY;
 
 19. **DESAFIO**: Corrija o problema identificado.
 ```c
-		<mova a collision animation para
-		antes do efeito de comer maçã>
+		<mova a collision animation para antes do efeito de comer maçã>
 ``` 
 ```c
 		if(!(appleEaten = (++appleEatenFrame < 90) && (!EoG))) {
@@ -218,10 +217,10 @@ void buildSprites() {
 	}
 ```
 
-23. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 17.
+24. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 16b.
 
 
-### 16a.2. Finalização da Sessão 16
+### 16a.2. Finalização da Sessão 16a
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:

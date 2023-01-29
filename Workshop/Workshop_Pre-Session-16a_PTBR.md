@@ -1,9 +1,9 @@
 # Programando em C e ASM para MSX usando Visual Studio e Fusion-C
-# Sessão 16: Sprites!
+# Sessão 16a: Sprites!
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 16: XXX
+Vídeo da sessão 16a: https://youtu.be/czx3ol2ecs0
 
 Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
 
@@ -38,7 +38,7 @@ VS: Visual Studio 2019
 Esse documento é dividido em sessões de workshop, e as sessões são divididas em tópicos de estudo.
 
 Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3 formatos:
-* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em XXX)
+* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em https://youtu.be/czx3ol2ecs0)
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
@@ -46,12 +46,12 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 ---
 
-# Sessão 16: Sprites!
+# Sessão 16a: Sprites!
 
-### 16.1. Mostrar bônus por comer maçãs.
+### 16a.1. Mostrar bônus por comer maçãs.
 ###### *Github Ticket/Branch: 61/TKT0061.*
 
-##### Objetivo: Fornecer informação sonora do movimento da cobra e entender os vários bugs que a Fusion-C tem em relação a sprites (previsão: 90 minutos).
+##### Objetivo: Mostrar bônus por comer maçãs e detectar o primeiro bug no tratamento de sprites pela Fusion-C (previsão: 90 minutos).
 
 1. A Fusion-C tem muitos problemas com sprites no MSX1. Configurem, inicialmente, o emulador para trabalhar com o Turbo-R (Panasonic FS-A1GT). Depois resolveremos os problemas para que tudo funcione no MSX1.
 
@@ -84,7 +84,7 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 7. **DESAFIO**: Crie diretivas constantes para referência às tabelas de padrões e atributos de sprites do VDP, de forma similar às de referência às tabelas de nomes, padrões e cores.
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
+``` 
 
 8. Definindo o comportamento do indicador de bônus por comer a maçã:
 - O bônus por comer a maçã deverá aparecer por 90 frames (1,5 segundos);
@@ -115,39 +115,41 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 12. **DESAFIO**: Sem olhar o código abaixo e com base em tudo o que você aprendeu nos itens acima, crie a função *buildSprites()* para configurar a tabela de padrão de sprites.
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
+``` 
 
-12. **DESAFIO**: Mostre o bônus quando uma maçã é comida, fazendo a animação conforme definido no item 7 acima.
+13. **DESAFIO**: Mostre o bônus quando uma maçã é comida, fazendo a animação conforme definido no item 7 acima.
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
+``` 
 
-13. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
+14. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
 
-14. **DESAFIO**: Adicione o sprite do Bevel por baixo do sprite do bonus. Utilize os defines/constantes de cores nos *PutSprite()*.
+15. Agora execute o jogo em um MSX 1. O que houve? Diagnosticaremos e trataremos esse problema mais para frente!
+
+16. **DESAFIO**: Adicione o sprite do Bevel por baixo do sprite do bonus. Utilize os defines/constantes de cores nos *PutSprite()*.
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
+``` 
 
-15. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito. Teste cores diferentes.
+17. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito. Teste cores diferentes.
 
-16. Discussão: você consegue encontrar um pequeno problema na implementação?
+18. Discussão: você consegue encontrar um pequeno problema na implementação?
 
-17. **DESAFIO**: Corrija o problema identificado.
+19. **DESAFIO**: Corrija o problema identificado.
 ```c
 *** Resposta ao desafio somente no roteiro pós-sessão. ***
-```
+```  
 
-18. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
+20. Compile e execute (no Turbo-R!!!) o jogo para ver o efeito.
 
-19. Compile e execute o jogo no Hotbit. O que houve? Você reconhece os desenhos?
- 
-20. Explorando o problema de escrita no registro 14 do VDP.
+21. Compile e execute o jogo no Hotbit. O que houve? Você Reconhece os desenhos?
+
+22. Explorando o problema de escrita no registro 14 do VDP.
 - Endereçamento da VRAM.
 - Implementação do Vpeek + VpeekFirst + VDPwriteNi.
 - Consequência no VDP do MSX1.
 
-21. Corrija o problema encontrado, consertando o endereço da tabela de padrões de sprite:
+23. Corrija o problema encontrado, consertando o endereço da tabela de padrões de sprite:
 ```c
 void buildSprites() {
 	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
@@ -158,17 +160,16 @@ void buildSprites() {
 	}
 ```
 
-22. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 17.
+24. Compile e execute o jogo em no Hotbit. Discuta os resultados. Aconteceu algum problema? Consertaremos o problema na sessão 16b.
 
 
-### 16.2. Finalização da Sessão 16
+### 16a.2. Finalização da Sessão 16a
 ##### Objetivo: Discutir os tópicos tratados e o modelo/dinâmica do workshop (previsão: 10 minutos).
 
 1. Discussão geral da apresentação:
 * Sprites
 * Estado do jogo
+* Bugs da Fusion-C
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
-
-**Happy MSX'ing.**
