@@ -84,22 +84,8 @@ void buildSprites() {
 
 2. **DESAFIO**: Para agravar o problema e aumentar a chance de  o problema acontecer, implemente *BuildSprites()* com uma única chamada à *SetSpritePattern()*:
 ```c
-void buildSprites() {
-	SpriteReset();
-	Sprite8();
-	SpriteSmall();
-
-	/*
-	// Alternative 1: Fusion-C Style (Too fast for MSX1's VDP)
-	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	}
-	*/
-
-	// Alternative 2 (Even faster)
-	SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
-}
-``` 
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
+```  
 
 3. Compile e execute o jogo no Turbo-R. O que houve?
 
@@ -111,28 +97,8 @@ void buildSprites() {
 
 6. **DESAFIO**: Corrija o problema encontrado, implementando a *BuildSprites()* com *blockToRAM()*:
 ```c
-void buildSprites() {
-	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
-	SpriteReset();
-	Sprite8();
-	SpriteSmall();
-
-	/*
-	// Alternative 1: Fusion-C Style (Too fast for MSX1's VDP)
-	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	}
-	*/
-
-	/*
-	// Alternative 2 (Even faster)
-	SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
-	*/
-
-	// Alternative 3 (Very slow - solves the problem)
-	blockToVRAM(SPRITEPATTERNTABLE, sprite_patterns, sizeof(sprite_patterns));
-}
-```
+*** Resposta ao desafio somente no roteiro pós-sessão. ***
+```  
 
 7. Compile e teste o jogo no Turbo-R e no Hotbit.
 
