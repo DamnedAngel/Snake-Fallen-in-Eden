@@ -56,9 +56,11 @@ a MSX C/ASM development workshop, based on my MSX templates for Visual Studio
 Workshop Playlist: https://www.youtube.com/playlist?list=PLZm7VHLMIP0M3uHWWA2ytG2apoBHmtYk4
 
 ![image info](http://img.youtube.com/vi/RGDKg4krgFc/mqdefault.jpg)
+
 Session 0: **Development Environment Setup** - https://youtu.be/RGDKg4krgFc
 
 ![image info](http://img.youtube.com/vi/TYXZTF-IzWs/mqdefault.jpg)
+
 Session 1: **Using Project Templates** - https://youtu.be/TYXZTF-IzWs
 
 ![image info](http://img.youtube.com/vi/BNeZ2RBIkuc/mqdefault.jpg)
