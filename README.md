@@ -115,6 +115,8 @@ Session 17: **Assembly and the Grass8* - https://youtu.be/IZUw3gd63pI
 ![image info](http://img.youtube.com/vi/NkX2qC4PvBM/mqdefault.jpg)  
 Session 18: **A Quick Look on OpenMSX Debugger** - https://youtu.be/NkX2qC4PvBM
 
+----------
+
 2020-2023 by Damned Angel
 
 **Happy MSX'ing!**
