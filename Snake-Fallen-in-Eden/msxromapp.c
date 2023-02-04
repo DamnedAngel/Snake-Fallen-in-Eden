@@ -16,21 +16,22 @@
 #include "sprites.h"
 #include "sounds.h"
 
+extern void buildEden(int VRAMAddr, char* RAMAddr, unsigned int blockLength);
+
 #define NAMETABLE					0x1800
 #define PATTERNTABLE				0x0000
 #define COLORTABLE					0x2000
 #define SPRITEPATTERNTABLE			0x3800
-#define SPRITEATTRIBUTETABLE		0x1b00
-
+#define SPRITEATTRIBUTETABLE		0x1B00
 
 bool EoG;
 bool collision;
 bool edenUp;
 bool appleEaten;
 
-unsigned char collisionFrame;
+unsigned char collisionTile;
 unsigned char edenUpFrame;
-unsigned char edenUpSound; 
+unsigned char edenUpSound;
 unsigned char appleEatenFrame;
 unsigned char appleEatenBonusX;
 unsigned char appleEatenBonusY;
@@ -53,6 +54,8 @@ unsigned int highscore = 0;
 
 unsigned char waitFrames, waitMoves, eden;
 
+
+
 // ----------------------------------------------------------
 //	This is an example of embedding asm code into C.
 //	This is only for the demo app.
@@ -60,27 +63,29 @@ unsigned char waitFrames, waitMoves, eden;
 #pragma disable_warning 85	// because the var msg is not used in C context
 void _print(char* msg) {
 	__asm
-		ld      hl, #2; retrieve address from stack
-		add     hl, sp
-		ld		b, (hl)
-		inc		hl
-		ld		h, (hl)
-		ld		l, b
 
-		_printMSG_loop :
-		ld		a, (hl); print
-		or		a
-		ret z
-		push	hl
-		push	ix
-		ld		iy, (#0xfcc0); BIOS_ROMSLT
-		ld		ix, #0x00a2; BIOS_CHPUT
-		call	#0x001c; BIOS_CALSLT
-		ei
-		pop		ix
-		pop		hl
-		inc		hl
-		jr		_printMSG_loop
+	ld      hl, #2; retrieve address from stack
+	add     hl, sp
+	ld		b, (hl)
+	inc		hl
+	ld		h, (hl)
+	ld		l, b
+
+_printMSG_loop :
+	ld		a, (hl); print
+	or		a
+	ret	z
+	push	hl
+	push	ix
+	ld		iy, (#0xfcc0); BIOS_ROMSLT
+	ld		ix, #0x00a2; BIOS_CHPUT
+	call	#0x001c; BIOS_CALSLT
+	ei
+	pop		ix
+	pop		hl
+	inc		hl
+	jr		_printMSG_loop
+
 	__endasm;
 
 	return;
@@ -98,19 +103,6 @@ void print(char* msg) {
 	return;
 }
 
-/*
-unsigned char MSX1Vpeek(unsigned int address) {
-	unsigned char value = Vpeek(address);
-	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
-	return value;
-}
-
-void MSX1Vpoke(unsigned int address, unsigned char data) {
-	Vpoke(address, data);
-	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
-}
-*/
-
 #ifdef DEBUG
 void charMap() {
 	for (unsigned char y = 0; y < 16; y++) {
@@ -122,19 +114,64 @@ void charMap() {
 }
 #endif
 
+/*
 void blockToVRAM(int VRAMAddr, char* RAMAddr, unsigned int blockLength) {
 	VpokeFirst(VRAMAddr);
 	for (; blockLength > 0; blockLength--)
 		VpokeNext(*(RAMAddr++));
+} 
+*/
+
+void blockToVRAM(int VRAMAddr, char* RAMAddr, int blockLength) {
+// Fabio suggested to leave a comment here that the
+// function is not working for colors
+// so HE can fix it someday.
+	__asm
+
+	ld		hl, #2
+	add		hl, sp
+
+	ld		a, (hl)
+	out		(#0x99), a
+	inc		hl
+	ld		a, (hl)
+	and		#0x3f
+	or		#0x40
+	out		(#0x99), a
+
+	inc		hl
+	ld		e, (hl)
+	inc		hl
+	ld		d, (hl)
+
+	inc		hl
+	ld		b, (hl)
+	ld		a, b
+	inc		hl
+	or		a               ; cp 0 ==> tests if lsb is zero
+	ld		a, (hl)
+	ld		l, e
+	ld		h, d
+	ld		c, #0x98
+	jr      z, b2vr_loop    ; if lsb is not zero
+	inc		a               ;   adjusts (increment) msb
+	
+b2vr_loop:                  ; b (lsb) controls inner loop; a (msb) controls outer loop
+	outi
+	jr		nz, b2vr_loop
+	dec		a
+	jr		nz, b2vr_loop
+	ret
+
+	__endasm;
 }
 
 void buildFont() {
-	// Italic
 	unsigned char temp;
-	for (int i = 0; i < 128; i++) {
+	for (int i = 0; i <= 127; i++) {
 		for (int j = 0; j < 4; j++) {
-			temp = Vpeek(PATTERNTABLE + i * 8 + j);
-			Vpoke(PATTERNTABLE + i * 8 + j, temp >> 1);
+			temp = Vpeek((int)(PATTERNTABLE + i * 8 + j));
+			Vpoke((int)(PATTERNTABLE + i * 8 + j), temp >> 1);
 		}
 	}
 }
@@ -146,24 +183,30 @@ void buildTiles() {
 	blockToVRAM(PATTERNTABLE + TILE_HEADXPLOD * 8, tiles_headXplod, sizeof(tiles_headXplod));
 	blockToVRAM(PATTERNTABLE + TILE_VINE * 8, tiles_vine, sizeof(tiles_vine));
 	blockToVRAM(PATTERNTABLE + TILE_GRASS * 8, tiles_grass, sizeof(tiles_grass));
+	blockToVRAM(PATTERNTABLE + (TILE_GRASS + 8) * 8, tiles_grass, sizeof(tiles_grass));
 }
 
 void buildSprites() {
 	VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
+	SpriteOn();
 	SpriteReset();
 	Sprite8();
 	SpriteSmall();
 
-	// Alternative 1: Fusion-C Style
-	//for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
-	//	SetSpritePattern(i, sprite_patterns + (i * 8), 8);
-	//}
+	/*
+	// Alternative 1: Fusion-C Style (Too fast for MSX1's VDP)
+	for (unsigned char i = 0; i < sizeof(sprite_patterns)/8; i++) {
+		SetSpritePattern(i, sprite_patterns + (i * 8), 8);
+	}
+	*/
 
-	// Alternative 2: Raw Stype
+	/*
+	// Alternative 2 (Even faster)
+	SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
+	*/
+
+	// Alternative 3 (Very slow - solves the problem)
 	blockToVRAM(SPRITEPATTERNTABLE, sprite_patterns, sizeof(sprite_patterns));
-
-	// Alternative 3: Mixed Style
-	//SetSpritePattern(0, sprite_patterns, sizeof(sprite_patterns));
 }
 
 char allJoysticks() {
@@ -180,14 +223,14 @@ char allTriggers() {
 }
 
 void title() {
-	// Set colors
+	//Set title colors
 	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
 
-	Cls();
-	_print(titleScreen);
+	// Build Screen
+	buildEden(NAMETABLE, titleScreen, sizeof(titleScreen));
 
-	while (allJoysticks() || allTriggers()) {}		// waits until key release
-	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
+	while (allJoysticks() || allTriggers()) {}		// waits for key release
+	while (!(allJoysticks() || allTriggers())) {}	// waits for key press
 }
 
 void dropApple() {
@@ -198,29 +241,32 @@ void dropApple() {
 }
 
 void game() {
-	// Set colors
 	blockToVRAM(COLORTABLE, tileColors_game, sizeof(tileColors_game));
 
 	srand(Peekw(BIOS_JIFFY));
 
-	Cls();
-	_print(gameScreen);
+	// Build screen
+	buildEden(NAMETABLE, gameScreen, sizeof(gameScreen));
+
 	Locate(18, 23);
 	PrintNumber(highscore);
 
 	// Initialize game variables
 	edenUp = false;
+	appleEaten = false;
 	EoG = false;
 	collision = false;
-	collisionFrame = TILE_HEADXPLOD;
+	collisionTile = TILE_HEADXPLOD;
 	score = 0;
 	growth = 0;
 	snakeHeadPos = NAMETABLE + 10 * 32 + 11;
 	direction = RIGHT;
 	lastDirection = 0;	// initially, none
 	Pokew(BIOS_JIFFY, 0);
+	appleEatenBonusX = 0;
+	appleEatenBonusY = 255;
 
-	// initialize snake
+	// Initialize snake
 	snakeTail = snake;
 	snakeHead = snake + 1;
 	snake[0] = snakeHeadPos - 1;
@@ -228,7 +274,7 @@ void game() {
 	Vpoke(snakeHeadPos - 1, TILE_SNAKETAIL);
 	Vpoke(snakeHeadPos, (unsigned char) (TILE_SNAKEHEAD + 1));
 
-	// initialize difficulty
+	// Initialize difficulty
 	waitFrames = 15;
 	waitMoves = 100;
 	eden = 1;
@@ -238,10 +284,8 @@ void game() {
 		PSGwrite(i, gameSound[i]);
 	}
 
-	// Drop first apple
 	dropApple();
 
-	// Game's main loop
 	while (!EoG) {
 		while (lastJiffy == Peekw(BIOS_JIFFY)) {
 			joy = allJoysticks();
@@ -261,7 +305,6 @@ void game() {
 				if ((joy == UP) || (joy == DOWN)) direction = joy;
 				break;
 			}
-
 /*
 			// Alternative 2: Composition of Conditions in a single IF
 			if ((((lastDirection == UP) || (lastDirection == DOWN)) && ((joy == RIGHT) || (joy == LEFT))) ||
@@ -270,8 +313,9 @@ void game() {
 */
 		}
 		// from this point on, 1 pass per frame
-		if ((Peekw(BIOS_JIFFY) >= waitFrames) && (!collision)) {
 
+		if ((Peekw(BIOS_JIFFY) >= waitFrames) && (!collision)) {
+			
 			// Controls eden progression
 			if (!(--waitMoves)) {
 				// Next Eden
@@ -289,45 +333,50 @@ void game() {
 			// move snake
 			switch (direction) {
 			case UP:
-				snakeHeadPos -= 32;
+				snakeHeadPos-=32;// snakeHeadPos = snakeHeadPos - 32;
 				break;
 			case RIGHT:
-				snakeHeadPos++;
+				snakeHeadPos++;  // snakeHeadPos = snakeHeadPos + 1;
 				break;
 			case DOWN:
-				snakeHeadPos += 32;
+				snakeHeadPos+=32;// snakeHeadPos = snakeHeadPos + 32;
 				break;
 			case LEFT:
-				snakeHeadPos--;
+				snakeHeadPos--;  // snakeHeadPos = snakeHeadPos - 1;
 				break;
 			}
 
 			content = Vpeek(snakeHeadPos);
 
-			collision = (content != TILE_GRASS_EMPTY) && (content != TILE_APPLE);
+			collision = (content < TILE_GRASS) && (content != TILE_APPLE);
 			if (collision) {
 				// Collision start
 				if (content < TILE_VINE) {
-					Vpoke(COLORTABLE + 0x12,
-						(tileColors_game[TILE_HEADXPLOD / 8] & 0xf0) |
-						(tileColors_game[TILE_GRASS / 8] & 0x0f));
+					Vpoke(COLORTABLE + TILE_HEADXPLOD / 8,
+						((tileColors_game[TILE_HEADXPLOD / 8] & 0xf0) | (tileColors_game[TILE_GRASS / 8] & 0x0f)));
+
+
+					/*
+							0b10000000 = 0x80        0b00100011 = 0x23
+						  &	0b11110000 = 0xf0      & 0b00001111 = 0x0f
+						  ------------             ------------
+							0b10000000               0b00000011
+
+							0b10000000
+						  | 0b00000011
+						  ------------
+							0b10000011 = 0x83
+					*/
 				}
 				Vpoke(snakeHeadPos, TILE_HEADXPLOD);
 
-		
 				for (unsigned char i = 0; i < sizeof(xplodSound); i++) {
 					PSGwrite(i, xplodSound[i]);
-				};
-
+				}
+				
 			} else {
 				if (content == TILE_APPLE) {
 					dropApple();
-
-					appleEaten = true;
-					appleEatenFrame = 0;
-					appleEatenBonusX = 8 * (snakeHeadPos % 32);
-					appleEatenBonusY = 8 * (snakeHeadPos / 32) - 4;
-
 					bonus = (rand() & 7) + 1;
 					growth += bonus;
 					score += bonus;
@@ -338,6 +387,10 @@ void game() {
 						Locate(18, 23);
 						PrintNumber(highscore);
 					}
+					appleEaten = true;
+					appleEatenFrame = 0;
+					appleEatenBonusX = 8 * (snakeHeadPos % 32);
+					appleEatenBonusY = 8 * (snakeHeadPos / 32) - 4;
 				}
 
 				// Draws head in new position
@@ -347,7 +400,7 @@ void game() {
 
 			// Erases last tail segment
 			if (growth == 0) {
-				Vpoke(*snakeTail, TILE_GRASS_EMPTY);
+				Vpoke(*snakeTail, TILE_GRASS + (rand() & 0x0f));
 				snakeTail++;
 				if (snakeTail > &snake[511])
 					snakeTail = snake;
@@ -364,47 +417,51 @@ void game() {
 			if (snakeHead > &snake[511]) snakeHead = snake;
 			*snakeHead = snakeHeadPos;
 
-			lastDirection = direction;		// saves last direction after moving
+			lastDirection = direction;  // saves last direction after moving
 			Pokew(BIOS_JIFFY, 0);
 		}
 
-		// here we will add animations and sound effects routine 
+		// here we will add the animation and sound effects routine
 		{
 			// Collision animation
 			if (collision && (Peekw(BIOS_JIFFY) >= 6)) {
-				Vpoke(snakeHeadPos, ++collisionFrame);
-				EoG = (collisionFrame == TILE_HEADXPLOD + 7);
+				Vpoke(snakeHeadPos, ++collisionTile);
 				Pokew(BIOS_JIFFY, 0);
+				EoG = collisionTile >= TILE_HEADXPLOD + 7;
 			}
 
 			// Apple eaten effect
 			if (appleEaten) {
-				if (appleEatenFrame < 16) 
+				if (appleEatenFrame < 16)
 					PSGwrite(9, 15 - appleEatenFrame);
 				if (!(appleEatenFrame & 3)) {
 					PutSprite(0, bonus, appleEatenBonusX, --appleEatenBonusY, BONUS_COLOR);
 					PutSprite(1, 9, appleEatenBonusX, appleEatenBonusY, BONUSBEVEL_COLOR);
 				}
-				if(!(appleEaten = (++appleEatenFrame < 90) & (!EoG))) {
-					PutSprite(0, 0, 0, 192, 0);
-					PutSprite(1, 0, 0, 192, 0);
+				if (!(appleEaten = (++appleEatenFrame < 90) && (!EoG))) {
+					PutSprite(0, 0, 0, 255, 0);
+					PutSprite(1, 0, 0, 255, 0);
+					appleEatenBonusX = 0;		// Extra safety by Fábio Santos
+					appleEatenBonusY = 255;		// Extra safety by Fábio Santos
 				}
 			}
 
-			// Eden Up effect
+			// Eden up effect
 			if (edenUp) {
 				if (++edenUpFrame & 1) {
 					// random color & sound
 					PSGwrite(4, rand());
-					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8, (rand() & 0xf0) + 3);
+					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8,
+						(rand() & 0x00f0) + 3);
 				} else {
-					// next color & effect up sound
+					// next color & freq up sound effect 
 					PSGwrite(4, edenUpSound--);
-					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8, tailColors[((eden - 1) % sizeof(tailColors))]);
+					Vpoke(COLORTABLE + TILE_SNAKETAIL / 8,
+						tailColors[(eden - 1) % sizeof(tailColors)]);
 				}
 				if (!(edenUp = edenUpFrame < 60)) {
 					PSGwrite(10, 0);
-				};
+				}
 			}
 		}
 
@@ -412,16 +469,16 @@ void game() {
 		VDPwriteNi(6, SPRITEPATTERNTABLE >> 11);
 	}
 
-	Poke(BIOS_JIFFY, 0);
-	while (Peek(BIOS_JIFFY) < 90) {}
+	Pokew(BIOS_JIFFY, 0);
+	while (Peekw(BIOS_JIFFY) < 90) {}
 }
 
 void gameOver() {
-	Locate(0, 9);
+	Locate(0, 10);
 	_print(gameOverMsg);
 
-	while (allJoysticks() || allTriggers()) {}		// waits until key release
-	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
+	while (allJoysticks() || allTriggers()) {}		// waits for key release
+	while (!(allJoysticks() || allTriggers())) {}	// waits for key press
 }
 
 // ----------------------------------------------------------
@@ -442,11 +499,11 @@ void main(void) {
 #ifdef DEBUG
 	blockToVRAM(COLORTABLE, tileColors_title, sizeof(tileColors_title));
 	charMap();
-	while (!(allJoysticks() || allTriggers())) {}	// waits until key press
+	while (!(allJoysticks() || allTriggers())) {}	// waits for key press
 #endif
 
 	// program's infinite loop
-	while (1) {
+	while (true) {
 		title();
 		game();
 		gameOver();

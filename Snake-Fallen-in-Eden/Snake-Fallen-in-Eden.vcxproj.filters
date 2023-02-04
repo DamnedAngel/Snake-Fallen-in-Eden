@@ -89,6 +89,9 @@
     <None Include="Make\make.sh">
       <Filter>Make</Filter>
     </None>
+    <None Include="eden.s">
+      <Filter>ASM Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="IncludeDirectories.txt">

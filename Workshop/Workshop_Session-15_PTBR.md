@@ -3,7 +3,7 @@
 
 Escrito por **Danilo Angelo (a.k.a. Damned Angel)**, 2020-2021
 
-Vídeo da sessão 15: XXX
+Vídeo da sessão 15: https://youtu.be/98lg1KDSXes
 
 Canal **8-bit Saga**: https://www.youtube.com/channel/UC-QPKENS07P_5q-7a7ps2HA
 
@@ -38,7 +38,7 @@ VS: Visual Studio 2019
 Esse documento é dividido em sessões de workshop, e as sessões são divididas em tópicos de estudo.
 
 Os tópicos de estudo são dividos em passos. Esses passos terão sempre 1 dentre 3 formatos:
-* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em XXX)
+* Um passo com o verbo no gerúndio (ex: *Compilando o projeto.*) significa uma exposição do palestrante (assista o vídeo no YouTube com a exposição em https://youtu.be/98lg1KDSXes)
 * Um passo com o verbo no imperativo (ex: *Configure a aplicação*) denota um passo para ser executado pelo participante.
 * Um passo com a descrição de uma atividade (ex: *Discussão em grupo.*) descreve a proposta de uma dinâmica.
 
@@ -68,12 +68,12 @@ http://www.msxtop.msxall.com/Portugues/Projeto_msx_top_secret.htm
 #pragma once
 
 static const char gameSound[] = {
-	0,	0,		// Channel A Freq	none; movement
+	0,	0,			// Channel A Freq	none; movement
 	255,	0,		// Channel B Freq	eat apple
-	40,	0,		// Channel C Freq	level up
-	31,			// Noise Freq		(Movement noise)
-	49,			// Mixing		A: noise, B: tone, C: Tone
-	16,	0,	0,	// Channels volume
+	40,	0,			// Channel C Freq	level up
+	31,				// Noise Freq		(Movement noise)
+	49,				// Mixing		A: noise, B: tone, C: Tone
+	16,	0,	0,		// Channels volume
 	100,	4,		// Envelope freq
 };
 ```
@@ -199,14 +199,14 @@ unsigned char edenUpSound;
 1. Insira no arquivo *sounds.h* o vetor constante *xplodSound* com configuração do PSG para som da explosão da cabeça da cobra:
 ```c
 static const char xplodSound[] = {
-	255,	31,				// Channel A Freq		
-	100,	20,				// Channel B Freq		
-	255,	1,				// Channel C Freq		
-	31,					// Noise Freq			
-	128,					// Mixing				
-	16,	16,	16,			// Channels volume
-	10,	20,				// Envelope freq
-	0					// Envelope
+	255,	31,		// Channel A Freq		
+	100,	20,		// Channel B Freq		
+	255,	1,		// Channel C Freq		
+	31,				// Noise Freq			
+	128,			// Mixing				
+	16,	16,	16,		// Channels volume
+	10,	20,			// Envelope freq
+	0				// Envelope
 };
 ```
 
