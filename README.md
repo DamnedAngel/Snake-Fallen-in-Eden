@@ -55,8 +55,9 @@ a MSX C/ASM development workshop, based on my MSX templates for Visual Studio
 
 Workshop Playlist: https://www.youtube.com/playlist?list=PLZm7VHLMIP0M3uHWWA2ytG2apoBHmtYk4
 
-![image info](http://img.youtube.com/vi/RGDKg4krgFc/default.jpg)
+![image info](http://img.youtube.com/vi/RGDKg4krgFc/maxresdefault.jpg)
 Session 0: **Development Environment Setup** - https://youtu.be/RGDKg4krgFc
+
 Session 1: **Using Project Templates** - https://youtu.be/TYXZTF-IzWs
 Session 2: **Starting the Development** - https://youtu.be/BNeZ2RBIkuc
 Session 3: **Screens of the Game** - https://youtu.be/eZ26uxMsKmc
