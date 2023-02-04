@@ -173,3 +173,5 @@ void buildSprites() {
 * Dinâmica geral do workshop: feedbacks e ideias.
 
 ---
+
+**Happy MSX'ing.**

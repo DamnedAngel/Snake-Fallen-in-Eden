@@ -83,10 +83,10 @@ Adicionalmente, note que os trechos de código fornecidos como exemplo muitas ve
 
 7. **DESAFIO**: Crie diretivas constantes para referência às tabelas de padrões e atributos de sprites do VDP, de forma similar às de referência às tabelas de nomes, padrões e cores.
 ```c
-#define NAMETABLE				0x1800
-#define PATTERNTABLE			0x0000
-#define COLORTABLE				0x2000
-#define SPRITEPATTERNTABLE		0x3800
+#define NAMETABLE		0x1800
+#define PATTERNTABLE		0x0000
+#define COLORTABLE		0x2000
+#define SPRITEPATTERNTABLE	0x3800
 #define SPRITEATTRIBUTETABLE	0x1b00
 ```
 
